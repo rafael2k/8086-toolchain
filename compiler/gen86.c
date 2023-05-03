@@ -2987,6 +2987,9 @@ static void g_compare P4 (const EXPR *, ep, OPCODE, opu, OPCODE, ops, LABEL, lab
 	    break;
 	default:
 	    CANNOT_REACH_HERE ();
+	    op2 = op_nop;
+	    op3 = op_nop;
+	    op4 = op_nop;
 	    break;
 	}
     } else {
@@ -3024,6 +3027,9 @@ static void g_compare P4 (const EXPR *, ep, OPCODE, opu, OPCODE, ops, LABEL, lab
 	    break;
 	default:
 	    CANNOT_REACH_HERE ();
+	    op2 = op_nop;
+	    op3 = op_nop;
+	    op4 = op_nop;
 	    break;
 	}
     }
