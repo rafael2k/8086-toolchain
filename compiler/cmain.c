@@ -351,7 +351,7 @@ void numeric_option P3 (BOOL, set, OPTION *, optptr, const CHAR *, arg)
 	case '7':
 	case '8':
 	case '9':
-	    *(optptr->u1.ip) = atoi ((char *) arg);
+	    *(optptr->u1.ip) = atoi ((const char *) arg);
 	    break;
 	default:
 	    break;
@@ -380,7 +380,7 @@ void enumeration_option P3 (BOOL, set, OPTION *, optptr, const CHAR *, arg)
     size_t  len;
 
     if (set) {
-	len = strlen ((char *) arg);
+	len = strlen ((const char *) arg);
 	for (optenums = optptr->u2.ep; optenums->text; optenums++) {
 	    if (memcmp (optenums->text, arg, len) == 0) {
 		*(optptr->u1.ip) = optenums->val;
