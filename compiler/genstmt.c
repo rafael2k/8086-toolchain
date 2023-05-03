@@ -253,7 +253,7 @@ static void gendo P1 (const STMT *, stmt)
 static void genswitch P1 (const STMT *, stmt)
 {
     LABEL   deflab;
-    UVAL    min_caselabel, max_caselabel, nxt_caselabel;
+    UVAL    min_caselabel = 0, max_caselabel = 0, nxt_caselabel;
     UVAL    i;
     UVAL    number_of_cases;
     int     number_of_ranges;
