@@ -22,9 +22,9 @@ extern void rel_reglst P_ ((void));
 extern int main P_ ((int, char **));
 extern void options P_ ((const CHAR *, BOOL));
 extern void chip_option P_ ((BOOL, const OPTION *, const CHAR *));
-extern void enumeration_option P_ ((BOOL, const OPTION *, const CHAR *));
+extern void enumeration_option P_ ((BOOL, OPTION *, const CHAR *));
 extern void list_option P_ ((BOOL, OPTION *, const CHAR *));
-extern void numeric_option P_ ((BOOL, const OPTION *, const CHAR *));
+extern void numeric_option P_ ((BOOL, OPTION *, const CHAR *));
 extern void set_option P_ ((BOOL, OPTION *, const CHAR *));
 extern void string_option P_ ((BOOL, const OPTION *, const CHAR *));
 

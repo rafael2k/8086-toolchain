@@ -337,7 +337,7 @@ static void uniq_option P3 (BOOL, set, OPTION *, optptr, const CHAR *, arg)
     }
 }
 
-void numeric_option P3 (BOOL, set, const OPTION *, optptr, const CHAR *, arg)
+void numeric_option P3 (BOOL, set, OPTION *, optptr, const CHAR *, arg)
 {
     if (set) {
 	switch (*arg) {
@@ -372,7 +372,7 @@ void string_option P3 (BOOL, set, const OPTION *, optptr, const CHAR *, arg)
     }
 }
 
-void enumeration_option P3 (BOOL, set, const OPTION *, optptr, const CHAR *, arg)
+void enumeration_option P3 (BOOL, set, OPTION *, optptr, const CHAR *, arg)
 {
     OPTENUM *optenums;
     const CHAR *seperator;
