@@ -586,7 +586,7 @@ static void commandline P2 (int, argc, char **, argv)
 	    pptr++;
 	}
     }
-    openfiles (argc, argv);
+    openfiles (argc, (const char * const*)argv);
 #ifdef LIST
     listfile = errfile;
 #endif /* LIST */
