@@ -91,7 +91,7 @@ static RANGE range_longlong = { -2147483647L - 1L, 2147483647L
 static FUNC func_params = {
     fc_normal,
     &init_block,
-    0			/*lint !e708*/	/* union initialisation */
+    {0}			/*lint !e708*/	/* union initialisation */
 };
 
 /*****************************************************************************/
