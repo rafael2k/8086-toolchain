@@ -2112,7 +2112,7 @@ void CSimControl::CmdSetRegMonitor(SimCommand *cmd)
 
 	// Check for form 4) mm ADDR [SIZE]		(stop on modify [i.e. change to a DIFFERENT value])
 	else if(cmd->cmdString[1] == 'm') {
-		if((ID = SetRegMonitor(registerNum, ON_MODIFY, NULL)) == -1) SimIO.PrintText("ERROR: Could not add register monitor.\n");
+		if((ID = SetRegMonitor(registerNum, ON_MODIFY, 0)) == -1) SimIO.PrintText("ERROR: Could not add register monitor.\n");
 		else SimIO.PrintMessage("Register monitor ID %d added.\nRegister: %s    Mode: Modify\n", ID, registerName[registerNum]);
 	}
 
@@ -2221,25 +2221,25 @@ void CSimControl::CmdSetMemMonitor(SimCommand *cmd)
 
 	// Check for form 2) mr ADDR [SIZE]		(stop when read from)
 	if(cmd->cmdString[1] == 'r') {
-		if((ID = SetMemMonitor(&address, p1, ON_READ, NULL)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
+		if((ID = SetMemMonitor(&address, p1, ON_READ, 0)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
 		else SimIO.PrintMessage("Memory monitor ID %d added.\nAddress: %04X:%04X (%Xh)   Mode: Read   Size: %d\n", ID, address.segment, address.offset, address.physical, p1);
 	}
 
 	// Check for form 3) mw ADDR [SIZE]		(stop when written to)
 	else if(cmd->cmdString[1] == 'w') {
-		if((ID = SetMemMonitor(&address, p1, ON_WRITE, NULL)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
+		if((ID = SetMemMonitor(&address, p1, ON_WRITE, 0)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
 		else SimIO.PrintMessage("Memory monitor ID %d added.\nAddress: %04X:%04X (%Xh)   Mode: Write   Size: %d\n", ID, address.segment, address.offset, address.physical, p1);
 	}
 
 	// Check for form 4) mm ADDR [SIZE]		(stop on modify [i.e. change to a DIFFERENT value])
 	else if(cmd->cmdString[1] == 'm') {
-		if((ID = SetMemMonitor(&address, p1, ON_MODIFY, NULL)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
+		if((ID = SetMemMonitor(&address, p1, ON_MODIFY, 0)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
 		else SimIO.PrintMessage("Memory monitor ID %d added.\nAddress: %04X:%04X (%Xh)   Mode: Modify   Size: %d\n", ID, address.segment, address.offset, address.physical, p1);
 	}
 
 	// Check for form 5) ma ADDR [SIZE]		(stop when accessed)
 	else if(cmd->cmdString[1] == 'a') {
-		if((ID = SetMemMonitor(&address, p1, ON_ACCESS, NULL)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
+		if((ID = SetMemMonitor(&address, p1, ON_ACCESS, 0)) == -1) SimIO.PrintText("ERROR: Could not add memory monitor.\n");
 		else SimIO.PrintMessage("Memory monitor ID %d added.\nAddress: %04X:%04X (%Xh)   Mode: Access   Size: %d\n", ID, address.segment, address.offset, address.physical, p1);
 	}
 
