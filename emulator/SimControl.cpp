@@ -16,6 +16,7 @@
 
 #include "Help.h"
 
+#include <time.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -1289,6 +1290,22 @@ int CSimControl::ExecCommand(char *cmdString, SimCommand *cmd)
 
 	else if(!strcmp(cmdString, "echo"))		{ if(cmd->numParams >= 1) ProgramWindow.PrintText(cmd->param[0]); }
 	else if(!strcmp(cmdString, "simptris"))	{ cmd->op = CMD_SIMPTRIS;				CmdInitSimptris(cmd); }
+	else if(!strcmp(cmdString, "stress")) {
+		clock_t start, end;
+		time_t start2, end2;
+		double cpu_time;
+		double wall_time;
+		time(&start2);
+		start = clock();
+		char str[31] = "This is a really cool string.\n";
+		for(int i = 0; i < 1000000; i++) ProgramWindow.SendString(str, 30);
+		end = clock();
+		time(&end2);
+		cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
+		wall_time = difftime(end2, start2);
+		SimIO.PrintMessage("CPU  Time elapsed: %f seconds\n", cpu_time);
+		SimIO.PrintMessage("Wall Time elapsed: %d seconds (rounded to nearest second)\n", (int)wall_time);
+	}
 	else if(!strcmp(cmdString, "test")) {
 		// Do any testing here
 		//SimIO.PrintText("Don't ever type that again!\n");
