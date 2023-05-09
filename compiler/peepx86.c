@@ -411,146 +411,146 @@ static BOOL is_equal_oper P2 (ADDRESS *, ap1, ADDRESS *, ap2)
     return FALSE;
 }
 
-/*
- * Determine whether a move is redundant ... this is done by looking back
- * along the code list (following all branches to labels) to determine
- * whether the destination already contains the necessary result.
- */
-static BOOL was_move_redundant P3 (CODE *, ip, CODE *, ip2, BOOL, memory)
-{
-    BOOL    altered, overwritten;
-    LABEL   label;
-    SWITCH *sw;
+// /*
+//  * Determine whether a move is redundant ... this is done by looking back
+//  * along the code list (following all branches to labels) to determine
+//  * whether the destination already contains the necessary result.
+//  */
+// static BOOL was_move_redundant P3 (CODE *, ip, CODE *, ip2, BOOL, memory)
+// {
+//     BOOL    altered, overwritten;
+//     LABEL   label;
+//     SWITCH *sw;
 
-    for (ip2 = ip2->back; ip2 != NIL_CODE; ip2 = ip2->back) {
-	switch (ip2->opcode) {
-	case op_label:
-	    label = ip2->oper1->u.offset->v.l;
+//     for (ip2 = ip2->back; ip2 != NIL_CODE; ip2 = ip2->back) {
+// 	switch (ip2->opcode) {
+// 	case op_label:
+// 	    label = ip2->oper1->u.offset->v.l;
 
-	    /* first check code before the label */
-	    if (!was_move_redundant (ip, ip2, memory)) {
-		return FALSE;
-	    }
-	    /* ... and then check all branches to this label */
-	    for (ip2 = peep_head; ip2 != NIL_CODE; ip2 = ip2->fwd) {
-		if (branch (ip2)) {
-		    if (is_label_used (ip2->oper1, label)) {
-			OPCODE  op = ip2->opcode;
+// 	    /* first check code before the label */
+// 	    if (!was_move_redundant (ip, ip2, memory)) {
+// 		return FALSE;
+// 	    }
+// 	    /* ... and then check all branches to this label */
+// 	    for (ip2 = peep_head; ip2 != NIL_CODE; ip2 = ip2->fwd) {
+// 		if (branch (ip2)) {
+// 		    if (is_label_used (ip2->oper1, label)) {
+// 			OPCODE  op = ip2->opcode;
 
-			ip2->opcode = op_nop;
-			if (!was_move_redundant (ip, ip2, memory)) {
-			    ip2->opcode = op;
-			    return FALSE;
-			}
-			ip2->opcode = op;
-		    }
-		}
-	    }
+// 			ip2->opcode = op_nop;
+// 			if (!was_move_redundant (ip, ip2, memory)) {
+// 			    ip2->opcode = op;
+// 			    return FALSE;
+// 			}
+// 			ip2->opcode = op;
+// 		    }
+// 		}
+// 	    }
 
-	    /* but if it is via a jump table we cannot determine it */
-	    for (sw = swtables; sw != NIL_SWITCH; sw = sw->next) {
-		LABEL   lab;
+// 	    /* but if it is via a jump table we cannot determine it */
+// 	    for (sw = swtables; sw != NIL_SWITCH; sw = sw->next) {
+// 		LABEL   lab;
 
-		for (lab = (LABEL) 0; lab < sw->numlabs; lab++) {
-		    if (sw->labels[lab] == label) {
-			return FALSE;
-		    }
-		}
-	    }
-	    return TRUE;
+// 		for (lab = (LABEL) 0; lab < sw->numlabs; lab++) {
+// 		    if (sw->labels[lab] == label) {
+// 			return FALSE;
+// 		    }
+// 		}
+// 	    }
+// 	    return TRUE;
 
-	case op_ret:
-	case op_jmp:
-	case op_bra:
-	    /* should have at least hit a label before here! */
-	case op_nop:
-	    return TRUE;
+// 	case op_ret:
+// 	case op_jmp:
+// 	case op_bra:
+// 	    /* should have at least hit a label before here! */
+// 	case op_nop:
+// 	    return TRUE;
 
-	case op_call:
-#ifdef ASM
-	case op_asm:
-#endif /* ASM */
-	    return FALSE;
+// 	case op_call:
+// #ifdef ASM
+// 	case op_asm:
+// #endif /* ASM */
+// 	    return FALSE;
 
-	case op_line:
-	    break;
+// 	case op_line:
+// 	    break;
 
-	default:
-	    if (is_same_instruction (ip, ip2)) {
-		return TRUE;
-	    }
-	    altered = (BOOL) (op_flags[ip2->opcode] & DEST_ALTERED);
-	    overwritten = (BOOL) (op_flags[ip2->opcode] & DEST_OVERWRITE);
-	    if (ip2->oper2) {
-		/* two operand instruction */
-		if (is_equal_address (ip->oper1, ip2->oper2)) {
-		    if (overwritten && (ip->length <= ip2->length) &&
-			is_equal_address (ip->oper2, ip2->oper1))
-			return TRUE;
-		    if (altered) {
-			return FALSE;
-		    }
-		}
-		if (altered && is_address_used (ip2->oper2, ip->oper1)) {
-		    return FALSE;
-		}
-		switch (ip2->oper2->mode) {
-		case am_dreg:
-		case am_areg:
-		case am_mreg:
-		case am_direct:
-		case am_immed:
-		    if (altered && (is_equal_address (ip->oper2, ip2->oper2)
-				    || is_equal_address (ip->oper1,
-							 ip2->oper2))) {
-			return FALSE;
-		    }
-		    break;
-		case am_ind:
-		case am_indx:
-		    if (altered && memory) {
-			return FALSE;
-		    }
-		    break;
-		default:
-		    break;
-		}
-	    }
-	    if (ip2->oper1) {
-		switch (ip2->oper1->mode) {
-		case am_dreg:
-		case am_areg:
-		case am_mreg:
-		case am_direct:
-		case am_immed:
-		    if (ip2->oper2 != NIL_ADDRESS) {
-			break;
-		    }
-		    /* one operand instruction */
-		    if (altered && (is_equal_address (ip->oper2, ip2->oper1)
-				    || is_equal_address (ip->oper1,
-							 ip2->oper1))) return
-			    FALSE;
-		    break;
-		case am_ind:
-		case am_indx:
-		    if (ip2->oper2 != NIL_ADDRESS) {
-			break;
-		    }
-		    /* one operand instruction */
-		    if (altered && memory) {
-			return FALSE;
-		    }
-		    break;
-		default:
-		    break;
-		}
-	    }
-	    break;
-	}
-    }
-    return FALSE;
-}
+// 	default:
+// 	    if (is_same_instruction (ip, ip2)) {
+// 		return TRUE;
+// 	    }
+// 	    altered = (BOOL) (op_flags[ip2->opcode] & DEST_ALTERED);
+// 	    overwritten = (BOOL) (op_flags[ip2->opcode] & DEST_OVERWRITE);
+// 	    if (ip2->oper2) {
+// 		/* two operand instruction */
+// 		if (is_equal_address (ip->oper1, ip2->oper2)) {
+// 		    if (overwritten && (ip->length <= ip2->length) &&
+// 			is_equal_address (ip->oper2, ip2->oper1))
+// 			return TRUE;
+// 		    if (altered) {
+// 			return FALSE;
+// 		    }
+// 		}
+// 		if (altered && is_address_used (ip2->oper2, ip->oper1)) {
+// 		    return FALSE;
+// 		}
+// 		switch (ip2->oper2->mode) {
+// 		case am_dreg:
+// 		case am_areg:
+// 		case am_mreg:
+// 		case am_direct:
+// 		case am_immed:
+// 		    if (altered && (is_equal_address (ip->oper2, ip2->oper2)
+// 				    || is_equal_address (ip->oper1,
+// 							 ip2->oper2))) {
+// 			return FALSE;
+// 		    }
+// 		    break;
+// 		case am_ind:
+// 		case am_indx:
+// 		    if (altered && memory) {
+// 			return FALSE;
+// 		    }
+// 		    break;
+// 		default:
+// 		    break;
+// 		}
+// 	    }
+// 	    if (ip2->oper1) {
+// 		switch (ip2->oper1->mode) {
+// 		case am_dreg:
+// 		case am_areg:
+// 		case am_mreg:
+// 		case am_direct:
+// 		case am_immed:
+// 		    if (ip2->oper2 != NIL_ADDRESS) {
+// 			break;
+// 		    }
+// 		    /* one operand instruction */
+// 		    if (altered && (is_equal_address (ip->oper2, ip2->oper1)
+// 				    || is_equal_address (ip->oper1,
+// 							 ip2->oper1))) return
+// 			    FALSE;
+// 		    break;
+// 		case am_ind:
+// 		case am_indx:
+// 		    if (ip2->oper2 != NIL_ADDRESS) {
+// 			break;
+// 		    }
+// 		    /* one operand instruction */
+// 		    if (altered && memory) {
+// 			return FALSE;
+// 		    }
+// 		    break;
+// 		default:
+// 		    break;
+// 		}
+// 	    }
+// 	    break;
+// 	}
+//     }
+//     return FALSE;
+// }
 
 /* ensure we have a label to branch to (create if needed) */
 static void check_label P2 (CODE *, ip, CODE *, target)
