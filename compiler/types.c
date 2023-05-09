@@ -32,7 +32,7 @@
 
 /********************************************************* Macro Definitions */
 
-#define MAXTYPEKEY	((unsigned) 256)	/* hash table size */
+#define MAXTYPEKEY	((unsigned long) 256)	/* hash table size */
 
 /********************************************************** Static Variables */
 
@@ -1235,9 +1235,9 @@ TYP    *copy_type P1 (const TYP *, tp)
     return ret_tp;
 }
 
-static unsigned typehash P1 (const TYP *, tp)
+static unsigned long typehash P1 (const TYP *, tp)
 {
-    return ((unsigned) tp >> (unsigned) 2 & (MAXTYPEKEY - (unsigned) 1));
+    return ((unsigned long) tp >> (unsigned long) 2 & (MAXTYPEKEY - (unsigned long) 1));
 }
 
 /*
@@ -1324,7 +1324,7 @@ RANGE  *mk_range P2 (IVAL, low, IVAL, high)
 TYP    *mk_type P2 (const TYP *, tp1, TYP *, btp)
 {
     TYP    *tp;
-    unsigned keyno;
+    unsigned long keyno;
 
     if (tp1 == NIL_TYP)
 	return NIL_TYP;
