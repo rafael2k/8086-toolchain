@@ -473,7 +473,7 @@ static void putconst P1 (const EXPR *, ep)
  */
 static void putlen P1 (ILEN, l)
 {
-    switch (l) {
+    switch ((int)l) {
     case IL0:
 	break;
     case IL1:

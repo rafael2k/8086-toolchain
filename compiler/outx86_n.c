@@ -566,7 +566,7 @@ static void putconst P1 (const EXPR *, ep)
 static void putlen P1 (ILEN, l)
 {
 	// In this code, all used to include "ptr" identifier (e.g., "byte ptr"). "ptr" has been 
-    switch (l) {
+    switch ((int)l) {
     case IL0:
 	break;
     case IL1:
