@@ -89,7 +89,7 @@ static void putamode P_ ((const ADDRESS *, ILEN, unsigned int, const CODE *)); /
 static void put_header P_ ((enum e_gt, SIZE));
 static void seg P_ ((enum e_sg, const char *, SIZE));
 static void put_bseg P_ ((SIZE));
-static void put_noseg P_ ((void));
+// static void put_noseg P_ ((void));
 static void nl P_ ((void));
 static void put_align P_ ((SIZE));
 
@@ -1105,49 +1105,49 @@ PRIVATE void put_literals P0 (void)
 /*
  * write out the type of the symbol
  */
-static void puttype P1 (const TYP *, tp)
-{
-    if (tp == NIL_TYP) {
-	/* runtime support routine */
-	oprintf ("far");	// I don't think this works in NASM. -WSF
-	return;
-    }
-    switch (tp->type) {
-    case bt_char:
-    case bt_schar:
-    case bt_uchar:
-    case bt_charu:
-	oprintf ("byte");
-	break;
-    case bt_short:
-    case bt_ushort:
-    case bt_int16:
-    case bt_uint16:
-    case bt_pointer16:
-	oprintf ("word");
-	break;
-    case bt_int32:
-    case bt_uint32:
-    case bt_long:
-    case bt_ulong:
-    case bt_pointer32:
-	oprintf ("dword");
-	break;
-    case bt_float:
-	oprintf ("dword");	// Changed from "real4". -WSF
-	break;
-    case bt_double:
-    case bt_longdouble:
-	oprintf ("qword");	// Changed from "real8". -WSF
-	break;
-    case bt_func:
-	oprintf ("far");	// I don't think this works in NASM. -WSF
-	break;
-    default:
-	oprintf ("byte");
-	break;
-    }
-}
+// static void puttype P1 (const TYP *, tp)
+// {
+//     if (tp == NIL_TYP) {
+// 	/* runtime support routine */
+// 	oprintf ("far");	// I don't think this works in NASM. -WSF
+// 	return;
+//     }
+//     switch (tp->type) {
+//     case bt_char:
+//     case bt_schar:
+//     case bt_uchar:
+//     case bt_charu:
+// 	oprintf ("byte");
+// 	break;
+//     case bt_short:
+//     case bt_ushort:
+//     case bt_int16:
+//     case bt_uint16:
+//     case bt_pointer16:
+// 	oprintf ("word");
+// 	break;
+//     case bt_int32:
+//     case bt_uint32:
+//     case bt_long:
+//     case bt_ulong:
+//     case bt_pointer32:
+// 	oprintf ("dword");
+// 	break;
+//     case bt_float:
+// 	oprintf ("dword");	// Changed from "real4". -WSF
+// 	break;
+//     case bt_double:
+//     case bt_longdouble:
+// 	oprintf ("qword");	// Changed from "real8". -WSF
+// 	break;
+//     case bt_func:
+// 	oprintf ("far");	// I don't think this works in NASM. -WSF
+// 	break;
+//     default:
+// 	oprintf ("byte");
+// 	break;
+//     }
+// }
 
 /* put the definition of an external name in the ouput file */
 /* assembler can find out about externals itself. This also has the
