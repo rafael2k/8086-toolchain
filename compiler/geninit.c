@@ -31,7 +31,7 @@ static void geninit P_ ((const EXPR *, unsigned char *));
 static void geninittype P2 (const EXPR *, ep, unsigned char *, data)
 {
     TYP    *tp = ep->etp;
-    UVAL    uval;
+//     UVAL    uval;
 
     
 #ifdef FLOAT_SUPPORT
@@ -62,7 +62,8 @@ static void geninittype P2 (const EXPR *, ep, unsigned char *, data)
     case bt_bitfield:
     case bt_ubitfield:
     case bt_bbitfield:
-	uval = ep->v.u & bitmask (bitfield_width (tp));
+        // MGH TODO: uval is never used! What should the  side effect be here?
+	// uval = ep->v.u & bitmask (bitfield_width (tp));
 	break;
     case bt_int32:
     case bt_uint32:
