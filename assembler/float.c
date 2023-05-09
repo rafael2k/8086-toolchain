@@ -198,7 +198,7 @@ static void shr(unsigned short *mant, int i)
 /*
  * Round a mantissa off after i words.
  */
-static int round(unsigned short *mant, int i) 
+static int _round(unsigned short *mant, int i) 
 {
     if (mant[i] & 0x8000) {
 	do {
@@ -232,7 +232,7 @@ static int to_double(char *str, long sign, unsigned char *result,
 	     */
 	    exponent += 1023;
 	    shr(mant, 11);
-	    round(mant, 4);
+	    _round(mant, 4);
 	    if (mant[0] & 0x20)	       /* did we scale up by one? */
 		shr(mant, 1), exponent++;
 	    mant[0] &= 0xF;	       /* remove leading one */
@@ -247,7 +247,7 @@ static int to_double(char *str, long sign, unsigned char *result,
 	    int shift = -(exponent+1011);
 	    int sh = shift % 16, wds = shift / 16;
 	    shr(mant, sh);
-	    if (round(mant, 4-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
+	    if (_round(mant, 4-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
 		shr(mant, 1);
 		if (sh==0)
 		    mant[0] |= 0x8000;
@@ -293,7 +293,7 @@ static int to_float(char *str, long sign, unsigned char *result,
 	     */
 	    exponent += 127;
 	    shr(mant, 8);
-	    round(mant, 2);
+	    _round(mant, 2);
 	    if (mant[0] & 0x100)       /* did we scale up by one? */
 		shr(mant, 1), exponent++;
 	    mant[0] &= 0x7F;	       /* remove leading one */
@@ -306,7 +306,7 @@ static int to_float(char *str, long sign, unsigned char *result,
 	    int shift = -(exponent+118);
 	    int sh = shift % 16, wds = shift / 16;
 	    shr(mant, sh);
-	    if (round(mant, 2-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
+	    if (_round(mant, 2-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
 		shr(mant, 1);
 		if (sh==0)
 		    mant[0] |= 0x8000;
@@ -346,7 +346,7 @@ static int to_ldoub(char *str, long sign, unsigned char *result,
 	     * Normalised.
 	     */
 	    exponent += 16383;
-	    if (round(mant, 4))	       /* did we scale up by one? */
+	    if (_round(mant, 4))	       /* did we scale up by one? */
 		shr(mant, 1), mant[0] |= 0x8000, exponent++;
 	    put(result+8,exponent | sign);
 	    put(result+6,mant[0]);
@@ -360,7 +360,7 @@ static int to_ldoub(char *str, long sign, unsigned char *result,
 	    int shift = -(exponent+16383);
 	    int sh = shift % 16, wds = shift / 16;
 	    shr(mant, sh);
-	    if (round(mant, 4-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
+	    if (_round(mant, 4-wds) || (sh>0 && (mant[0]&(0x8000>>(sh-1))))) {
 		shr(mant, 1);
 		if (sh==0)
 		    mant[0] |= 0x8000;
