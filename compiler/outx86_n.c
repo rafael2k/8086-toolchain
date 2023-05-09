@@ -116,7 +116,7 @@ static int outcol = 0;
 static SIZE align_type = 0L;
 
 static char prefix_buffer[MAX_LABEL+1];	// Variable added for unique label generation. -WSF
-static char *prefix = "L";				// This is the assembler label prefix (was "I"). -WSF
+static const char *prefix = "L";				// This is the assembler label prefix (was "I"). -WSF
 static const char *comment = ";";		// Character used to begin comments. -WSF
 
 static struct oplst
@@ -817,7 +817,7 @@ PRIVATE void put_code P1 (const CODE *, ip)
 		}
 		putamode (ip->oper1, len1, sa, ip);
 		if (ip->oper2 != NIL_ADDRESS && ip->opcode == op_line) {
-			char *string;
+			const CHAR *string;
 			string = ip->oper2->u.offset->v.str; 
 			while(*string != 0 && (*string == ' ' || *string == '\t')) string++;
 
@@ -1293,10 +1293,10 @@ PRIVATE void put_start P0 (void)
 	strcat(prefix_buffer, "_");
 	
 	// Find start of filename (eliminate any extra path)
-	for(start = strlen(in_file)-1; start >= 0; start--) {
+	for(start = strlen((const char *)in_file)-1; start >= 0; start--) {
 		if(in_file[start] == '\\' || in_file[start] == '/') break;
 	}	
-	prefix = &in_file[start+1];
+	prefix = (const char *)&in_file[start+1];
 
 	// Find index of '.' in file name, if it has one
 	for(end = 0; (prefix[end] != '.') && (prefix[end+1] != '\0') && (end < MAX_LABEL - (strlen(prefix_buffer)+2)); end++);
