@@ -503,6 +503,7 @@ static ADDRESS *temp_register P1 (REGTYPE, regtype)
 	break;
     default:
 	CANNOT_REACH_HERE ();
+        ap = 0;
     }
     ap->deep = reg_in_use[ap->preg];
     return ap;

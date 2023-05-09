@@ -359,6 +359,7 @@ ADDRESS *mk_reg P1 (REG, reg)
 #endif /* FLOAT_IEEE */
     default:
 	CANNOT_REACH_HERE ();
+        ap = 0;
     }
     ap->preg = reg;
     return ap;
@@ -794,6 +795,7 @@ static ADDRESS *g_index P1 (const EXPR *, ep)
 	break;
     default:
 	CANNOT_REACH_HERE ();
+        ap2 = 0;
     }
 
     switch (ap1->mode) {
@@ -848,7 +850,7 @@ static void g_rotate P5 (ADDRESS *, ap, ILEN, ilen, int, offset, TYP *, tp,
 {
     OPCODE  op;
     int ls, rs;
-    ADDRESS *ap2;
+    ADDRESS *ap2 = 0;
 
     switch (tp->type) {
     case bt_int16:
@@ -2463,6 +2465,7 @@ static ADDRESS *func_result P3 (FLAGS, flags, SIZE, bytes, TYP *, tp)
 	    FATAL (
 		   (__FILE__, "func_result", "not F_DREG or F_AREG (%d)",
 		    flags));
+            ap = 0;
 	}
 	if (ap->preg != reg_usage->result->reg[0]) {
 	    g_code (op_mov, IL2, &eax_reg, ap);
