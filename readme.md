@@ -25,7 +25,7 @@ On Debian based systems (Ubuntu, etc), run the following in your terminal:
 sudo apt-get install gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev xterm
 ```
 
-*Tested on Ubuntu 16.04 x86_64, Ubuntu 17.04 x86_64 & Ubuntu 17.10*
+*Tested on Ubuntu 16.04 x86_64, Ubuntu 17.04 x86_64, Ubuntu 17.10, and Ubuntu 22.04 (regular and WSL)*
 
 **Prerequisites for Mac OS X:**
 
