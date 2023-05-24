@@ -3062,11 +3062,12 @@ void CSimControl::CheckRegisterMonitors(void)
 
 // This is the Simulators execution loop. Call this function to start the similator
 // after initialization.
-void CSimControl::ExecLoop(char *loadBin)
+int CSimControl::ExecLoop(char *loadBin, char *scriptFile)
 {
 	char cmdString[COMMAND_BUFFER_SIZE];
 	int status;
 	int length;
+	FILE *script_fp = NULL;
 
 	SimIO.PrintText("\nWelcome to the BYU ECEn 425 8086 simulator.\nFor a list of commands, enter h or ?.\n\n");
 
@@ -3075,16 +3076,67 @@ void CSimControl::ExecLoop(char *loadBin)
         ExecCommand(cmdString, &cmdCurrent);
     }
 
-	do {
-		// Display Prompt
-		SimIO.PrintText("Emu86>");
+	if (scriptFile) {
+		script_fp = fopen(scriptFile, "r");
+		if (script_fp == NULL) {
+			printf("ERROR: Failed to open script file '%s'\n", scriptFile);
+			return 1;
+		}
+	}
 
-		// Get next command form user interface
-		length = SimIO.GetCommandString(cmdString, COMMAND_BUFFER_SIZE);
+	do {
+		if (script_fp) {
+			// Script commands
+			if (!fgets(cmdString, COMMAND_BUFFER_SIZE, script_fp)) {
+				fclose(script_fp);
+				script_fp = NULL;
+				// End of script. Continue to interactive commands
+				continue;
+			}
+
+			// Skip command if it starts with a // comment
+			length = strlen(cmdString);
+			if ((length >= 2) && (cmdString[0] == '/' && cmdString[1] == '/')) {
+				continue;
+			}
+
+			// Skip command if it starts with a # comment
+			if ((length >= 1) && (cmdString[0] == '#')) {
+				continue;
+			}
+
+			// Ignore Unix newlines (LF)
+			if ((length == 1) && (cmdString[0] == '\n')) {
+				continue;
+			}
+
+			// Ignore Windows newlines (CRLF)
+			if ((length == 2) &&
+			    (cmdString[0] == '\r' && cmdString[1] == '\n')) {
+				continue;
+			}
+
+			// Display prompt
+			SimIO.PrintText("Emu86>");
+			// Print out the command, so user can see what was inputted
+			SimIO.PrintText(cmdString);
+		} else {
+			// Interactive commands
+			// Display prompt
+			SimIO.PrintText("Emu86>");
+			// Get next command form user interface
+			length = SimIO.GetCommandString(cmdString, COMMAND_BUFFER_SIZE);
+			if(length <= 0) continue;
+		}
 
 		// Interpret command
-		if(length > 0) status = ExecCommand(cmdString, &cmdCurrent);
-	} while (status != CMD_QUIT);		
+		status = ExecCommand(cmdString, &cmdCurrent);
+	} while (status != CMD_QUIT);
+
+	if (script_fp) {
+		fclose(script_fp);
+	}
+	return 0;
 }
 
 

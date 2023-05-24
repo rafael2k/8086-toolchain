@@ -31,17 +31,71 @@ void printk(const char *fmt, ...)
 void closeConio(void);
 #endif
 
+static const char *usage =
+"Usage: emu86 [<file>] [-s <script_file>] [-h|--help]\n";
+
+static const char *help = 
+"\n"
+"emu86 is an 8086 emulator. This emu86 was enhanced for BYU's ECEn 425 class.\n"
+"\n"
+"Options:\n"
+"  <file> : The file to run on the emulator. Equivalent to the 'l <file>'\n"
+"           command once inside the emulator.\n"
+"  -s <script_file> : A text file of newline-delimited emulator commands to\n"
+"                     run on startup. Supports # and // comments at the\n"
+"                     beginning of the line.\n"
+"  -h|--help : Print this help message.\n"
+;
+
+static void _print_usage() {
+	printf("%s", usage);
+}
+
+static void _print_help() {
+	printf("%s%s", usage, help);
+}
 
 int main(int argc, char *argv[])
 {	
 	bool status;
+	int rc;
+	int arg_index = 1;
+	char *loadBin = NULL;
+	char *scriptFile = NULL;
 
 	// Intialize simulator
 	status = SimControl.InitSim(argv[0]);
 	if(!status) return 1;
 
+	while (arg_index < argc) {
+		if ((!strcmp(argv[arg_index], "-h")) ||
+		    (!strcmp(argv[arg_index], "--help"))) {
+			_print_help();
+			return 0;
+		} else if (!strcmp(argv[arg_index], "-s")) {
+			arg_index++;
+			if (scriptFile) {
+				printf("ERROR: Script file was already specified once\n\n");
+				_print_usage();
+				return 1;
+			}
+			scriptFile = argv[arg_index];
+		} else if (!loadBin) {
+			// Assume bare arg is a binary file for emu86 to load
+			loadBin = argv[arg_index];
+		} else {
+			printf("ERROR: Unknown argument '%s'; "
+				   "<file> already specified as '%s'\n\n",
+				   argv[arg_index], loadBin);
+			_print_usage();
+			return 1;
+		}
+
+		arg_index++;
+	}
+
 	// Begin main execution loop
-	SimControl.ExecLoop(argv[1]);
+	rc = SimControl.ExecLoop(loadBin, scriptFile);
 
 #ifdef TERMIOS_CONSOLE
 	/*
@@ -52,6 +106,6 @@ int main(int argc, char *argv[])
 	closeConio();
 #endif
 
-	return 0;
+	return rc;
 }
 
