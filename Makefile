@@ -10,3 +10,6 @@ clean:
 	make --directory compiler/ clean
 	make --directory emulator/ clean
 	rm -rf $(BIN_DIR)
+
+reproducer:
+	make --directory emulator/ reproducer

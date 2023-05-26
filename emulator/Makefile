@@ -111,6 +111,9 @@ sys.o:		sys.cpp x86emu.h x86emu/regs.h x86emu/debug.h x86emu/prim_ops.h
 PIC.o:		PIC.cpp PIC.h x86emu/x86emui.h
 		$(CC) -c PIC.cpp
 
+reproducer:
+	$(CC) reproducer.cpp -o reproducer.out
+
 # Cleanup
 clean:		
 		-rm -f *.o ExecRelease/emu86 ExecRelease/ProgramCRT
