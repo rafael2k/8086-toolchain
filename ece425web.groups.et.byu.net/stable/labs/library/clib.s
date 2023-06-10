@@ -31,14 +31,14 @@ InterruptVectorTable:
         dd      0                       ; Int 18h
         dd      0                       ; Int 19h
         dd      0                       ; Int 1Ah
-        dd      0                       ; Int 1Bh
+        dd      0 ; Simptris Services   ; Int 1Bh
         dd      0                       ; Int 1Ch
         dd      0                       ; Int 1Dh
         dd      0                       ; Int 1Eh
         dd      0                       ; Int 1Fh
         dd      0                       ; Int 20h
         dd      0 ; Reserved (DOS)      ; Int 21h
-        dd      0 ; Simptris Services   ; Int 22h
+        dd      0                       ; Int 22h
         dd      0                       ; Int 23h
         dd      0                       ; Int 24h
         dd      0                       ; Int 25h
