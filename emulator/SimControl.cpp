@@ -3096,6 +3096,11 @@ int CSimControl::ExecLoop(char *loadBin, char *scriptFile)
 
 			// Skip command if it starts with a // comment
 			length = strlen(cmdString);
+
+			if (length >= COMMAND_BUFFER_SIZE - 1) {
+				printf("WARNING: Command is longer than line buffer size %d\n", COMMAND_BUFFER_SIZE - 1);
+			}
+
 			if ((length >= 2) && (cmdString[0] == '/' && cmdString[1] == '/')) {
 				continue;
 			}
