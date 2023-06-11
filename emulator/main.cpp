@@ -32,7 +32,7 @@ void closeConio(void);
 #endif
 
 static const char *usage =
-"Usage: emu86 [<file>] [-s <script_file>] [-h|--help]\n";
+"Usage: emu86 [<file>] [-c <commands>] [-s <script_file>] [-h|--help]\n";
 
 static const char *help = 
 "\n"
@@ -41,6 +41,7 @@ static const char *help =
 "Options:\n"
 "  <file> : The file to run on the emulator. Equivalent to the 'l <file>'\n"
 "           command once inside the emulator.\n"
+"  -c <commands> : A ;-delimited string of commands to run on startup.\n"
 "  -s <script_file> : A text file of newline-delimited emulator commands to\n"
 "                     run on startup. Supports # and // comments at the\n"
 "                     beginning of the line.\n"
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
 	int arg_index = 1;
 	char *loadBin = NULL;
 	char *scriptFile = NULL;
+	char *inlineCmdStr = NULL;
 
 	// Intialize simulator
 	status = SimControl.InitSim(argv[0]);
@@ -80,6 +82,9 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			scriptFile = argv[arg_index];
+		} else if (!strcmp(argv[arg_index], "-c")) {
+			arg_index++;
+			inlineCmdStr = argv[arg_index];
 		} else if (!loadBin) {
 			// Assume bare arg is a binary file for emu86 to load
 			loadBin = argv[arg_index];
@@ -95,7 +100,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Begin main execution loop
-	rc = SimControl.ExecLoop(loadBin, scriptFile);
+	rc = SimControl.ExecLoop(loadBin, scriptFile, inlineCmdStr);
 
 #ifdef TERMIOS_CONSOLE
 	/*

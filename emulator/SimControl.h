@@ -35,6 +35,7 @@
 #define DEFAULT_DISASSEMBE_SIZE	20			// Default number of instructions so disassemble with disassemble command
 #define DEFAULT_STACK_DUMP_SIZE 10			// Default number of bytes to dump from top of stack
 #define DEFAULT_HISTORY_SIZE	10			// Default number of history entries to display with history command
+#define MAX_INLINE_CMDS			64			// The max ;-delimited commands possible in -c <command_string>
 
 #define DATA_SEGMENT	0x00	// Same as CS
 #define EXTRA_SEGMENT	0x00	// Same as CS
@@ -221,7 +222,7 @@ public:
 	// Interface //
 
 	bool InitSim(char *path);
-	int ExecLoop(char *loadBin, char *scriptFile);
+	int ExecLoop(char *loadBin, char *scriptFile, char *inlineCmdStr);
 
 	void EnqueueInterrupt(int interruptVector);
 	void ProgramTerminated(unsigned short exitCode);

@@ -3062,12 +3062,15 @@ void CSimControl::CheckRegisterMonitors(void)
 
 // This is the Simulators execution loop. Call this function to start the similator
 // after initialization.
-int CSimControl::ExecLoop(char *loadBin, char *scriptFile)
+int CSimControl::ExecLoop(char *loadBin, char *scriptFile, char *inlineCmdStr)
 {
 	char cmdString[COMMAND_BUFFER_SIZE];
 	int status;
 	int length;
 	FILE *script_fp = NULL;
+	char *inlineCmds[MAX_INLINE_CMDS];
+	int inlineCmdsLen = 0;
+	int inlineCmdCurrentIndex = 0;
 
 	SimIO.PrintText("\nWelcome to the BYU ECEn 425 8086 simulator.\nFor a list of commands, enter h or ?.\n\n");
 
@@ -3081,6 +3084,20 @@ int CSimControl::ExecLoop(char *loadBin, char *scriptFile)
 		if (script_fp == NULL) {
 			printf("ERROR: Failed to open script file '%s'\n", scriptFile);
 			return 1;
+		}
+	}
+
+	if (inlineCmdStr) {
+		// Create tokens delimited by ;
+		char *token = strtok(inlineCmdStr, ";");
+		while (token != NULL) {
+			if (inlineCmdsLen >= MAX_INLINE_CMDS) {
+				printf("WARNING: Hit maximum number of inline commands (%d)", MAX_INLINE_CMDS);
+				break;
+			}
+			inlineCmds[inlineCmdsLen] = token;
+			inlineCmdsLen++;
+			token = strtok(NULL, ";");
 		}
 	}
 
@@ -3125,6 +3142,20 @@ int CSimControl::ExecLoop(char *loadBin, char *scriptFile)
 			SimIO.PrintText("Emu86>");
 			// Print out the command, so user can see what was inputted
 			SimIO.PrintText(cmdString);
+		} else if (inlineCmdsLen) {
+			// Use snprintf to convert ; to newlines
+			snprintf(cmdString, COMMAND_BUFFER_SIZE, "%s\n", inlineCmds[inlineCmdCurrentIndex]);
+			inlineCmdCurrentIndex++;
+
+			// Display prompt
+			SimIO.PrintText("Emu86>");
+			// Print out the command, so user can see what was inputted
+			SimIO.PrintText(cmdString);
+
+			// Stop on next iteration once all commands have been processed
+			if (inlineCmdCurrentIndex >= inlineCmdsLen) {
+				inlineCmdsLen = 0;
+			}
 		} else {
 			// Interactive commands
 			// Display prompt
