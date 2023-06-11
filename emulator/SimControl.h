@@ -116,7 +116,8 @@ enum CommandID {
 	CMD_SET_MEM_MONITOR,
 
 	CMD_SIMPTRIS,
-	CMD_SIMPTRIS_KILL
+	CMD_SIMPTRIS_KILL,
+	CMD_HARD_EXIT_MODE_TOGGLE
 };
 
 
@@ -326,6 +327,7 @@ private:
 	void CmdSetMemMonitor(SimCommand *cmd);
 	void CmdClearAll(SimCommand *cmd);
 	void CmdInitSimptris(SimCommand *cmd);
+	void CmdHardExitModeToggle(SimCommand *cmd);
 	
 
 	// Commonly used methods //
@@ -369,6 +371,7 @@ private:
 	bool simptris;
 	bool systemHalted;
 	bool stopFlag;
+	bool hardExitMode;
 
 	
 

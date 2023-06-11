@@ -59,6 +59,9 @@ const char HelpMessage[] =
 	"                 turn ticks off. Enter \"t\" to display current interval.\n"
 	" v             Toggle verbose mode.\n"			// What should verbose do?
 	" w             Wipe (clear) program output screen.\n"	// Wipe output screen?
+	" z             Toggle hard exit mode: simulator itself will return when the\n"
+	"                 program is terminated (e.g. exit()) or the system is halted\n"
+	"                 (e.g. illegal op code). Useful for scripted testing.\n"
 	" ?,h           Print this list of commands \n";
 
 /* OLD, from original SIMP simulator

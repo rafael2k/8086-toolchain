@@ -1335,7 +1335,10 @@ int CSimControl::ExecCommand(char *cmdString, SimCommand *cmd)
 		if( Simptris.GameOver()) SimIO.PrintText("Game over!\n");
 		*/		
 	}
-	else {
+	else if (!strcmp(cmdString, "z")) {
+		cmd->op = CMD_HARD_EXIT_MODE_TOGGLE;
+		CmdHardExitModeToggle(cmd);
+	} else {
 		SimIO.PrintMessage("Invalid command: \"%s\"\n", cmd->cmdString);
 		cmd->op = CMD_INVALID;
 	}
@@ -2333,6 +2336,18 @@ void CSimControl::CmdInitSimptris(SimCommand *cmd)
 }
 
 
+// Handle init simptris command (simptris)
+void CSimControl::CmdHardExitModeToggle(SimCommand *cmd)
+{
+	if (hardExitMode) {
+		SimIO.PrintText("Hard exit mode disabled.\n");
+		hardExitMode = false;
+	} else {
+		SimIO.PrintText("Hard exit mode enabled.\n");
+		hardExitMode = true;
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -2356,6 +2371,10 @@ void CSimControl::ProgramTerminated(unsigned short exitCode)
 
 	//SimIO.PrintMessage("Program terminated with exit code %Xh.\n", (int)exitCode);
 	SimIO.PrintMessage("PROGRAM FINISHED with exit code %Xh.\n", (int)exitCode);
+
+	if (hardExitMode) {
+		exit((int)exitCode);
+	}
 }
 
 
@@ -2397,6 +2416,11 @@ void CSimControl::SystemHalted(int errorCode)
 		break;
 	default:
 		SimIO.PrintText("SIMULATOR STOP: Unknown exception.\n");
+	}
+
+	// Exit the simulator if hardExitMode is enabled
+	if (hardExitMode) {
+		exit(1);
 	}
 }
 
