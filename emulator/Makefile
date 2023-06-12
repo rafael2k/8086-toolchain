@@ -97,7 +97,7 @@ decode.o:	decode.cpp x86emu/x86emui.h
 		$(CC) -c decode.cpp
 fpu.o:		fpu.cpp x86emu/x86emui.h
 		$(CC) -c fpu.cpp
-main.o:		main.cpp x86emu/x86emui.h
+main.o:		main.cpp x86emu/x86emui.h Help.h
 		$(CC) -c main.cpp
 ops.o:		ops.cpp x86emu/x86emui.h
 		$(CC) -c ops.cpp

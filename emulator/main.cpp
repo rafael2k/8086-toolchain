@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "SimControl.h"
+#include "Help.h"
 
 #include "x86emu/x86emui.h"
 
@@ -32,7 +33,7 @@ void closeConio(void);
 #endif
 
 static const char *usage =
-"Usage: emu86 [<file>] [-c <str>] [-s <file>] [-h]\n";
+"Usage: emu86 [<file>] [-c <str>] [-s <file>] [-l] [-r] [-h]\n";
 
 static const char *help = 
 "\n"
@@ -46,6 +47,8 @@ static const char *help =
 "  -s <script_file> : A text file of newline-delimited emulator commands to\n"
 "                     run on startup. Supports # and // comments at the\n"
 "                     beginning of the line.\n"
+"  -l : List emu86 commands. Equivalent to `h` or `?` in the emulator.\n"
+"  -r : List x86 register descriptions. Equivalent to `regs` in the emulator.\n"
 "  -h|--help : Print this help message.\n"
 ;
 
@@ -74,6 +77,12 @@ int main(int argc, char *argv[])
 		if ((!strcmp(argv[arg_index], "-h")) ||
 		    (!strcmp(argv[arg_index], "--help"))) {
 			_print_help();
+			return 0;
+		} else if (!strcmp(argv[arg_index], "-l")) {
+			printf(HelpMessage);
+			return 0;
+		} else if (!strcmp(argv[arg_index], "-r")) {
+			printf(RegisterDescription);
 			return 0;
 		} else if (!strcmp(argv[arg_index], "-s")) {
 			arg_index++;
