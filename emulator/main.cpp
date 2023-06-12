@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	char *scriptFile = NULL;
 	char *inlineCmdStr = NULL;
 
-	// Intialize simulator
+	// Initialize simulator
 	status = SimControl.InitSim(argv[0]);
 	if(!status) return 1;
 
