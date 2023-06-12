@@ -68,10 +68,6 @@ int main(int argc, char *argv[])
 	char *scriptFile = NULL;
 	char *inlineCmdStr = NULL;
 
-	// Initialize simulator
-	status = SimControl.InitSim(argv[0]);
-	if(!status) return 1;
-
 	while (arg_index < argc) {
 		if ((!strcmp(argv[arg_index], "-h")) ||
 		    (!strcmp(argv[arg_index], "--help"))) {
@@ -107,6 +103,10 @@ int main(int argc, char *argv[])
 
 		arg_index++;
 	}
+
+	// Initialize simulator
+	status = SimControl.InitSim(argv[0]);
+	if(!status) return 1;
 
 	// Begin main execution loop
 	rc = SimControl.ExecLoop(loadBin, scriptFile, inlineCmdStr);
