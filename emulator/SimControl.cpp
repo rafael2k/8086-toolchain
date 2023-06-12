@@ -1339,7 +1339,7 @@ int CSimControl::ExecCommand(char *cmdString, SimCommand *cmd)
 		cmd->op = CMD_HARD_EXIT_MODE_TOGGLE;
 		CmdHardExitModeToggle(cmd);
 	} else {
-		SimIO.PrintMessage("Invalid command: \"%s\"\n", cmd->cmdString);
+		SimIO.PrintMessage("Invalid command: \"%s\". Enter ? for help.\n", cmd->cmdString);
 		cmd->op = CMD_INVALID;
 	}
 
@@ -3095,8 +3095,6 @@ int CSimControl::ExecLoop(char *loadBin, char *scriptFile, char *inlineCmdStr)
 	char *inlineCmds[MAX_INLINE_CMDS];
 	int inlineCmdsLen = 0;
 	int inlineCmdCurrentIndex = 0;
-
-	SimIO.PrintText("\nWelcome to the BYU ECEn 425 8086 simulator.\nFor a list of commands, enter h or ?.\n\n");
 
     if (loadBin) {
         snprintf(cmdString, COMMAND_BUFFER_SIZE, "l %s", loadBin);

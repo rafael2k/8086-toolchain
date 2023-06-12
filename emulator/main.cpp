@@ -36,7 +36,8 @@ static const char *usage =
 
 static const char *help = 
 "\n"
-"emu86 is an 8086 emulator. This emu86 was enhanced for BYU's ECEn 425 class.\n"
+"Welcome to the BYU ECEn 425 8086 emulator.\n"
+"For a list of commands, run the h or ? command in the emulator.\n"
 "\n"
 "Options:\n"
 "  <file> : The file to run on the emulator. Equivalent to the 'l <file>'\n"
