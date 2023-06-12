@@ -32,7 +32,7 @@ void closeConio(void);
 #endif
 
 static const char *usage =
-"Usage: emu86 [<file>] [-c <commands>] [-s <script_file>] [-h|--help]\n";
+"Usage: emu86 [<file>] [-c <str>] [-s <file>] [-h]\n";
 
 static const char *help = 
 "\n"
