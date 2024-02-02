@@ -1,69 +1,72 @@
 8086 Toolchain
 ==============
 
-This project is for BYU ECEn 425, and was taken from the CAEDM servers (`/ee2/ee425/src/dist`). The purpose for posting on GitHub is to make the build process available for Ubuntu 12.04+ and Mac OS X, along with any minor modifications along the way.
+This is the 8086 build toolchain for BYU ECEn 425, and was taken from the CAEDM servers (`/ee2/ee425/src/dist`).
 
 **Disclaimer:** For ECEn 425 projects, this may or may not compile exactly the same as the CAEDM machines
 
-## Installing ##
+## Build and Install ##
 
-You can either clone this repo, or on the side click 'Download ZIP'.
-
-To clone:
+To clone this repo, do:
 
 ```bash
-$ git clone https://github.com/plusk01/8086-toolchain.git
+$ cd ~
+$ git clone https://github.com/hintron/8086-toolchain.git
 ```
 
-**Prerequisites for Linux:**
+**Prerequisites to build toolchain:**
 
-There are a few dependencies needed for this toolchain to be built correctly.
+* Linux:
+  * On Debian based systems (Ubuntu, etc.), run the following in your terminal:
+  `sudo apt-get install gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev xterm`
+  * *Tested on Ubuntu 16.04 x86_64, Ubuntu 17.04 x86_64, Ubuntu 17.10, and Ubuntu 22.04 (regular and WSL)*
 
-On Debian based systems (Ubuntu, etc), run the following in your terminal:
-
-```bash
-sudo apt-get install gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev xterm
-```
-
-*Tested on Ubuntu 16.04 x86_64, Ubuntu 17.04 x86_64, Ubuntu 17.10, and Ubuntu 22.04 (regular and WSL)*
-
-**Prerequisites for Mac OS X:**
-
-Your system will depend on the X11 Window system, which is now called XQuartz. It can be found [here](http://xquartz.macosforge.org/). (Tested with version 3.7.7)
-
-*Tested on Mac OS X Yosemite.*
+* Mac OS X:
+  * Your system will depend on the X11 Window system, which is now called
+  XQuartz. It can be found [here](http://xquartz.macosforge.org/).
+  * *Tested with XQuartz 3.7.7 on Mac OS X Yosemite.*
 
 **Building on Linux/Mac:**
 
-Then, `cd` into the repo and run `make`:
+`cd` into the cloned repo and run `make`:
 
 ```bash
-$ cd 8086-toolchain/
+$ cd ~/8086-toolchain/
 $ make
 ```
 
-If all goes as planned, you will have 5 binaries in your `./8086-toolchain/bin/`
- directory. If there are any problems, you can try `cd`ing into each of the tool
+This will create 5 binaries in the `./bin/` directory:
+
+* `c86` - The 8086 compiler
+* `emu86` - The 8086 emulator
+* `nasm` - The 8086 assembler
+* `ndiasm` - The 8086 disassembler
+* `ProgramCRT` - The terminal program used by emu86 to display Simptris.
+
+ If there are any problems, you can try `cd`ing into each of the tool
  directories and running make individually so you can see the warnings/errors more clearly.
 
 To use the binaries from anywhere, see **Setting Your Path** below.
 
 ### Setting Your Path ###
 
-Put this at the bottom of your `~/.profile` `~/.bashrc` (Or whatever your shells startup script is).
+To use the binaries from anywhwere, modify your `PATH` at the bottom of your
+`~/.profile` or `~/.bashrc` (or whatever your shell's startup script is):
 
 ```bash
-# ECEn 425 binaries
-export PATH="/Users/plusk01/Documents/8086-toolchain/bin":$PATH
+# 8086 Toolchain
+export PATH="$HOME/8086-toolchain/bin":$PATH
 ```
 
-Make sure to reload your shells startup by either closing your shell and reopening it, or using the `source` command:
+Reload your shell's startup by either closing your shell and reopening it, or using the `source` command:
 
 ```bash
 source ~/.profile
+# Or
+source ~/.bashrc
 ```
 
-This will actually add your toolchain bin to the path.
+This will add your toolchain bin to `PATH` in the current terminal.
 
 ## Common Problems ##
 
@@ -89,7 +92,7 @@ lab1.s:         lab1.c
                 cpp -xc++ lab1.c lab1.i    # Step 1, Preprocess
                 c86 -g lab1.i lab1.s       # Step 2, Compile
 
-clean:  
+clean:
                 rm lab1.bin lab1.lst lab1final.s lab1.s lab1.i
 
 test:
