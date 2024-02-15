@@ -103,19 +103,19 @@ test:
 
 ## Website ##
 
-The ECEn 425 website is stored in directory `ece425web.groups.et.byu.net/` and
+The ECEn 425 website is stored in directory `website/` and
 contains lab instructions, 8086 resources, homework assignments, and class
 slides.
 
 ### Browsing the website ##
 
-You can open file `ece425web.groups.et.byu.net/index.html` locally with a web
+You can open file `website/index.html` locally with a web
 browser, and all the links should work.
 
 Another option is to host the website locally. In a terminal, do:
 
 ```shell
-cd ece425web.groups.et.byu.net/
+cd website/
 python3 -m http.server 8000
 ```
 Then, access the local website in your browser at `localhost:8000`.
