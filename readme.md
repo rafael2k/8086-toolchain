@@ -1,5 +1,4 @@
-8086 Toolchain
-==============
+# 8086 Toolchain
 
 This is the 8086 build toolchain for BYU ECEn 425, and was taken from the CAEDM servers (`/ee2/ee425/src/dist`).
 
