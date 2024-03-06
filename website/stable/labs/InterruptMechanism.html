@@ -13,7 +13,7 @@
 <p>
 The original 8088/8086 PCs used an Intel 8259A PIC (<i>Programmable Interrupt Controller</i>) to manage its eight hardware interrupts (also called <i>IRQs</i>,
 which is short for <i>Interrupt Requests</i>). This separate chip communicates with the processor and tells it when an interrupt needs to be serviced and which ISR
-(Interrupt Service Routine) to call. Therefore, any device that generates interrupts is connected to one the interrupt pins on the PIC, not to the CPU. The interrupt (or IRQ) pins on the PIC are numbered
+(Interrupt Service Routine) to call. Therefore, any device that generates interrupts is connected to one of the interrupt pins on the PIC, not to the CPU. The interrupt (or IRQ) pins on the PIC are numbered
 0 to 7 where IRQ 0 is the highest priority interrupt and IRQ 7 is the lowest priority. The PIC connects to the processor's single maskable interrupt pin.
 If an interrupt occurs, the PIC lets the processor know by asserting this interrupt pin.
 
