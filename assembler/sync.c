@@ -41,7 +41,7 @@ void init_sync(void)
      * dynamically I avoid problems with the total size of DGROUP
      * in Borland C.
      */
-    synx = malloc((SYNC_MAX+1) * sizeof(*synx));
+    synx = fmemalloc((SYNC_MAX+1) * sizeof(*synx));
     if (!synx) {
 	fprintf(stderr, "ndisasm: not enough memory for sync array\n");
 	exit(1);

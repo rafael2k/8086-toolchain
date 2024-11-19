@@ -11,8 +11,11 @@
 # You may need to adjust these values.
 
 prefix = /usr/local
-CC = cc
-CFLAGS = -O -I.
+CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/elks/include -I/usr/bin/watcom/h -IH -D__UNIX__ -D__ELKS__
+#CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,/home/rafael2k/programs/devel/elks/libc/libc.lib
+
+CFLAGS = -I.
 PERL = perl
 MKDIR_P = mkdir -p
 BIN_DIR = ../bin/
@@ -30,30 +33,30 @@ mandir = $(prefix)/man
 .SUFFIXES: .c .o .h .mac .pl
 
 .c.o:
-	$(CC) -c $(CFLAGS) -m32 $<
+	$(CC) -c $(CFLAGS) $<
 
 NASM = 	nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
-       	parser.o outform.o output/outbin.o output/outaout.o \
+	parser.o outform.o output/outbin.o output/outaout.o \
 	output/outcoff.o output/outelf.o \
-       	output/outobj.o output/outas86.o output/outdbg.o preproc.o listing.o \
-       	eval.o output/outrdf2.o output/outieee.o
+	output/outobj.o output/outas86.o output/outdbg.o preproc.o listing.o \
+	eval.o output/outrdf2.o output/outieee.o
 
 # The following added because make didn't like directory organization. -WS 
 NASMO = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
-       	parser.o outform.o outbin.o outaout.o \
+	parser.o outform.o outbin.o outaout.o \
 	outcoff.o outelf.o \
-       	outobj.o outas86.o outdbg.o preproc.o listing.o \
-       	eval.o outrdf2.o outieee.o
+	outobj.o outas86.o outdbg.o preproc.o listing.o \
+	eval.o outrdf2.o outieee.o
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
 all: nasm ndisasm
 
 nasm: directory $(NASM)
-	$(CC) -m32 -o $(BIN_DIR)nasm $(NASMO)
+	$(LINK) -o $(BIN_DIR)nasm $(NASMO)
 
 ndisasm: directory $(NDISASM)
-	$(CC) -m32 -o $(BIN_DIR)ndisasm $(NDISASM)
+	$(LINK) -o $(BIN_DIR)ndisasm $(NDISASM)
 
 directory:
 	$(MKDIR_P) $(BIN_DIR)

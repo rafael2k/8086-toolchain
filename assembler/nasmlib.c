@@ -15,6 +15,16 @@
 #include "nasmlib.h"
 #include "insns.h"		/* For MAX_KEYWORD */
 
+/* Return the `ldiv_t' representation of NUMER over DENOM.  */
+ldiv_t
+ldiv (long int numer, long int denom)
+{
+  ldiv_t result;
+  result.quot = numer / denom;
+  result.rem = numer % denom;
+  return result;
+}
+
 static efunc nasm_malloc_error;
 
 #ifdef LOGALLOC
