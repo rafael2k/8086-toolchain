@@ -175,6 +175,14 @@ static struct itemplate instrux_DAS[] = {
     ITEMPLATE_END
 };
 
+static struct itemplate instrux_DB[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_DD[] = {
+    ITEMPLATE_END
+};
+
 static struct itemplate instrux_DEC[] = {
     {I_DEC, 1, {REG16,0,0}, "\320\10\x48", IF_8086},
     {I_DEC, 1, {REGMEM|BITS8,0,0}, "\300\1\xFE\201", IF_8086},
@@ -185,6 +193,18 @@ static struct itemplate instrux_DEC[] = {
 static struct itemplate instrux_DIV[] = {
     {I_DIV, 1, {REGMEM|BITS8,0,0}, "\300\1\xF6\206", IF_8086},
     {I_DIV, 1, {REGMEM|BITS16,0,0}, "\320\300\1\xF7\206", IF_8086},
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_DQ[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_DT[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_DW[] = {
     ITEMPLATE_END
 };
 
@@ -679,6 +699,10 @@ static struct itemplate instrux_INC[] = {
     ITEMPLATE_END
 };
 
+static struct itemplate instrux_INCBIN[] = {
+    ITEMPLATE_END
+};
+
 static struct itemplate instrux_INT[] = {
     {I_INT, 1, {IMMEDIATE,0,0}, "\1\xCD\24", IF_8086|IF_SB},
     ITEMPLATE_END
@@ -876,18 +900,6 @@ static struct itemplate instrux_OR[] = {
     ITEMPLATE_END
 };
 
-static struct itemplate instrux_ORPD[] = {
-    {I_ORPD, 2, {XMMREG,MEMORY,0}, "\301\3\x66\x0F\x56\110", IF_WILLAMETTE|IF_SSE2|IF_SM},
-    {I_ORPD, 2, {XMMREG,XMMREG,0}, "\3\x66\x0F\x56\110", IF_WILLAMETTE|IF_SSE2},
-    ITEMPLATE_END
-};
-
-static struct itemplate instrux_ORPS[] = {
-    {I_ORPS, 2, {XMMREG,MEMORY,0}, "\301\2\x0F\x56\110", IF_KATMAI|IF_SSE},
-    {I_ORPS, 2, {XMMREG,XMMREG,0}, "\2\x0F\x56\110", IF_KATMAI|IF_SSE},
-    ITEMPLATE_END
-};
-
 static struct itemplate instrux_OUT[] = {
     {I_OUT, 2, {IMMEDIATE,REG_AL,0}, "\1\xE6\24", IF_8086|IF_SB},
     {I_OUT, 2, {IMMEDIATE,REG_AX,0}, "\320\1\xE7\24", IF_8086|IF_SB},
@@ -950,6 +962,23 @@ static struct itemplate instrux_RCR[] = {
 
 static struct itemplate instrux_RESB[] = {
     {I_RESB, 1, {IMMEDIATE,0,0}, "\340", IF_8086},
+    ITEMPLATE_END
+};
+
+
+static struct itemplate instrux_RESD[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_RESQ[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_REST[] = {
+    ITEMPLATE_END
+};
+
+static struct itemplate instrux_RESW[] = {
     ITEMPLATE_END
 };
 
@@ -1197,8 +1226,13 @@ struct itemplate *nasm_instructions[] = {
     instrux_CWD,
     instrux_DAA,
     instrux_DAS,
+	instrux_DB,
+	instrux_DD,
     instrux_DEC,
     instrux_DIV,
+	instrux_DQ,
+	instrux_DT,
+	instrux_DW,
     instrux_EQU,
     instrux_F2XM1,
     instrux_FABS,
@@ -1282,6 +1316,7 @@ struct itemplate *nasm_instructions[] = {
     instrux_IMUL,
     instrux_IN,
     instrux_INC,
+	instrux_INCBIN,
     instrux_INT,
     instrux_INT03,
     instrux_INT3,
@@ -1309,8 +1344,6 @@ struct itemplate *nasm_instructions[] = {
     instrux_NOP,
     instrux_NOT,
     instrux_OR,
-    instrux_ORPD,
-    instrux_ORPS,
     instrux_OUT,
     instrux_POP,
     instrux_POPF,
@@ -1321,6 +1354,10 @@ struct itemplate *nasm_instructions[] = {
     instrux_RCL,
     instrux_RCR,
     instrux_RESB,
+	instrux_RESD,
+    instrux_RESQ,
+    instrux_REST,
+    instrux_RESW,
     instrux_RET,
     instrux_RETF,
     instrux_RETN,

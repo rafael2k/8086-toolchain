@@ -47,7 +47,7 @@ void *nasm_malloc_log (char *file, int line, size_t size)
 void *nasm_malloc (size_t size)
 #endif
 {
-    void *p = malloc(size);
+    void *p = fmemalloc(size);
     if (!p)
 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
@@ -64,7 +64,19 @@ void *nasm_realloc_log (char *file, int line, void *q, size_t size)
 void *nasm_realloc (void *q, size_t size)
 #endif
 {
-    void *p = q ? realloc(q, size) : malloc(size);
+    void *p;
+	if (q)
+	{
+		void *foo = fmemalloc(size);
+		memcpy(foo, q, size);
+		fmemfree(q);
+		p = foo;
+
+	}
+	else
+	{
+		p = fmemalloc(size);
+	}
     if (!p)
 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
@@ -85,7 +97,7 @@ void nasm_free (void *q)
 #endif
 {
     if (q) {
-	free (q);
+	fmemfree (q);
 #ifdef LOGALLOC
 	fprintf(logfp, "%s %d free(%p)\n",
 		file, line, q);
@@ -102,7 +114,7 @@ char *nasm_strdup (const char *s)
     char *p;
     int size = strlen(s)+1;
 
-    p = malloc(size);
+    p = fmemalloc(size);
     if (!p)
 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
@@ -123,7 +135,7 @@ char *nasm_strndup (char *s, size_t len)
     char *p;
     int size = len+1;
 
-    p = malloc(size);
+    p = fmemalloc(size);
     if (!p)
 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC

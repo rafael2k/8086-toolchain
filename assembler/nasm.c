@@ -58,8 +58,8 @@ static FILE *ofile = NULL;
 //int optimizing = -1;		/* number of optimization passes to take */
 int optimizing = 10;		/* Default to "-O2" option (3 passes), for EE425. -WSF	*/
 static int sb, cmd_sb = 16;		       /* by default */
-static unsigned long cmd_cpu = IF_PLEVEL;	/* highest level by default */
-static unsigned long cpu = IF_PLEVEL;		/* passed to insn_size & assemble.c */
+static unsigned long cmd_cpu = IF_8086;	/* highest level by default */
+static unsigned long cpu = IF_8086;		/* passed to insn_size & assemble.c */
 int global_offset_changed;             /* referenced in labels.c */
 
 static loc_t location;
@@ -787,9 +787,9 @@ static void assemble_file (char *fname)
     int pass, pass_max;
     int pass_cnt = 0;		/* count actual passes */
 
-    if (cmd_sb == 32 && cmd_cpu < IF_386)
+    if (cmd_cpu != IF_8086)
       report_error(ERR_FATAL, "command line: "
-                    "32-bit segment size requires a higher cpu");
+                    "Only 16-bit cpu supported");
 
    pass_max = (optimizing>0 ? optimizing : 0) + 2;    /* passes 1, optimizing, then 2 */
    pass0 = !(optimizing>0);		/* start at 1 if not optimizing */
@@ -1622,25 +1622,6 @@ static unsigned long get_cpu (char *value)
 {
 
     if (!strcmp(value, "8086")) return IF_8086;
-    if (!strcmp(value, "186")) return IF_186;
-    if (!strcmp(value, "286")) return IF_286;
-    if (!strcmp(value, "386")) return IF_386;
-    if (!strcmp(value, "486")) return IF_486;
-    if (!strcmp(value, "586")    ||
-    	!nasm_stricmp(value, "pentium") ) 	return IF_PENT;
-    if (!strcmp(value, "686")  ||
-    	!nasm_stricmp(value, "ppro") ||
-    	!nasm_stricmp(value, "pentiumpro") ||
-    	!nasm_stricmp(value, "p2")    ) 	return IF_P6;
-    if (!nasm_stricmp(value, "p3")    ||
-    	!nasm_stricmp(value, "katmai") ) 	return IF_KATMAI;
-    if (!nasm_stricmp(value, "p4")    ||	/* is this right? -- jrc */
-    	!nasm_stricmp(value, "willamette") ) 	return IF_WILLAMETTE;
-    if (!nasm_stricmp(value, "ia64") ||
-	!nasm_stricmp(value, "ia-64") ||
-	!nasm_stricmp(value, "itanium") ||
-	!nasm_stricmp(value, "itanic") ||
-	!nasm_stricmp(value, "merced") )	return IF_IA64;
 
     report_error (pass0<2 ? ERR_NONFATAL : ERR_FATAL, "unknown 'cpu' type");
 
@@ -1654,7 +1635,7 @@ static int get_bits (char *value)
 
     if ((i = atoi(value)) == 16)  return i;   /* set for a 16-bit segment */
     else if (i == 32) {
-	if (cpu < IF_386) {
+	if (cpu != IF_8086) {
 	    report_error(ERR_NONFATAL,
 	    	"cannot specify 32-bit segment on processor below a 386");
 	    i = 16;
