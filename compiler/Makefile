@@ -101,11 +101,23 @@ RM=rm -f
 #	-Wwrite-strings -Wcast-qual -Wwrite-strings -Wcast-align \
 #	-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
 #	-Wredundant-decls -Wnested-externs
-CC=gcc
-CCFLAGS=  -Wall -ansi -std=c99 -pedantic -Wshadow -Wpointer-arith \
-	-Wwrite-strings -Wcast-qual -Wwrite-strings -Wcast-align \
-	-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
-	-Wredundant-decls -Wnested-externs
+
+ifeq ($(strip ${TOPDIRE}),)
+	TOPDIRE=/home/rafael2k/programs/devel/elks
+else
+	TOPDIRE=${TOPDIR}
+endif
+
+ifeq ($(strip ${WATCOM}),)
+	WATCOMC=/usr/bin/watcom
+else
+	WATCOMC=${WATCOM}
+endif
+
+
+CC=owcc
+CCFLAGS= -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 #------------------------------------------------------------------------------
 CFLAGS=-c $(CCFLAGS) $(CFLGS)
@@ -339,8 +351,9 @@ $(S)c$(S)ln:
 $(S)c$(S)cx:
 		cxref $(CXFLAGS) -C $<
 
+# fix linking here
 $(BINDIR)$(PROG):	directory $(OBJS)
-		$(CC) $(LDFLAGS) $(OF)$@ $(OBJS) $(LIB)
+		$(LINK) $(LDFLAGS) $(OF)$@ $(OBJS) $(LIB)
 
 directory:
 	$(MKDIR_P) $(BINDIR)
@@ -361,7 +374,7 @@ $(OBJDIR)analyze$(S)$(O) : $(SRCDIR)analyze$(S)c
 $(OBJDIR)cglbdef$(S)$(O) : $(SRCDIR)cglbdef$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)cglbdef$(S)$(O) $(SRCDIR)cglbdef$(S)c
 $(OBJDIR)cmain$(S)$(O) : $(SRCDIR)cmain$(S)c
-	$(CC) -ansi $(CFLAGS) $(OF)$(OBJDIR)cmain$(S)$(O) $(SRCDIR)cmain$(S)c
+	$(CC)  $(CFLAGS) $(OF)$(OBJDIR)cmain$(S)$(O) $(SRCDIR)cmain$(S)c
 #	$(CC) $(CFLAGS) $(OF)$(OBJDIR)cmain$(S)$(O) $(SRCDIR)cmain$(S)c
 $(OBJDIR)decl$(S)$(O) : $(SRCDIR)decl$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)decl$(S)$(O) $(SRCDIR)decl$(S)c
