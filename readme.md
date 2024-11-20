@@ -2,7 +2,7 @@
 
 This is a fork of the upstream 8086-toolchain, which contains a neat NASM version, and 
 the c68/c86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
-I also added dev86 cpp.
+I also added dev86's cpp and ld.
 
 I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
 
