@@ -170,13 +170,6 @@ int main(int argc, char **argv)
 		}
 		if ( !strcmp(v, "intel") ) {
 		  prefer = 0;	/* Default */
-		} else if ( !strcmp(v, "amd") ) {
-		  prefer = IF_AMD|IF_3DNOW;
-		} else if ( !strcmp(v, "cyrix") ) {
-		  prefer = IF_CYRIX|IF_3DNOW;
-		} else if ( !strcmp(v, "idt") || !strcmp(v, "centaur") ||
-			    !strcmp(v, "winchip") ) {
-		  prefer = IF_3DNOW;
 		} else {
 		  fprintf(stderr, "%s: unknown vendor `%s' specified with `-p'\n", pname, v);
 		  return 1;

@@ -11,7 +11,7 @@
 # You may need to adjust these values.
 
 prefix = /usr/local
-CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/elks/include -I/usr/bin/watcom/h -IH -D__UNIX__ -D__ELKS__ -DOF_ONLY -DOF_OBJ -DOF_BIN
+CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/elks/include -I/usr/bin/watcom/h -IH -D__UNIX__ -D__ELKS__ -DOF_ONLY -DOF_OBJ -DOF_BIN -DOF_ELF -DOF_AOUT -DOF_AS86
 #CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
 LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,/home/rafael2k/programs/devel/elks/libc/libc.lib
 
@@ -50,7 +50,7 @@ NASMO = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: nasm
+all: nasm ndisasm
 
 nasm: directory $(NASM)
 	$(LINK) -o $(BIN_DIR)nasm $(NASMO)
