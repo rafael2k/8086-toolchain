@@ -116,7 +116,7 @@ static const char *insn_names[] = {
 	"int",
 	"int03",
 	"int3",
-	"int0",
+	"into",
 	"iret",
 	"iretw",
 	"jcxz",
