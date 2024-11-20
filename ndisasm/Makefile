@@ -11,9 +11,23 @@
 # You may need to adjust these values.
 
 prefix = /usr
-CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/elks/include -I/usr/bin/watcom/h -IH -D__UNIX__ -D__ELKS__
+
+
+ifeq ($(strip ${TOPDIRE}),)
+	TOPDIRE=/home/rafael2k/programs/devel/elks
+else
+	TOPDIRE=${TOPDIR}
+endif
+
+ifeq ($(strip ${WATCOM}),)
+	WATCOMC=/usr/bin/watcom
+else
+	WATCOMC=${WATCOM}
+endif
+
+CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__ -DOF_ONLY -DOF_OBJ -DOF_BIN -DOF_ELF -DOF_AOUT -DOF_AS86
 #CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,/home/rafael2k/programs/devel/elks/libc/libc.lib
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 CFLAGS = -I.
 PERL = perl
