@@ -5,6 +5,8 @@ the c68/c86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave 
 
 I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
 
+The relevant directories for ELKS are: nasm, ndisasm and compiler (c86).
+
 
 # 8086 Toolchain (Original OLD README)
 
