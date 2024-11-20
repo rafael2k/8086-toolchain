@@ -1,0 +1,50 @@
+diff --git a/assembler/nasmlib.c b/assembler/nasmlib.c
+index bb0ab29..ae4d902 100644
+@@ -37,7 +48,7 @@ void *nasm_malloc_log (char *file, int line, size_t size)
+ void *nasm_malloc (size_t size)
+ #endif
+ {
+-    void *p = malloc(size);
++    void *p = fmemalloc(size);
+     if (!p)
+ 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+ #ifdef LOGALLOC
+@@ -54,7 +65,19 @@ void *nasm_realloc_log (char *file, int line, void *q, size_t size)
+ void *nasm_realloc (void *q, size_t size)
+ #endif
+ {
+-    void *p = q ? realloc(q, size) : malloc(size);
++    void *p;
++	if (q)
++	{
++		void *foo = fmemalloc(size);
++		memcpy(foo, p, size);
++		fmemfree(p);
++		p = foo;
++
++	}
++	else
++	{
++		p = malloc(size);
++	}
+     if (!p)
+ 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+ #ifdef LOGALLOC
+@@ -75,7 +98,7 @@ void nasm_free (void *q)
+ #endif
+ {
+     if (q) {
+-	free (q);
++	fmemfree (q);
+ #ifdef LOGALLOC
+ 	fprintf(logfp, "%s %d free(%p)\n",
+ 		file, line, q);
+@@ -92,7 +115,7 @@ char *nasm_strdup (const char *s)
+     char *p;
+     int size = strlen(s)+1;
+ 
+-    p = malloc(size);
++    p = fmemalloc(size);
+     if (!p)
+ 	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+ #ifdef LOGALLOC
