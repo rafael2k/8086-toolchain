@@ -1,23 +1,50 @@
 CFLAGS=-Wall -Wstrict-prototypes
 
-all: bcc-cpp
+ifeq ($(strip ${TOPDIRE}),)
+	TOPDIRE=/home/rafael2k/programs/devel/elks
+else
+	TOPDIRE=${TOPDIR}
+endif
 
-bcc-cpp: main.o cpp.o hash.o token1.o token2.o
-	$(CC) $(CFLAGS) -o bcc-cpp main.o cpp.o hash.o token1.o token2.o
+ifeq ($(strip ${WATCOM}),)
+	WATCOMC=/usr/bin/watcom
+else
+	WATCOMC=${WATCOM}
+endif
+
+CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__
+#CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
+
+
+all: cpp
+
+cpp: main.o cpp.o hash.o token1.o token2.o
+	$(LINK) -o cpp main.o cpp.o hash.o token1.o token2.o
 
 clean realclean:
-	rm -f bcc-cpp main.o cpp.o hash.o token1.o token2.o tmp.h
+	rm -f cpp main.o cpp.o hash.o token1.o token2.o tmp.h
 
 maintclean: realclean
 	rm -f token1.h token2.h
 
 main.o: cc.h
+	$(CC) -c -o main.o main.c
+
 cpp.o: cc.h
+	$(CC) -c -o cpp.o cpp.c
+
 hash.o: cc.h
+	$(CC) -c -o hash.o hash.c
+
 tree.o: cc.h
+	$(CC) -c -o tree.o tree.c
 
 token1.o: token1.h
+	$(CC) -c -o token1.o token1.c
+
 token2.o: token2.h
+	$(CC) -c -o token2.o token2.c
 
 token1.h: token1.tok
 	gperf -aptTc -N is_ctok -H hash1 token1.tok > tmp.h

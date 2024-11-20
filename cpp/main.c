@@ -46,7 +46,7 @@ char ** argv;
    char * p;
 static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
 
-#ifdef LC_CTYPE
+#ifndef __ELKS__
    setlocale(LC_CTYPE, "");
 #endif
 
