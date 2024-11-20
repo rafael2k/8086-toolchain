@@ -1,4 +1,10 @@
-# 8086 Toolchain
+# ELKS 8086 Toolchain
+
+This is a fork of the upstream 8086-toolchain, which contains a neat NASM version, and 
+the c68/c86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
+
+
+# 8086 Toolchain (Original OLD README)
 
 This is the C-based 8086 toolchain for BYU ECEn 425 (Real Time Operating
 Systems). This repo also includes [an archive of the class website][4],
