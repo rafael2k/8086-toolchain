@@ -1158,17 +1158,17 @@ PRIVATE void put_literals P0 (void)
 // we use a linker. -WSF
 PRIVATE void put_reference P1 (SYM *, sp)
 {
-	/*
+
     if (!is_symbol_output (sp)) {
 	switch (storageof (sp)) {
 	case sc_global:
-	    put_noseg ();
-	    oprintf ("\tpublic\t%s%s", outlate (nameof (sp)), newline);
+	    //put_noseg ();
+	    oprintf ("\tglobal\t%s%s", outlate (nameof (sp)), newline);
 	    break;
 	case sc_external:
-	    put_noseg ();
-	    oprintf ("\textrn\t%s:", outlate (nameof (sp)));
-	    puttype (typeof (sp));
+	    //put_noseg ();
+	    oprintf ("\textern\t%s", outlate (nameof (sp)));
+	    //puttype (typeof (sp));
 	    oprintf ("%s", newline);
 	    break;
 	default:
@@ -1176,7 +1176,7 @@ PRIVATE void put_reference P1 (SYM *, sp)
 	}
 	symbol_output (sp);
     }
-	*/
+
 }
 
 /* align the following data */
@@ -1190,7 +1190,7 @@ static void put_align P1 (SIZE, al)
 	    break;
 	case 2L:
 	case 4L:
-	    oprintf ("\tALIGN\t%d%s", (int) al, newline);
+	    oprintf ("\talign\t%d%s", (int) al, newline);
 	    break;
 	default:
 	    FATAL ((__FILE__, "put_align", "align == %ld", al));
@@ -1279,12 +1279,12 @@ PRIVATE void put_start P0 (void)
 
 	// Add header info
 	oprintf("\tCPU\t8086%s", newline);
-	oprintf("\tALIGN\t2%s", newline);
+	// oprintf("\tALIGN\t2%s", newline);
 	//oprintf("\tORG\t100h%s%s", newline, newline);
 
 	// Add instruction to jump to start of program
 	//oprintf("\tsection .text%s", newline);
-	oprintf("\tjmp\t%smain\t; Jump to program start%s", external_prefix, newline);
+	// oprintf("\tjmp\t%smain\t; Jump to program start%s", external_prefix, newline);
 	
 	// Append file name to labels for unique names //
 	// This will give labels the form: L_file_name_#

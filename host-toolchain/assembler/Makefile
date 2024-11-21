@@ -30,7 +30,7 @@ mandir = $(prefix)/man
 .SUFFIXES: .c .o .h .mac .pl
 
 .c.o:
-	$(CC) -c $(CFLAGS) -m32 $<
+	$(CC) -c $(CFLAGS) $<
 
 NASM = 	nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
        	parser.o outform.o output/outbin.o output/outaout.o \
@@ -50,10 +50,10 @@ NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 all: nasm ndisasm
 
 nasm: directory $(NASM)
-	$(CC) -m32 -o $(BIN_DIR)nasm $(NASMO)
+	$(CC) -o $(BIN_DIR)nasm $(NASMO)
 
 ndisasm: directory $(NDISASM)
-	$(CC) -m32 -o $(BIN_DIR)ndisasm $(NDISASM)
+	$(CC) -o $(BIN_DIR)ndisasm $(NDISASM)
 
 directory:
 	$(MKDIR_P) $(BIN_DIR)
