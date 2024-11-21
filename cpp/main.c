@@ -47,7 +47,9 @@ char ** argv;
 static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
 
 #ifndef __ELKS__
+#ifdef LC_CTYPE
    setlocale(LC_CTYPE, "");
+#endif
 #endif
 
    alltok = 1;	/* Get all tokens from the cpp. */

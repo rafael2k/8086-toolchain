@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #ifdef __STDC__
@@ -114,8 +113,7 @@ static int_type get_exp_value P((void));
 static void gen_substrings P((char *, char *, int, int));
 static char * insert_substrings P((char *, struct arg_store *, int));
 
-int
-gettok()
+int gettok(void)
 {
    int ch;
 
@@ -184,13 +182,16 @@ gettok()
    }
 }
 
-static int
-gettok_nosub()
-{ int rv; dont_subst++; rv=get_onetok(SKIP_SPACE); dont_subst--; return rv; }
+static int gettok_nosub(void)
+{
+   int rv;
+   dont_subst++;
+   rv = get_onetok(SKIP_SPACE);
+   dont_subst--;
+   return rv;
+}
 
-static int
-get_onetok(keep)
-int keep;
+static int get_onetok(int keep)
 {
    char * p;
    int state;
@@ -449,8 +450,7 @@ break_break:
    return ch;
 }
 
-static int
-pgetc()
+static int pgetc(void)
 {
    int ch, ch1;
 
@@ -507,8 +507,7 @@ pgetc()
 }
 
 /* This function handles the first and second translation phases of Ansi-C */
-static int 
-chget()
+static int chget(void)
 {
    int ch, ch1;
    for(;;) {
@@ -544,8 +543,7 @@ chget()
    }
 }
 
-static void 
-unchget(int ch)
+static void unchget(int ch)
 {
 #if CPP_DEBUG
    fprintf(stderr, "\b", ch);
@@ -560,8 +558,7 @@ unchget(int ch)
    if( ch == '\n' ) c_lineno--;
 }
 
-static int 
-chget_raw()
+static int chget_raw(void)
 #if CPP_DEBUG
 {
    int ch;
@@ -581,8 +578,7 @@ static int last_fi = 0;
    return ch;
 }
 
-static int 
-realchget()
+static int realchget(void)
 #endif
 {
    int ch;
@@ -634,8 +630,7 @@ realchget()
    }
 }
 
-static int
-do_preproc()
+static int do_preproc(void)
 {
    int val, no_match=0;
 
@@ -702,8 +697,7 @@ do_preproc()
    return 0;
 }
 
-static int
-do_proc_copy_hashline()
+static int do_proc_copy_hashline(void)
 {
    int off, ch;
 
@@ -725,8 +719,7 @@ do_proc_copy_hashline()
    return TK_COPY;
 }
 
-static void
-do_proc_include()
+static void do_proc_include(void)
 {
    int ch, ch1;
    char * p;
@@ -771,8 +764,7 @@ do_proc_include()
    return;
 }
 
-static void
-do_proc_define()
+static void do_proc_define(void)
 {
    int ch, ch1;
    struct define_item * ptr, * old_value = 0;
@@ -887,8 +879,7 @@ do_proc_define()
    while(ch != '\n') ch = pgetc();
 }
 
-static void
-do_proc_undef()
+static void do_proc_undef(void)
 {
    int ch;
    struct define_item * ptr;
@@ -913,9 +904,7 @@ do_proc_undef()
    }
 }
 
-static int
-do_proc_if(type)
-int type;
+static int do_proc_if(int type)
 {
    int ch = 0;
    if(if_false && if_hidden)
@@ -982,8 +971,7 @@ int type;
    return 0;
 }
 
-static void 
-do_proc_else()
+static void do_proc_else(void)
 {
    if( if_hidden == 0 )
    {
@@ -998,8 +986,7 @@ do_proc_else()
    do_proc_tail();
 }
 
-static void 
-do_proc_endif()
+static void do_proc_endif(void)
 {
    if( if_hidden )
       if_hidden--;
@@ -1018,8 +1005,7 @@ do_proc_endif()
    do_proc_tail();
 }
 
-static void
-do_proc_tail()
+static void do_proc_tail(void)
 {
    int ch, flg=1;
    while((ch = pgetc()) != '\n') if(ch > ' ')
@@ -1030,8 +1016,7 @@ do_proc_tail()
    }
 }
 
-static int
-get_if_expression()
+static int get_if_expression(void)
 {
    int value = get_expression(0);
 
@@ -1041,9 +1026,7 @@ get_if_expression()
    return value;
 }
 
-static int_type
-get_expression(prio)
-int prio;
+static int_type get_expression(int prio)
 {
    int_type lvalue;
    int_type rvalue;
@@ -1175,8 +1158,7 @@ int prio;
    return lvalue;
 }
 
-static int_type
-get_exp_value()
+static int_type get_exp_value(void)
 {
    int_type value = 0;
    int sign = 1;
@@ -1254,12 +1236,7 @@ get_exp_value()
    return sign<0 ? -value: value;
 }
 
-void
-gen_substrings(macname, data_str, arg_count, is_vararg)
-char * macname;
-char * data_str;
-int arg_count;
-int is_vararg;
+void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
 {
    char * mac_text = 0;
    struct arg_store *arg_list;
@@ -1380,11 +1357,7 @@ int is_vararg;
 #endif
 }
 
-static char * 
-insert_substrings(data_str, arg_list, arg_count)
-char * data_str;
-struct arg_store *arg_list;
-int arg_count;
+static char *insert_substrings(char *data_str, struct arg_store *arg_list, int arg_count)
 {
    int ac, ch;
    char * p, * s;

@@ -25,8 +25,8 @@ extern int    dialect;
 extern int gettok P((void));
 
 struct token_trans { char * name; int token; };
-struct token_trans * is_ctok P((const char *str, unsigned int len));
-struct token_trans * is_ckey P((const char *str, unsigned int len));
+struct token_trans * is_ctok P((register const char *str, register size_t len));
+struct token_trans * is_ckey P((register const char *str, register size_t len));
 
 #define WORDSIZE	128
 #define TK_WSPACE	256
