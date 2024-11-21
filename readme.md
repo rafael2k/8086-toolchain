@@ -8,6 +8,7 @@ I removed all instructions above 8086 set from nasm, but 186 and 286 instruction
 
 The relevant directories for ELKS are: nasm, ld, cpp and c86.
 
+Directory "host-toolchain" contains the original tools just patched to compile in recent Linux / MacOS systems.
 
 # 8086 Toolchain (Original OLD README)
 
