@@ -6,7 +6,7 @@ I also added dev86's cpp and ld.
 
 I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
 
-The relevant directories for ELKS are: nasm, ndisasm and compiler (c86).
+The relevant directories for ELKS are: nasm, ld, cpp and c86.
 
 
 # 8086 Toolchain (Original OLD README)
