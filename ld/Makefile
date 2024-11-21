@@ -43,6 +43,9 @@ all: ld86 objdump86
 ld86: $(OBJS)
 	$(LINK) $(LDFLAGS) $(OBJS) -o $@
 
+objdump86: objdump86.o
+	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+
 install: ld86
 	install -d $(LIBDIR)
 	install -m 755 ld86 $(LIBDIR)

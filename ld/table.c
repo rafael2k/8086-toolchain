@@ -30,7 +30,7 @@ PUBLIC void syminit()
 
     for (i = sizeof(int) <= 2 ? 0xE000 : (unsigned) 0x38000;
 	 i != 0; i -= 512)
-	if ((tableptr = malloc(i)) != NUL_PTR)
+	if ((tableptr = fmemalloc(i)) != NUL_PTR)
 	    break;
     if (tableptr == NUL_PTR)
 	outofmemory();
