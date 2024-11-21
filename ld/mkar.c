@@ -60,7 +60,7 @@ char buf[128];
       snprintf(arbuf.ar_size, 10, "%-10ld", (long)st.st_size);
       memcpy(arbuf.ar_fmag, ARFMAG, sizeof(arbuf.ar_fmag));
 
-      if( fwrite((void *)&arbuf, 1, sizeof(arbuf), fd) != sizeof(arbuf) )
+      if( fwrite( (void *) &arbuf, 1, sizeof(arbuf), fd) != sizeof(arbuf) )
          fatalerror("Cannot write header");
 
       ptr = malloc(st.st_size+2);
