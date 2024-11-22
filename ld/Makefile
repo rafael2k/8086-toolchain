@@ -1,65 +1,81 @@
+# Copyright (C) 1997 Robert de Bath <robert@mayday.cix.co.uk>
+# This file is part of the Linux-8086 Development environment and is
+# distributed under the GNU General Public License.
 
-LIBDIR	=/usr/bin
-CFLAGS	=-Os
-LDFLAGS	=
+VERSION=0.16.21
 
-# Will need some of these if you want native executables on non-Linux/i386
-# -DDETECTAOUT			# Turn on detection.
-# -DV7_A_OUT			# a.out.h is like V7
-# -DBSD_A_OUT			# a.out.h is like BSD
-# -DSTANDARD_GNU_A_OUT		# a.out.h is like GNU normal.
-#
-# -DREL_OUTPUT -DBUGCOMPAT	# -r Produces weird *.o files.
-#
-DEFS	=-DREL_OUTPUT
+TARGETS=install clean other \
+    bcc86 unproto copt as86 ld86 elksemu \
+    install-all install-bcc install-emu install-lib \
+    install-lib2 install-ln install-man install-other \
+    all-libs alt-libs library lib-386 lib-bsd lib-dos lib-fast lib-stand \
+    config tests dis88 doselks bootblocks ld86r
 
-# An alternative file for a non-standard a.out.h (eg i386 linux on an Alpha)
-#
-# NATIVE=-DA_OUT_INCL='"a_out_local.h"' 
+ELKSSRC= /usr/src/elks
+PREFIX=  /usr
+BINDIR=	 $(PREFIX)/bin
+LIBDIR=  $(PREFIX)/lib/bcc
+INCLDIR= $(PREFIX)/lib/bcc
+ASLDDIR= $(BINDIR)
+MANDIR=	 $(PREFIX)/man
+CFLAGS=  -O2 -pipe
+IFDEFNAME= ifdef
+WD=$(shell pwd)
 
-ifeq ($(strip ${TOPDIRE}),)
-	TOPDIRE=/home/rafael2k/programs/devel/elks
-else
-	TOPDIRE=${TOPDIR}
-endif
+# These are used to compile binaries run on the build machine, only relevant if cross-compiling dev86.
+BUILD_CC ?= $(CC)
+BUILD_CFLAGS ?= $(CFLAGS)
+BUILD_LDFLAGS ?= $(LDFLAGS)
 
-ifeq ($(strip ${WATCOM}),)
-	WATCOMC=/usr/bin/watcom
-else
-	WATCOMC=${WATCOM}
-endif
+# Some makes take the last of a list as the default ...
+all: make.fil
+	PATH="`pwd`/bin:$$PATH" $(MAKE) -f make.fil VERSION=$(VERSION) TOPDIR=`pwd` $@
 
+$(TARGETS): make.fil
+	PATH="`pwd`/bin:$$PATH" $(MAKE) -f make.fil VERSION=$(VERSION) TOPDIR=`pwd` $@
 
-CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__
-#CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
+$(TARGETS):
 
+ld: ld86
+as: as86
 
-OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
-      writex86.o writebin.o writeemu.o
+distclean: realclean
 
-all: ld86 objdump86
+realclean:
+	-[ ! -f make.fil ] || $(MAKE) -f make.fil VERSION=$(VERSION) TOPDIR=`pwd` $@
+	-rm -f make.fil ifdef ifdefg
+	-find -name '*~' -delete
+	-for X in */; do cd $$X && make clean; cd $(WD); done
 
-ld86: $(OBJS)
-	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+make.fil: $(IFDEFNAME) makefile.in
+	./$(IFDEFNAME) -MU $(IFDEFOPTS) makefile.in >tmp.mak
+	echo > tmp.sed
+	[ "$(BINDIR)" != "//bin" ] || echo >> tmp.sed "s:%BINDIR%:/bin:"
+	[ "$(LIBDIR)" != "//lib/bcc" ] || echo >> tmp.sed "s:%LIBDIR%:/lib/bcc:"
+	[ "$(INCLDIR)" != "//lib/bcc" ] || echo >> tmp.sed "s:%INCLDIR%:/lib/bcc:"
+	[ "$(ASLDDIR)" != "//bin" ] || echo >> tmp.sed "s:%ASLDDIR%:/bin:"
+	[ "$(MANDIR)" != "//man" ] || echo >> tmp.sed "s:%MANDIR%:/man:"
+	echo >> tmp.sed "s:%PREFIX%:$(PREFIX):"
+	echo >> tmp.sed "s:%BINDIR%:$(BINDIR):"
+	echo >> tmp.sed "s:%INCLDIR%:$(INCLDIR):"
+	echo >> tmp.sed "s:%LIBDIR%:$(LIBDIR):"
+	echo >> tmp.sed "s:%ASLDDIR%:$(ASLDDIR):"
+	echo >> tmp.sed "s:%MANDIR%:$(MANDIR):"
+	echo >> tmp.sed "s:%ELKSSRC%:$(ELKSSRC):"
+	echo >> tmp.sed "s:%CC%:$(CC):"
+	echo >> tmp.sed "s:%CFLAGS%:$(CFLAGS):"
+	echo >> tmp.sed "s:%LDFLAGS%:$(LDFLAGS):"
+	sed -f tmp.sed < tmp.mak > make.tmp
+	mv -f make.tmp make.fil
+	@rm -f tmp.mak tmp.sed
 
-objdump86: objdump86.o
-	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+$(IFDEFNAME): ifdef.c
+	$(BUILD_CC) $(IFDEFARCH) $(BUILD_CFLAGS) $(IFDEFFLAGS) $(BUILD_LDFLAGS) -o $(IFDEFNAME) ifdef.c
 
-install: ld86
-	install -d $(LIBDIR)
-	install -m 755 ld86 $(LIBDIR)
+uninstall:
+	@echo 'Sorry, no go; it was just wrong.'
+	false
 
-clean realclean clobber:
-	rm -f *.o ld86 ld86r objchop catimage objdump86
-
-$(OBJS): align.h ar.h bindef.h byteord.h config.h const.h globvar.h obj.h \
-	 syshead.h type.h x86_aout.h
-
-writebin.o: writebin.c
-	$(CC) $(CFLAGS) $(DEFS) $(NATIVE) -c $<
-
-writerel.o: writebin.c
-
-.c.o:
-	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
+distribution:
+	@[ `id -u` -eq 0 ] || fakeroot -- sh ./Mk_dist $(VERSION)
+	@[ `id -u` -ne 0 ] || sh ./Mk_dist $(VERSION)

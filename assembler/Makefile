@@ -47,7 +47,7 @@ NASMO = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: ndisasm
+all: nasm ndisasm
 
 nasm: directory $(NASM)
 	$(CC) -o $(BIN_DIR)nasm $(NASMO)

@@ -1,21 +1,32 @@
+all: host elks
+
 BIN_DIR=bin/
 
-all:
-	make --directory nasm/
-	make --directory ndisasm/
-	make --directory c86/
-	make --directory cpp/
-	make --directory ld/
-#	make --directory emulator/
+elks:
+	make -C compiler -f Makefile.elks
+	make -C assembler -f Makefile.elks
+	make -C cpp -f Makefile.elks
+	make -C ld -f Makefile.elks
+	make -C ndisasm -f Makefile.elks
+#	make -C emulator -f Makefile.elks
+
+host:
+	make -C compiler
+	make -C assembler
+	make -C emulator
+	make -C cpp
+	make -C ld
+	make -C ndisasm
+
 
 clean:
-	make --directory nasm/ clean
-	make --directory ndisasm/ clean
-	make --directory c86/ clean
-	make --directory cpp/ clean
-	make --directory ld/ clean
-#	make --directory emulator/ clean
+	make -C compiler clean
+	make -C assembler clean
+	make -C emulator clean
+	make -C cpp clean
+	make -C ld clean
+	make -C ndisasm clean
 	rm -rf $(BIN_DIR)
 
 #reproducer:
-#	make --directory emulator/ reproducer
+#	make -C emulator/ reproducer
