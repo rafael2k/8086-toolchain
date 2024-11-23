@@ -25,7 +25,7 @@
 # named CRTexe, which reads a pipe and ouputs the data, acting as a
 # separate output window.
 
-CC = g++ -m32
+CC = g++
 PCRTCC = gcc
 
 BIN_DIR = ../bin/

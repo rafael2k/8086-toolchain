@@ -173,9 +173,10 @@ void rel_global P0 (void)
 	    message (MSG_RELEASEGLB, (int) (glo_mem * sizeof (long)));
 	}
 #endif /* LIST */
-	message (MSG_MAXMEMORY, (int) (max_mem * sizeof (long)));
     }
 #endif
+    if (verbose_option)
+	message (MSG_MAXMEMORY, (int) (max_mem * sizeof (long)));
     glbblk = NIL_BLK;
     max_mem = (size_t) 0;
     glo_mem = (size_t) 0;

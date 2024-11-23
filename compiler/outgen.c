@@ -72,9 +72,9 @@ const CHAR *outlate P1 (const CHAR *, string)
     dp = (CHAR *) &symname[0];
     if (*string == (CHAR) '.') {
 #ifdef TRANSLATE
-	if (!trans_option) {
-	    return string;
-	}
+	//if (!trans_option) {
+	    //return string;
+	//}
 	/* delete the leading '.' which mucks things up here!! */
 	sp = &string[1];
 #else

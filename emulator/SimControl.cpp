@@ -85,7 +85,7 @@ bool CSimControl::InitSim(char *path)
 	// Set up simulator core variables to reflect memory allocation
     memset(&M, 0, sizeof(M));	// Clear registers
 	M.privatevp = pCoreMemory;
-	M.mem_base = (u32)M.privatevp;
+	M.mem_base = (unsigned long)M.privatevp;
 	M.mem_size = SIM_MEM_SIZE;
 	
 	// Init processor registers to standard values

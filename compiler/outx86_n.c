@@ -77,7 +77,7 @@ enum e_gt
 };
 enum e_sg
 {
-    noseg, codeseg, dataseg
+    noseg, codeseg, dataseg, bssseg
 };
 
 /*********************************************** Static Function Definitions */
@@ -116,7 +116,7 @@ static int outcol = 0;
 static SIZE align_type = 0L;
 
 static char prefix_buffer[MAX_LABEL+1];	// Variable added for unique label generation. -WSF
-static const char *prefix = "L";				// This is the assembler label prefix (was "I"). -WSF
+static const char *prefix = "L";		// This is the assembler label prefix (was "I"). -WSF
 static const char *comment = ";";		// Character used to begin comments. -WSF
 
 static struct oplst
@@ -422,7 +422,7 @@ static struct oplst
     ,
 #endif /* ASM */
     {
-	"; >>>>> Line:", 0		/* op_line */	// Changed from '"|.line", 0' - WSF
+	"; Line ", 0		/* op_line */	// Changed from '"|.line", 0' - WSF
     }
     , {
 	(char *) NULL, 0	/* op_label */
@@ -783,7 +783,8 @@ PRIVATE void put_code P1 (const CODE *, ip)
 
 	// The following code replaces the commented version below. -WSF
 	
-	/*	This version prints line number and comments on one line
+#if 1
+	/*	This version prints line number and comments on one line */
 	if(ip->oper1 != NIL_ADDRESS) {
 		if(ip->oper2 != NIL_ADDRESS) {
 			if(ip->opcode != op_line) {
@@ -793,21 +794,21 @@ PRIVATE void put_code P1 (const CODE *, ip)
 				putamode(ip->oper1, len1, sa, ip);
 			}
 			else {
-				char *string;
+				const CHAR *string;
 				
 				// Skip over leading spaces
 				string = ip->oper2->u.offset->v.str; 
 				while(*string != 0 && (*string == ' ' || *string == '\t')) string++;
 				// Print the comment
-				oprintf(" %ld> %s", (long)ip->oper1->u.offset->v.i, string); // Add space after to prevent NASM EOL character problems
+				oprintf("%ld >>>>> %s", (long)ip->oper1->u.offset->v.i, string); // Add space after to prevent NASM EOL character problems
 			}
 		}
 		else {
 			oprintf("\t");
 			putamode(ip->oper1, len1, sa, ip);
 		}
-	}*/
-
+        }
+#else
 	// This version prints line number and comments on 2 lines
 	if (ip->oper1 != NIL_ADDRESS) {
 		if(ip->opcode != op_asm) oprintf ("\t");
@@ -824,7 +825,7 @@ PRIVATE void put_code P1 (const CODE *, ip)
 			oprintf("%s\t%s >>>>> %s ", newline, comment, string);
 		}
     }
-
+#endif
 	// End replacement section. -WSF
 
 	/* Original code:
@@ -985,10 +986,10 @@ PRIVATE void put_storage P1 (SYM *, sp)
 	
 	put_bseg (alignment_of_type (typeof (sp)));
 	if (is_static (sp)) {
-		oprintf ("%s%u:%s\tTIMES\t%ld db 0%s", prefix, (unsigned) sp->value.l, newline, size, newline);
+		oprintf ("%s%u:%s\tRESB\t%ld%s", prefix, (unsigned) sp->value.l, newline, size, newline);
 	}
 	else {
-		oprintf ("%s:%s\tTIMES\t%ld db 0%s", outlate (nameof (sp)), newline, size, newline);
+		oprintf ("%s:%s\tRESB\t%ld%s", outlate (nameof (sp)), newline, size, newline);
 	}
 }
 /*
@@ -1105,57 +1106,57 @@ PRIVATE void put_literals P0 (void)
 /*
  * write out the type of the symbol
  */
-// static void puttype P1 (const TYP *, tp)
-// {
-//     if (tp == NIL_TYP) {
-// 	/* runtime support routine */
-// 	oprintf ("far");	// I don't think this works in NASM. -WSF
-// 	return;
-//     }
-//     switch (tp->type) {
-//     case bt_char:
-//     case bt_schar:
-//     case bt_uchar:
-//     case bt_charu:
-// 	oprintf ("byte");
-// 	break;
-//     case bt_short:
-//     case bt_ushort:
-//     case bt_int16:
-//     case bt_uint16:
-//     case bt_pointer16:
-// 	oprintf ("word");
-// 	break;
-//     case bt_int32:
-//     case bt_uint32:
-//     case bt_long:
-//     case bt_ulong:
-//     case bt_pointer32:
-// 	oprintf ("dword");
-// 	break;
-//     case bt_float:
-// 	oprintf ("dword");	// Changed from "real4". -WSF
-// 	break;
-//     case bt_double:
-//     case bt_longdouble:
-// 	oprintf ("qword");	// Changed from "real8". -WSF
-// 	break;
-//     case bt_func:
-// 	oprintf ("far");	// I don't think this works in NASM. -WSF
-// 	break;
-//     default:
-// 	oprintf ("byte");
-// 	break;
-//     }
-// }
+static void puttype P1 (const TYP *, tp)
+{
+#if 0
+    if (tp == NIL_TYP) {
+	/* runtime support routine */
+	oprintf ("function");	// Was far
+	return;
+    }
+    switch (tp->type) {
+    case bt_char:
+    case bt_schar:
+    case bt_uchar:
+    case bt_charu:
+	oprintf ("byte");
+	break;
+    case bt_short:
+    case bt_ushort:
+    case bt_int16:
+    case bt_uint16:
+    case bt_pointer16:
+	oprintf ("word");
+	break;
+    case bt_int32:
+    case bt_uint32:
+    case bt_long:
+    case bt_ulong:
+    case bt_pointer32:
+	oprintf ("dword");
+	break;
+    case bt_float:
+	oprintf ("dword");	// Changed from "real4". -WSF
+	break;
+    case bt_double:
+    case bt_longdouble:
+	oprintf ("qword");	// Changed from "real8". -WSF
+	break;
+    case bt_func:
+	oprintf ("function");	// Was far
+	break;
+    default:
+	oprintf ("object");     // Was byte
+	break;
+    }
+#endif
+}
 
 /* put the definition of an external name in the ouput file */
 /* assembler can find out about externals itself. This also has the
  * advantage that I don't have to worry if the symbol is in text or
  * data segment. Therefore this function is a noop
  */
-// The following code is commented because public and extern declarations aren't needed unless
-// we use a linker. -WSF
 PRIVATE void put_reference P1 (SYM *, sp)
 {
 
@@ -1176,7 +1177,6 @@ PRIVATE void put_reference P1 (SYM *, sp)
 	}
 	symbol_output (sp);
     }
-
 }
 
 /* align the following data */
@@ -1204,8 +1204,8 @@ static void put_align P1 (SIZE, al)
  */
 PRIVATE void put_epilogue P2 (SYM *, sp, LABEL, label)
 {
-    sp = sp;			/* keep the compiler quiet */
-    label = label;		/* keep the compiler quiet */
+    //sp = sp;			/* keep the compiler quiet */
+    //label = label;		/* keep the compiler quiet */
 }
 
 PRIVATE void nl P0 (void)
@@ -1222,7 +1222,7 @@ static void seg P3 (enum e_sg, segtype, const char *, segname, SIZE, al)
     nl ();
     if (curseg != segtype) {
 	//oprintf ("\tassume ds:flat%s", newline);	// Not supported by NASM. -WSF
-	//oprintf ("\t%s%s", segname, newline);		// Not supported by NASM. -WSF
+	oprintf ("\n\t%s%s", segname, newline);
 	curseg = segtype;
 	align_type = 0L;
     }
@@ -1231,17 +1231,17 @@ static void seg P3 (enum e_sg, segtype, const char *, segname, SIZE, al)
 
 PRIVATE void put_cseg P1 (SIZE, al)
 {
-    seg (codeseg, ".TEXT", al);	// Was ".code". -WSF
+    seg (codeseg, "section .text", al);	// Was ".code". -WSF
 }
 
 PRIVATE void put_dseg P1 (SIZE, al)
 {
-    seg (dataseg, ".DATA", al); // Was ".data"
+    seg (dataseg, "section .data", al); // Was ".data"
 }
 
 static void put_bseg P1 (SIZE, al)
 {
-    put_dseg (al);
+    seg (bssseg, "section .bss", al);
 }
 
 PRIVATE void put_kseg P1 (SIZE, al)
@@ -1267,18 +1267,17 @@ static void put_noseg P0 (void)
 
 PRIVATE void put_finish P0 (void)
 {
-    //oprintf ("\tend%s", newline);	// The "end" indicator is not needed by NASM. -WSF
+    //oprintf ("\tEND%s", newline);	// The "end" indicator is not needed by NASM. -WSF
 }
 
 // The following function was replaced. See original below. -WSF
 PRIVATE void put_start P0 (void)
 {
 	int end, start, i;
-
-    oprintf ("%s Generated by %s (BYU-NASM) %s from %s%s", comment, PROGNAME, VERSION, in_file, newline);
+    oprintf ("%s Generated by %s v%s %s (nasm) from %s%s", comment, PROGNAME, VERSION, LAST_CHANGE_DATE, in_file, newline);
 
 	// Add header info
-	oprintf("\tCPU\t8086%s", newline);
+	oprintf("\tcpu\t8086%s", newline);
 	// oprintf("\tALIGN\t2%s", newline);
 	//oprintf("\tORG\t100h%s%s", newline, newline);
 
@@ -1309,8 +1308,6 @@ PRIVATE void put_start P0 (void)
 	for(i = strlen(prefix_buffer); i >= 0; i--) {
 		if(prefix_buffer[i] == ' ') prefix_buffer[i] = '_';
 	}
-	
-	//
 }
 /*
 PRIVATE void put_start P0 (void)
