@@ -28,7 +28,7 @@
 CC = g++
 PCRTCC = gcc
 
-BIN_DIR = ../bin/
+BIN_DIR = ../host-bin/
 MKDIR_P = mkdir -p
 
 # Nasm Source Directory

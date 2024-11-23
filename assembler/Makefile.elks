@@ -32,7 +32,7 @@ LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,optio
 CFLAGS = -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BIN_DIR = ../bin/
+BIN_DIR=../elks-bin/
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
@@ -129,7 +129,7 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
 clean:
-	rm -f *.o $(BIN_DIR)nasm $(BIN_DIR)ndisasm
+	rm -f *.o $(BIN_DIR)nasm
 	$(MAKE) -C rdoff clean
 
 rdf:

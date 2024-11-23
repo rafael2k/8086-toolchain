@@ -17,7 +17,7 @@ CFLGS=  -DNDEBUG -O
 
 SRCDIR=
 OBJDIR=unixobj/
-BINDIR=../bin/
+BINDIR=../host-bin/
 MKDIR_P=mkdir -p
 
 # cxref flags

@@ -1,12 +1,15 @@
 CFLAGS=-O2 -pipe -Wall -Wstrict-prototypes
 
-all: bcc-cpp
+BINDIR=../host-bin/
 
-bcc-cpp: main.o cpp.o hash.o token1.o token2.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o bcc-cpp main.o cpp.o hash.o token1.o token2.o
+all: cpp
+
+
+cpp: main.o cpp.o hash.o token1.o token2.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BINDIR)cpp main.o cpp.o hash.o token1.o token2.o
 
 clean realclean:
-	rm -f bcc-cpp main.o cpp.o hash.o token1.o token2.o tmp.h
+	rm -f cpp main.o cpp.o hash.o token1.o token2.o tmp.h
 
 distclean maintclean: realclean
 	rm -f token1.h token2.h

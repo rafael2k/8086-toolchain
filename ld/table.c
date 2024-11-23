@@ -30,7 +30,11 @@ PUBLIC void syminit()
 
     for (i = sizeof(int) <= 2 ? 0xE000 : (unsigned) 0x38000;
 	 i != 0; i -= 512)
+#ifdef __ELKS__
 	if ((tableptr = fmemalloc(i)) != NUL_PTR)
+#else
+	if ((tableptr = malloc(i)) != NUL_PTR)
+#endif
 	    break;
     if (tableptr == NUL_PTR)
 	outofmemory();

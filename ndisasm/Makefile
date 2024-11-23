@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -O -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BIN_DIR = ../bin/
+BIN_DIR = ../host-bin/
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
@@ -112,7 +112,7 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
 clean:
-	rm -f *.o $(BIN_DIR)nasm $(BIN_DIR)ndisasm
+	rm -f *.o $(BIN_DIR)ndisasm
 	$(MAKE) -C rdoff clean
 
 rdf:

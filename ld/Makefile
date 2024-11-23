@@ -2,6 +2,7 @@
 LIBDIR	=/usr/bin
 CFLAGS	=-O2 -pipe
 LDFLAGS	=
+BIN_DIR=../host-bin/
 
 # Will need some of these if you want native executables on non-Linux/i386
 # -DDETECTAOUT			# Turn on detection.
@@ -20,10 +21,13 @@ DEFS	=-DREL_OUTPUT
 OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
       writex86.o writebin.o writeemu.o
 
-all: ld86 objchop catimage objdump86
+all: ld86 objdump86
 
 ld86: $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $@
+	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN_DIR)/$@
+
+objdump86: objdump86.o
+	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN_DIR)/$@
 
 install: ld86
 	install -d $(LIBDIR)
@@ -34,11 +38,6 @@ clean realclean clobber:
 
 $(OBJS): align.h ar.h bindef.h byteord.h config.h const.h globvar.h obj.h \
 	 syshead.h type.h x86_aout.h
-
-ar.h:
-	test -f ar.h || \
-	{ rm -f ar.h ; ln -s ../libc/include/ar.h . ; } || \
-	ln ../libc/include/ar.h .
 
 writebin.o: writebin.c
 	$(CC) $(CFLAGS) $(DEFS) $(NATIVE) -c $<
