@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wstrict-prototypes
 
-ifeq ($(strip ${TOPDIRE}),)
+ifeq ($(strip ${TOPDIR}),)
 	TOPDIRE=/home/rafael2k/programs/devel/elks
 else
 	TOPDIRE=${TOPDIR}

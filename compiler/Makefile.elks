@@ -102,7 +102,7 @@ RM=rm -f
 #	-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
 #	-Wredundant-decls -Wnested-externs
 
-ifeq ($(strip ${TOPDIRE}),)
+ifeq ($(strip ${TOPDIR}),)
 	TOPDIRE=/home/rafael2k/programs/devel/elks
 else
 	TOPDIRE=${TOPDIR}

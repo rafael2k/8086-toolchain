@@ -122,7 +122,7 @@ static void docmds1(struct name *np, struct line *lp)
                     {
                         putchar('\n');
                         if (!(np->n_flag & N_PREC))
-                            if (remove(np->n_name) == 0)
+                            if (unlink(np->n_name) == 0)
                                 printf("%s: '%s' removed.\n", myname, np->n_name);
                         exit(1);
                     }

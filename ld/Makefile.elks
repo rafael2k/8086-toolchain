@@ -17,7 +17,7 @@ DEFS	=-DREL_OUTPUT
 #
 # NATIVE=-DA_OUT_INCL='"a_out_local.h"' 
 
-ifeq ($(strip ${TOPDIRE}),)
+ifeq ($(strip ${TOPDIR}),)
 	TOPDIRE=/home/rafael2k/programs/devel/elks
 else
 	TOPDIRE=${TOPDIR}
