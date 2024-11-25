@@ -8,9 +8,7 @@ I also added dev86's cpp and ld.
 
 I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
 
-The relevant directories for ELKS are: nasm, ld, cpp and c86.
-
-Directory "host-toolchain" contains the original tools just patched to compile in recent Linux / MacOS systems.
+The relevant directories for ELKS are: assembler (nasm), ld (linker), cpp (C Preprocessor), c86 (C compiler) and make (make tool).
 
 To build, type "make". Elks binaries will be in "elks-bin" and host binaries in "host-bin". Build should
 work on any recent Linux or MacOS with OpenWatcom v2 installed (source the owsetenv.sh script for setting
