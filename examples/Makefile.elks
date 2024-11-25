@@ -1,7 +1,7 @@
-CPP=../elks-bin/cpp
-CC=../elks-bin/c86
-AS=../elks-bin/nasm
-LD=../elks-bin/ld86
+CPP=cpp
+CC=c86
+AS=nasm
+LD=ld86
 
 all: test
 
@@ -21,6 +21,6 @@ clib.o: clib.s
 	$(AS) -f as86 clib.s -o clib.o
 
 clean:
-	rm *.o *.i test.s
+	rm -f *.o *.i test.s
 
 # end
