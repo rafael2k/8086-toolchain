@@ -39,6 +39,7 @@ opr:
 	make pr ^ opr
 
 $(BINDIR)make:	$(OBJS)
+	mkdir -p $(BINDIR)
 	$(LINK) -o $(BINDIR)make $(OBJS)
 
 $(OBJS):	h.h

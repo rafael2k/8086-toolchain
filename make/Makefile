@@ -26,6 +26,7 @@ opr:
 	make pr ^ opr
 
 $(BINDIR)make:	$(OBJS)
+	mkdir -p $(BINDIR)
 	$(CC) -o $(BINDIR)make $(OBJS)
 
 $(OBJS):	h.h
