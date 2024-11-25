@@ -1,12 +1,10 @@
 all:
-	make clean
+	make cleaneobjs
 	make elks
-	make clean
+	make cleanhobjs
 	make host
 
-# HOST_BIN_DIR=bin/
-
-elks: cleanobjs
+elks: cleaneobjs
 	make -C compiler -f Makefile.elks
 	make -C assembler -f Makefile.elks
 	make -C cpp -f Makefile.elks
@@ -14,7 +12,7 @@ elks: cleanobjs
 	make -C ndisasm -f Makefile.elks
 	make -C make -f Makefile.elks
 
-host:
+host: cleanhobjs
 	make -C compiler
 	make -C assembler
 	make -C cpp
@@ -25,15 +23,17 @@ host:
 
 .PHONY: clean cleanobjs
 
-clean: cleanobjs
+clean: cleaneobjs cleanhobjs
 
-cleanobjs:
+cleaneobjs:
 	make -C compiler -f Makefile.elks clean
 	make -C assembler -f Makefile.elks clean
 	make -C cpp -f Makefile.elks clean
 	make -C ld -f Makefile.elks clean
 	make -C ndisasm -f Makefile.elks clean
 	make -C make -f Makefile.elks clean
+
+cleanhobjs:
 	make -C compiler clean
 	make -C assembler clean
 	make -C cpp clean
@@ -41,7 +41,3 @@ cleanobjs:
 	make -C ndisasm clean
 	make -C make clean
 	make -C emulator clean
-#	rm -rf $(BIN_DIR)
-
-#reproducer:
-#	make -C emulator/ reproducer
