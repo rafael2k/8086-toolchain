@@ -463,7 +463,7 @@ struct RAA *raa_write (struct RAA *r, long posn, long value)
     return result;
 }
 
-#define SAA_MAXLEN 8192
+#define SAA_MAXLEN 4096
 
 struct SAA *saa_init (long elem_len) 
 {

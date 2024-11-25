@@ -408,7 +408,7 @@ int any_extrastdmac;
 /*
  * Tokens are allocated in blocks to improve speed
  */
-#define TOKEN_BLOCKSIZE 4096
+#define TOKEN_BLOCKSIZE 2048
 static Token *freeTokens = NULL;
 struct Blocks {
 	Blocks *next;
