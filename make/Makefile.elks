@@ -17,22 +17,23 @@ CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,
 #CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
 LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
+BINDIR=../elks-bin/
 
 OBJS	=	check.o input.o macro.o main.o \
 		make.o reader.o rules.o
 # unix not defined under Xenix ???
-CFLAGS = -Dunix	
+CFLAGS = -Dunix
 
-all:	make
+all:	$(BINDIR)make
 
-install: make
-	cp make $(EMHOME)/bin/make
+install: $(BINDIR)make
+	cp $(BINDIR)make $(EMHOME)/bin/make
 
 cmp:	make
-	cmp make $(EMHOME)/bin/make
+	cmp $(BINDIR)make $(EMHOME)/bin/make
 
 clean:
-	rm -f *.o make
+	rm -f *.o $(BINDIR)make
 
 pr:
 	@pr README Makefile h.h main.c check.c input.c macro.c make.c reader.c rules.c
@@ -40,7 +41,7 @@ pr:
 opr:
 	make pr ^ opr
 
-make:	$(OBJS)
-	$(LINK) -o make $(OBJS)
+$(BINDIR)make:	$(OBJS)
+	$(LINK) -o $(BINDIR)make $(OBJS)
 
 $(OBJS):	h.h

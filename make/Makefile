@@ -1,21 +1,23 @@
 # Makefile for make!
 EMHOME=../..
 
+BINDIR=../host-bin/
+
 OBJS	=	check.o input.o macro.o main.o \
 		make.o reader.o rules.o
 # unix not defined under Xenix ???
 CFLAGS = -Dunix	
 
-all:	make
+all:	$(BINDIR)make
 
-install: make
-	cp make $(EMHOME)/bin/make
+install: $(BINDIR)make
+	cp $(BINDIR)make $(EMHOME)/bin/make
 
 cmp:	make
-	cmp make $(EMHOME)/bin/make
+	cmp $(BINDIR)make $(EMHOME)/bin/make
 
 clean:
-	rm -f *.o make
+	rm -f *.o $(BINDIR)make
 
 pr:
 	@pr README Makefile h.h main.c check.c input.c macro.c make.c reader.c rules.c
@@ -23,7 +25,7 @@ pr:
 opr:
 	make pr ^ opr
 
-make:	$(OBJS)
-	$(CC) -o make $(OBJS)
+$(BINDIR)make:	$(OBJS)
+	$(CC) -o $(BINDIR)make $(OBJS)
 
 $(OBJS):	h.h

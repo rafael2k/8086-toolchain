@@ -13,6 +13,8 @@ elks:
 	make -C ld -f Makefile.elks
 	make -C ndisasm -f Makefile.elks clean
 	make -C ndisasm -f Makefile.elks
+	make -C make -f Makefile.elks clean
+	make -C make -f Makefile.elks
 #	make -C emulator -f Makefile.elks
 
 host:
@@ -26,6 +28,8 @@ host:
 	make -C ld
 	make -C ndisasm clean
 	make -C ndisasm
+	make -C make clean
+	make -C make
 	make -C emulator clean
 	make -C emulator
 
@@ -42,6 +46,7 @@ clean:
 	make -C cpp clean
 	make -C ld clean
 	make -C ndisasm clean
+	make -C make clean
 	make -C emulator clean
 #	rm -rf $(BIN_DIR)
 
