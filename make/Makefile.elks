@@ -13,15 +13,13 @@ else
 	WATCOMC=${WATCOM}
 endif
 
-CC = ia16-elf-gcc -ffreestanding -fno-inline -melks -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -Wall -Os -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare
-LINK = ia16-elf-gcc -melks-libc -mcmodel=small -nostdlib
+CC = ia16-elf-gcc -ffreestanding -fno-inline -melks -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff -I/home/rafael2k/programs/devel/elks/include -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -Wall -Os -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare -Dunix
+LINK = ia16-elf-gcc -melks-libc -mcmodel=small
 
 BINDIR=../elks-bin/
 
 OBJS	=	check.o input.o macro.o main.o \
 		make.o reader.o rules.o
-# unix not defined under Xenix ???
-CFLAGS = -Dunix
 
 all:	$(BINDIR)make
 
