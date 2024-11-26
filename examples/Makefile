@@ -38,6 +38,6 @@ c86lib.o: ../lib/c86lib.asm
 	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
 
 clean:
-	rm -f *.o *.i test.asm
+	rm -f *.o *.a *.i test.asm
 
 # end

@@ -19,6 +19,7 @@ test.i: test.c clib.h
 	$(CPP) test.c -o test.i
 
 clib.a: syscall.o c86lib.o
+	rm -f clib.a
 	$(AR) vq clib.a syscall.o c86lib.o
 
 syscall.o: ../lib/syscall.asm
@@ -28,6 +29,6 @@ c86lib.o: ../lib/c86lib.asm
 	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
 
 clean:
-	rm -f *.o *.i test.asm
+	rm -f *.o *.a *.i test.asm
 
 # end
