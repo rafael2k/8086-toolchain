@@ -2,25 +2,32 @@ CPP=cpp
 CC=c86
 AS=nasm
 LD=ld86
+AR=ar86
 
 all: test
 
-test: test.o clib.o
-	$(LD) -0 -i test.o clib.o -o test
+test: test.o clib.a
+	$(LD) -0 -i test.o clib.a -o test
 
-test.o: test.s
-	$(AS) -f as86 test.s -o test.o
+test.o: test.asm
+	$(AS) -f as86 test.asm -o test.o
 
-test.s: test.i
-	$(CC) -O test.i test.s
+test.asm: test.i
+	$(CC) -O test.i test.asm
 
 test.i: test.c clib.h
 	$(CPP) test.c -o test.i
 
-clib.o: clib.s
-	$(AS) -f as86 clib.s -o clib.o
+clib.a: syscall.o c86lib.o
+	$(AR) vq clib.a syscall.o c86lib.o
+
+syscall.o: ../lib/syscall.asm
+	$(AS) -f as86 ../lib/syscall.asm -o syscall.o
+
+c86lib.o: ../lib/c86lib.asm
+	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
 
 clean:
-	rm -f *.o *.i test.s
+	rm -f *.o *.i test.asm
 
 # end

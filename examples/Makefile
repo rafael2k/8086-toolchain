@@ -8,25 +8,36 @@ CPP=../host-bin/cpp
 CC=../host-bin/c86
 AS=../host-bin/nasm
 LD=../host-bin/ld86
+AR=../host-bin/ar86
 
 all: test
 
-test: test.o clib.o
-	$(LD) -0 -i test.o clib.o -o test
 
-test.o: test.s
-	$(AS) -f as86 test.s -o test.o
+all: test
 
-test.s: test.i
-	$(CC) -O test.i test.s
+test: test.o clib.a
+	$(LD) -0 -i test.o clib.a -o test
+
+test.o: test.asm
+	$(AS) -f as86 test.asm -o test.o
+
+test.asm: test.i
+	$(CC) -O test.i test.asm
 
 test.i: test.c clib.h
 	$(CPP) test.c -o test.i
 
-clib.o: clib.s
-	$(AS) -f as86 clib.s -o clib.o
+clib.a: syscall.o c86lib.o
+	rm -f clib.a
+	$(AR) vq clib.a syscall.o c86lib.o
+
+syscall.o: ../lib/syscall.asm
+	$(AS) -f as86 ../lib/syscall.asm -o syscall.o
+
+c86lib.o: ../lib/c86lib.asm
+	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
 
 clean:
-	rm *.o *.i test.s
+	rm -f *.o *.i test.asm
 
 # end
