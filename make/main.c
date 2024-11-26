@@ -103,7 +103,6 @@ int main(int argc, char** argv)
                 *nargv++ = p;
             }
         }
-    end_of_args:;
     }
     argv = nargv - nargc;
     argc = nargc;
