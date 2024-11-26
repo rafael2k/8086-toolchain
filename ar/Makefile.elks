@@ -1,0 +1,37 @@
+# Copyright (c) 1999 Greg Haerr <greg@censoft.com>
+# This file is part of the Linux-8086 Development environment and is
+# distributed under the GNU General Public License.
+
+BINDIR =../elks-bin/
+LIBDIR	=/usr/bin
+CFLAGS	=-Os
+LDFLAGS	=
+DEFS	=
+OBJS= ar.o alloca.o
+
+ifeq ($(strip ${TOPDIR}),)
+	TOPDIRE=/home/rafael2k/programs/devel/elks
+else
+	TOPDIRE=${TOPDIR}
+endif
+
+CC = ia16-elf-gcc -ffreestanding -fno-inline -melks -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff -I$(TOPDIRE)/include -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/elks/include -Wall -Os -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare -D__ELKS__
+LINK = ia16-elf-gcc -melks-libc -mcmodel=small
+
+all: $(BINDIR)ar86
+
+$(BINDIR)ar86: $(OBJS)
+	mkdir -p $(BINDIR)
+	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+
+install: $(BINDIR)ar86
+	install -d $(LIBDIR)
+	install -m 755 ar86 $(LIBDIR)
+
+clean realclean clobber:
+	rm -f *.o $(BINDIR)ar86 ar
+
+$(OBJS): ar.h rel_aout.h
+
+.c.o:
+	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
