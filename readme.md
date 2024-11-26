@@ -4,11 +4,17 @@ ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 80
 
 This is a fork of the upstream 8086-toolchain, which contains a neat NASM version, and 
 the c68/c86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
-I also added dev86's cpp and ld.
+I've also added Jody Bruchon's dev86's cpp, ld86 and ar86. Make is courtesy of 
+David Given, Carl Eric Codere and Ceriel Jacobs.
+
+- cpp, ld86 and ar86: https://codeberg.org/jbruchon/dev86
+- make: https://github.com/davidgiven/ack/tree/default/util/make
+- nasm: https://www.nasm.us/
+- c86: Check discussion here: https://github.com/ghaerr/elks/issues/2112
 
 I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
 
-The relevant directories for ELKS are: assembler (nasm), ld (linker), cpp (C Preprocessor), c86 (C compiler) and make (make tool).
+The relevant directories for ELKS are: assembler (nasm), ld (linker), cpp (C Preprocessor), c86 (C compiler), make (make tool) and ar (archiver).
 
 To build, type "make". Elks binaries will be in "elks-bin" and host binaries in "host-bin". Build should
 work on any recent Linux or MacOS with OpenWatcom v2 installed (source the owsetenv.sh script for setting
