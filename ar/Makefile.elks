@@ -7,7 +7,9 @@ LIBDIR	=/usr/bin
 CFLAGS	=-Os
 LDFLAGS	=
 DEFS	=
-OBJS= ar.o alloca.o
+OBJS    = ar.o
+# may need to replace alloca with fmemalloc for large symtabs or OWC compilation
+OBJS   += alloca.o
 
 ifeq ($(strip ${TOPDIR}),)
 	TOPDIRE=/home/rafael2k/programs/devel/elks

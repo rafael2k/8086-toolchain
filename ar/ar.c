@@ -37,10 +37,12 @@
 #define HAVE_RENAME
 #undef  HAVE_FSYNC
 #define SHORT_FILENAME
+#define UINTPTR_T			unsigned int
 #else
 #define HAVE_FCHMOD
 #define HAVE_RENAME
 #undef  HAVE_FSYNC
+#define UINTPTR_T			unsigned long
 #endif
 #define HAVE_TRAILING_SLASH_IN_NAME
 
@@ -55,7 +57,7 @@
 #endif
 
 #ifdef	__ELKS__
-#define	bcopy(source, dest, size)	memcpy((dest), (source), (size))
+#define bcopy(s, d, n)			memcpy((d), (s), (n))
 #define	bcmp(a, b, size)		memcmp((a), (b), (size))
 #define	bzero(s, size)			memset((s), 0, (size))
 #endif
@@ -74,7 +76,7 @@ struct member_desc
     /* The following fields are stored in the member header as decimal or octal
        numerals, but in this structure they are stored as machine numbers.  */
     int mode;		/* Protection mode from member header.  */
-    long int date;	/* Last modify date as stored in member header.  */
+    time_t date;	/* Last modify date as stored in member header.  */
     unsigned int size;	/* Bytes of member's data, from member header.  */
     int uid, gid;	/* UID and GID fields copied from member header.  */
     unsigned int offset;/* Offset in archive of the header of this member.  */
@@ -660,7 +662,12 @@ void extract_member(struct member_desc member, FILE *istream)
 
   if (preserve_dates)
     {
-#if defined(USG) || defined(__BCC__) || defined(__ELKS__)
+#ifdef __ELKS__
+      struct utimbuf tv;
+      tv.actime = member.date;
+      tv.modtime = member.date;
+      utime (member.name, &tv);
+#elif defined(USG) || defined(__BCC__)
       long tv[2];
       tv[0] = member.date;
       tv[1] = member.date;
@@ -1522,7 +1529,6 @@ void read_old_symdefs(struct mapelt *map, int archive_indesc)
 {
   struct mapelt *mapelt;
   char *data;
-  int val;
   int symdefs_size;
 
   mapelt = find_mapelt_noerror (map, "__.SYMDEF");
@@ -1531,7 +1537,7 @@ void read_old_symdefs(struct mapelt *map, int archive_indesc)
 
   data  = (char *) xmalloc (mapelt->info.size);
   lseek (archive_indesc, mapelt->info.data_offset, 0);
-  val = read (archive_indesc, data, mapelt->info.size);
+  read (archive_indesc, data, mapelt->info.size);
 
 #ifdef HOST_TARGET_ENDIANESS_DIFFERS
   symdefs_size = md_chars_to_number ((unsigned char *) data,
@@ -1874,7 +1880,7 @@ void update_symdefs(struct mapelt *map, int archive_indesc)
     }
   else if (pos > old_strings_size)
     fatal ("Old archive's string size was %u too small.",
-	   (void*)(pos - old_strings_size));
+	   (void *)(UINTPTR_T)(pos - old_strings_size));
 
   for (tail = map; tail != 0; tail = tail->next)
     if (tail->info.symdefs)
