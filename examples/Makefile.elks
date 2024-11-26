@@ -20,7 +20,7 @@ test.i: test.c clib.h
 
 clib.a: syscall.o c86lib.o
 	rm -f clib.a
-	$(AR) vq clib.a syscall.o c86lib.o
+	$(AR) qv clib.a syscall.o c86lib.o
 
 syscall.o: ../lib/syscall.asm
 	$(AS) -f as86 ../lib/syscall.asm -o syscall.o
