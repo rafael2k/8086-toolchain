@@ -1193,7 +1193,6 @@ static const CHAR *check_scanf P5 (const CHAR *, fname, int, num,
 	}
 	return NIL_CHAR;
     }
-    pos = pos;			/* stops compilers generating warning about pos not being used */
 
     for (; *fstr; fstr++) {
 	suppress = 0;
