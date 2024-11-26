@@ -268,7 +268,8 @@ BOOL CSymbolTable::LoadSymbols(char *fileName, BOOL deriveFilename)
 		strLength = strlen(fileName);
 
 		// Find possible start of extension
-		for(i = strLength-1; i >= 0 && newFilename[i] != '.' && newFilename[i] != '\\' && newFilename[i] != '/'; i--);
+		for(i = strLength-1; i >= 0 && newFilename[i] != '.' && newFilename[i] != '\\' && newFilename[i] != '/'; i--)
+			;
 	    if(i == -1 || newFilename[i]=='\\' || newFilename[i]=='/') i = strLength;	// No extension
 		else i = i + 1;		// Typical extension (e.g., fileName was "~/project/myFile.bin" or "~/project/.bin" or ".bin")
 

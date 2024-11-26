@@ -149,7 +149,7 @@ void newline(struct name *np, struct depend *dp, struct cmd *cp, int flag)
 		if (rp->l_cmd)
 			hascmds = TRUE;
 
-	if (hascmds && cp && !(np->n_flag & N_DOUBLE))
+	if (hascmds && cp && !(np->n_flag & N_DOUBLE)) {
 		/* Handle the implicit rules redefinition case */
 		if (np->n_name[0] == '.' && dp == (struct depend *) 0)
 		{
@@ -158,6 +158,7 @@ void newline(struct name *np, struct depend *dp, struct cmd *cp, int flag)
 		}
 		else
 			error("Commands defined twice for target %s", np->n_name);
+	}
 	if (np->n_flag & N_TARG)
 		if (!(np->n_flag & N_DOUBLE) != !flag) /* like xor */
 			error("Inconsistent rules for target %s", np->n_name);
