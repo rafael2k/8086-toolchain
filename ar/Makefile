@@ -7,7 +7,7 @@ LIBDIR	=/usr/bin
 CFLAGS	=-O2 -pipe
 LDFLAGS	=
 DEFS	=
-OBJS= ar.o alloca.o
+OBJS    = ar.o
 
 all: $(BINDIR)ar86
 

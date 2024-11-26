@@ -332,7 +332,7 @@ struct relocation_info
 
 #undef N_MAGIC
 #define N_MAGIC3(magic0, magic1, type) \
-	((magic0) | ((magic1) << 8) | ((type) << 16))
+	((magic0) | ((magic1) << 8) | ((unsigned long)(type) << 16))
 #define N_MAGIC(exec) \
 	N_MAGIC3((exec).a_magic[0], (exec).a_magic[1], (exec).a_flags)
 	
