@@ -26,8 +26,8 @@ all: $(BINDIR)/ld86 $(BINDIR)/objdump86
 $(BINDIR)/ld86: $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@
 
-$(BINDIR)/objdump86: objdump86.o
-	$(CC) $(LDFLAGS) $(OBJS) -o $@
+$(BINDIR)/objdump86: objdump86.c
+	$(CC) $(CFLAGS) objdump86.c -o $@
 
 install: ld86
 	install -d $(LIBDIR)
