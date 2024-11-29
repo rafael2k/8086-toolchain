@@ -22,6 +22,7 @@ host:
 	make -C make
 	make -C nasm32
 	make -C emulator
+	make -C libc
 
 .PHONY: clean cleanobjs
 
@@ -45,3 +46,4 @@ cleanhobjs:
 	make -C make clean
 	make -C nasm32 clean
 	make -C emulator clean
+	make -C libc clean
