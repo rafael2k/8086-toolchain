@@ -1,6 +1,7 @@
 host-bin/*
 elks-bin/*
 *.o
+*.a
 assembler/macros.c
 nasm32/macros.c
 nasm32/nasm
