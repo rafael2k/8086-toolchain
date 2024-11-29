@@ -31,11 +31,11 @@ clib.a: syscall.o c86lib.o
 	rm -f clib.a
 	$(AR) qv clib.a syscall.o c86lib.o
 
-syscall.o: ../lib/syscall.asm
-	$(AS) -f as86 ../lib/syscall.asm -o syscall.o
+syscall.o: ../libc/syscall.asm
+	$(AS) -f as86 ../libc/syscall.asm -o syscall.o
 
-c86lib.o: ../lib/c86lib.asm
-	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
+c86lib.o: ../libc/c86lib.asm
+	$(AS) -f as86 ../libc/c86lib.asm -o c86lib.o
 
 clean:
 	rm -f *.o *.a *.i test.asm
