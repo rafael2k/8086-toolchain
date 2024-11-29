@@ -326,7 +326,13 @@ static STMT *forstmt P0 (void)
     getsym ();
     needpunc (tk_openpa);
     if (lang_option >= LANG_C99 && is_declaration_specifier (lastst)) {
+	init_node = NIL_EXPR;
 	lc_auto = declaration_list (sc_auto, lc_auto);
+	if (init_node != NIL_EXPR) {    /* ghaerr: initialize new for variable */
+	    snp->exp = init_node;
+	    init_node = NIL_EXPR;
+	    snp->next = NIL_STMT;
+	}
     } else {
 	snp->exp = expression ();
 #ifndef SYNTAX_CORRECT
@@ -786,8 +792,8 @@ static STMT *statement P0 (void)
 	if (init_node != NIL_EXPR) {
 	    snp = mk_stmt (st_expr);
 	    snp->exp = init_node;
-	    init_node = NIL_EXPR;
-	    snp->next = statement ();
+	    init_node = NIL_EXPR;       /* ghaerr: fixes C99 auto declarators anywhere */
+	    snp->next = NIL_STMT;
 #ifdef TRACE
 	    if (trace_option) {
 		tsnp->s1->next = snp;
