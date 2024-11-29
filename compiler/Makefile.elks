@@ -495,10 +495,10 @@ $(OBJDIR)regppc$(S)$(O) : $(SRCDIR)regppc$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)regppc$(S)$(O) $(SRCDIR)regppc$(S)c
 
 clobber:	clean
-		-$(RM) $(BINDIR)/$(PROG)
 		-$(RM) *$(S)exe
 		-$(RM) *$(S)img
 clean: directory
+		-$(RM) $(BINDIR)/$(PROG)
 		-$(RM) *$(S)cx
 		-$(RM) *$(S)ln
 		-$(RM) $(OBJDIR)*$(S)$(O)
