@@ -4,7 +4,7 @@
 # @file
 # @version 0.1
 
-CPP=../host-bin/cpp
+CPP=../host-bin/cpp86
 CC=../host-bin/c86
 AS=../host-bin/nasm
 LD=../host-bin/ld86

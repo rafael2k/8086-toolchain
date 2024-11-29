@@ -1,4 +1,4 @@
-CPP=cpp
+CPP=cpp86
 CC=c86
 AS=nasm
 LD=ld86

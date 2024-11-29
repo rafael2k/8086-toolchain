@@ -17,7 +17,7 @@ CFLGS=  -DNDEBUG -O
 
 SRCDIR=
 OBJDIR=unixobj/
-BINDIR=../host-bin/
+BINDIR=../host-bin
 MKDIR_P=mkdir -p
 
 # cxref flags
@@ -328,7 +328,7 @@ CXS    =$(OBJS:.o=.cx)
 .SUFFIXES:	$(S)ln $(S)cx $(S)obj $(S)o
 
 #------------------------------------------------------------------------------
-all:		$(BINDIR)$(PROG)
+all:		$(BINDIR)/$(PROG)
 
 $(S)c$(S)obj:
 		$(CC) $(CFLAGS) $*
@@ -339,7 +339,7 @@ $(S)c$(S)ln:
 $(S)c$(S)cx:
 		cxref $(CXFLAGS) -C $<
 
-$(BINDIR)$(PROG):	directory $(OBJS)
+$(BINDIR)/$(PROG):	$(OBJS)
 		$(CC) $(LDFLAGS) $(OF)$@ $(OBJS) $(LIB)
 
 directory:
@@ -482,10 +482,10 @@ $(OBJDIR)regppc$(S)$(O) : $(SRCDIR)regppc$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)regppc$(S)$(O) $(SRCDIR)regppc$(S)c
 
 clobber:	clean
-		-$(RM) $(BINDIR)$(PROG)
 		-$(RM) *$(S)exe
 		-$(RM) *$(S)img
-clean:
+clean: directory
+		-$(RM) $(BINDIR)/$(PROG)
 		-$(RM) *$(S)cx
 		-$(RM) *$(S)ln
 		-$(RM) $(OBJDIR)*$(S)$(O)

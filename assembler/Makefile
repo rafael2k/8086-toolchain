@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -O -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BIN_DIR=../host-bin/
+BINDIR=../host-bin
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
@@ -32,31 +32,23 @@ mandir = $(prefix)/man
 .c.o:
 	$(CC) -c $(CFLAGS) $<
 
-NASM = 	nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
-       	parser.o outform.o output/outbin.o output/outaout.o \
-	output/outcoff.o output/outelf.o \
-       	output/outobj.o output/outas86.o output/outdbg.o preproc.o listing.o \
-       	eval.o output/outrdf2.o output/outieee.o
-
-# The following added because make didn't like directory organization. -WS 
-NASMO = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
-       	parser.o outform.o outbin.o outaout.o \
-	outcoff.o outelf.o \
+NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o parser.o \
+       	outform.o outbin.o outaout.o outcoff.o outelf.o \
        	outobj.o outas86.o outdbg.o preproc.o listing.o \
        	eval.o outrdf2.o outieee.o
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: nasm
+all: $(BINDIR)/nasm $(BINDIR)/ndisasm
 
-nasm: directory $(NASM)
-	$(CC) -o $(BIN_DIR)nasm $(NASMO)
+$(BINDIR)/nasm: $(NASM)
+	$(CC) -o $(BINDIR)/nasm $(NASM)
 
-ndisasm: directory $(NDISASM)
-	$(CC) -o $(BIN_DIR)ndisasm $(NDISASM)
+$(BINDIR)/ndisasm: $(NDISASM)
+	$(CC) -o $(BINDIR)/ndisasm $(NDISASM)
 
 directory:
-	$(MKDIR_P) $(BIN_DIR)
+	$(MKDIR_P) $(BINDIR)
 
 # These files contains all the standard macros that are derived from
 # the version number.
@@ -111,8 +103,8 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) nasm.1 $(mandir)/man1/nasm.1
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
-clean:
-	rm -f *.o $(BIN_DIR)nasm
+clean: directory
+	rm -f *.o $(BINDIR)/nasm $(BINDIR)/ndisasm
 	$(MAKE) -C rdoff clean
 
 rdf:
@@ -145,20 +137,20 @@ nasmlib.o: nasmlib.c insns.h regs.c names.c nasm.h regs.h insnsn.c insnsi.h \
 ndisasm.o: ndisasm.c insns.h sync.h nasm.h disasm.h regs.h insnsi.h \
  nasmlib.h version.h
 outform.o: outform.c outform.h nasm.h regs.h version.h
-output/outaout.o: output/outaout.c outform.h nasm.h regs.h nasmlib.h \
+outaout.o: outaout.c outform.h nasm.h regs.h nasmlib.h \
  version.h
-output/outas86.o: output/outas86.c outform.h nasm.h regs.h nasmlib.h \
+outas86.o: outas86.c outform.h nasm.h regs.h nasmlib.h \
  version.h
-output/outbin.o: output/outbin.c outform.h nasm.h regs.h nasmlib.h version.h
-output/outcoff.o: output/outcoff.c outform.h nasm.h regs.h nasmlib.h \
+outbin.o: outbin.c outform.h nasm.h regs.h nasmlib.h version.h
+outcoff.o: outcoff.c outform.h nasm.h regs.h nasmlib.h \
  version.h
-output/outdbg.o: output/outdbg.c outform.h nasm.h regs.h nasmlib.h version.h
-output/outelf.o: output/outelf.c outform.h nasm.h regs.h nasmlib.h version.h
-output/outieee.o: output/outieee.c outform.h nasm.h regs.h nasmlib.h \
+outdbg.o: outdbg.c outform.h nasm.h regs.h nasmlib.h version.h
+outelf.o: outelf.c outform.h nasm.h regs.h nasmlib.h version.h
+outieee.o: outieee.c outform.h nasm.h regs.h nasmlib.h \
  version.h
-output/outobj.o: output/outobj.c outform.h nasm.h regs.h nasmlib.h version.h
-output/outrdf.o: output/outrdf.c outform.h nasm.h regs.h nasmlib.h version.h
-output/outrdf2.o: output/outrdf2.c outform.h nasm.h regs.h nasmlib.h \
+outobj.o: outobj.c outform.h nasm.h regs.h nasmlib.h version.h
+outrdf.o: outrdf.c outform.h nasm.h regs.h nasmlib.h version.h
+outrdf2.o: outrdf2.c outform.h nasm.h regs.h nasmlib.h \
  version.h
 parser.o: parser.c insns.h parser.h nasm.h regs.h insnsi.h regflags.c \
  float.h nasmlib.h version.h

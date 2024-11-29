@@ -12,20 +12,20 @@ else
 	WATCOMC=${WATCOM}
 endif
 
-BINDIR=../elks-bin/
+BINDIR=../elks-bin
 
 CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__
 #CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
 LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 
-all: cpp
+all: $(BINDIR)/cpp86
 
-cpp: main.o cpp.o hash.o token1.o token2.o
-	$(LINK) -o $(BINDIR)cpp main.o cpp.o hash.o token1.o token2.o
+$(BINDIR)/cpp86: main.o cpp.o hash.o token1.o token2.o
+	$(LINK) -o $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o
 
 clean realclean:
-	rm -f cpp main.o cpp.o hash.o token1.o token2.o tmp.h
+	rm -f $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o tmp.h
 
 maintclean: realclean
 	rm -f token1.h token2.h

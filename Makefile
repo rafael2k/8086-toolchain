@@ -4,23 +4,23 @@ all:
 	make cleanhobjs
 	make host
 
-elks: cleaneobjs
+elks:
 	make -C compiler -f Makefile.elks
 	make -C assembler -f Makefile.elks
 	make -C cpp -f Makefile.elks
 	make -C ld -f Makefile.elks
-	make -C ndisasm -f Makefile.elks
-	make -C make -f Makefile.elks
 	make -C ar -f Makefile.elks
+	make -C make -f Makefile.elks
+	make -C nasm32 -f Makefile.elks
 
-host: cleanhobjs
+host:
 	make -C compiler
 	make -C assembler
 	make -C cpp
 	make -C ld
-	make -C ndisasm
-	make -C make
 	make -C ar
+	make -C make
+	make -C nasm32
 	make -C emulator
 
 .PHONY: clean cleanobjs
@@ -32,16 +32,16 @@ cleaneobjs:
 	make -C assembler -f Makefile.elks clean
 	make -C cpp -f Makefile.elks clean
 	make -C ld -f Makefile.elks clean
-	make -C ndisasm -f Makefile.elks clean
-	make -C make -f Makefile.elks clean
 	make -C ar -f Makefile.elks clean
+	make -C make -f Makefile.elks clean
+	make -C nasm32 -f Makefile.elks clean
 
 cleanhobjs:
 	make -C compiler clean
 	make -C assembler clean
 	make -C cpp clean
 	make -C ld clean
-	make -C ndisasm clean
-	make -C make clean
 	make -C ar clean
+	make -C make clean
+	make -C nasm32 clean
 	make -C emulator clean
