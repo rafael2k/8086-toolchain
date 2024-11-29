@@ -19,13 +19,13 @@ CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,
 LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 
-all: cpp
+all: cpp86
 
-cpp: main.o cpp.o hash.o token1.o token2.o
-	$(LINK) -o $(BINDIR)cpp main.o cpp.o hash.o token1.o token2.o
+cpp86: main.o cpp.o hash.o token1.o token2.o
+	$(LINK) -o $(BINDIR)cpp86 main.o cpp.o hash.o token1.o token2.o
 
 clean realclean:
-	rm -f cpp main.o cpp.o hash.o token1.o token2.o tmp.h
+	rm -f cpp86 main.o cpp.o hash.o token1.o token2.o tmp.h
 
 maintclean: realclean
 	rm -f token1.h token2.h
