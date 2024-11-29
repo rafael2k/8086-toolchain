@@ -8,7 +8,7 @@ $(BINDIR)/cpp86: main.o cpp.o hash.o token1.o token2.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o
 
 clean realclean:
-	rm -f cpp86 main.o cpp.o hash.o token1.o token2.o tmp.h
+	rm -f $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o tmp.h
 
 distclean maintclean: realclean
 	rm -f token1.h token2.h
