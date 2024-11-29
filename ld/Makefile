@@ -21,7 +21,7 @@ DEFS	=-DREL_OUTPUT
 OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
       writex86.o writebin.o writeemu.o
 
-all: ld86 objdump86
+all: ld86
 
 ld86: $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN_DIR)/$@

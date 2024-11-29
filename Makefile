@@ -4,7 +4,7 @@ all:
 	make cleanhobjs
 	make host
 
-elks: cleaneobjs
+elks:
 	make -C compiler -f Makefile.elks
 	make -C assembler -f Makefile.elks
 	make -C cpp -f Makefile.elks
@@ -13,7 +13,7 @@ elks: cleaneobjs
 	make -C make -f Makefile.elks
 	make -C ar -f Makefile.elks
 
-host: cleanhobjs
+host:
 	make -C compiler
 	make -C assembler
 	make -C cpp
