@@ -21,13 +21,13 @@ DEFS	=-DREL_OUTPUT
 OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
       writex86.o writebin.o writeemu.o
 
-all: $(BINDIR)/ld86
+all: $(BINDIR)/ld86 $(BINDIR)/objdump86
 
 $(BINDIR)/ld86: $(OBJS)
-	$(CC) $(LDFLAGS) $(OBJS) -o $(BINDIR)/$@
+	$(CC) $(LDFLAGS) $(OBJS) -o $@
 
-objdump86: objdump86.o
-	$(CC) $(LDFLAGS) $(OBJS) -o $(BINDIR)/$@
+$(BINDIR)/objdump86: objdump86.o
+	$(CC) $(LDFLAGS) $(OBJS) -o $@
 
 install: ld86
 	install -d $(LIBDIR)
