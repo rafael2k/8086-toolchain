@@ -1,0 +1,3012 @@
+         NAME
+
+              c68/c386/c86/c30 - Compile preprocessed C source.
+
+         SYNOPSIS
+
+              c68  [options] [input_file [output_file [listing_file]]]
+              c386 [options] [input_file [output_file [listing_file]]]
+              c86  [options] [input_file [output_file [listing_file]]]
+              c30  [options] [input_file [output_file [listing_file]]]
+
+              cARM [options] [input_file [output_file [listing_file]]]
+              cPPC [options] [input_file [output_file [listing_file]]]
+
+         DESCRIPTION
+
+              c68 is a publicly available ANSI C compiler.  The compiler
+              can also  operate in  a mode  that is  compatible with the
+              original Kernighan  and Richie (K&R) definition.  The user
+              can select   K&R mode  (which causes  many  ANSI  specific
+              features to  be disabled)  by a run-time parameter option.
+              The default  is ANSI  compatible mode as this is what most
+              people would wish to use.
+
+              Although generically  the compiler is known under the name
+              of c68  the actual  program name normally varies according
+              to the  target environment  in which  it is  hosted.   The
+              names used  are c68 when hosted on Motorola 680x0 systems;
+              c386 when  hosted on Intel 386 (or better) systems running
+              in 32  bit mode;  c86 when  hosted on  an Intel  8086  (or
+              better system)  running in  16-bit real  mode;  cARM  when
+              hosted on a Acorn ARM Risc processor; c30 when hosted on a
+              Texas Instruments  TMSC30 processor; cPPC when hosted on a
+              Power PC processor.
+
+              The compiler  was originally developed to run on the MINIX
+              operating system, but is known to be in wide use on a wide
+              variety of  other operating  systems such  as  LINUX,  TOS
+              (Atari), QDOS/SMSQ (Sinclair QL) and EPOC (Psion 3a).  The
+              source  has   been  specifically   written  with   maximum
+              portability in mind.
+
+              The  compiler   is  slightly   unusual  in  there  is  the
+              capability for  simultaneous support  of  multiple  target
+              processor types  and/or  multiple  assemblers.   The  user
+              specifies at  the time  that the  compiler is  built which
+              target processors  and combination  of options  are to  be
+              supported.  If  support  for  multiple  processors  and/or
+              assemblers are  configured to  be built  in, then  options
+              other than  the default  can be  selected  by  appropriate
+              runtime parameter  options.  This  can make  the  compiler
+              very  useful  as  a  tool  for  cross-development  between
+              different hardware platforms.
+
+              The compiler  takes the  output of  a C pre-processor, and
+              compiles it  to give  assembler source.  If no output file
+              is specified  on the command line then the compiler writes
+              the generated  assembler code  to standard  output.  If in
+              addition  there  is  no  input  file  specified  then  the
+              compiler reads  the C source from standard input.  Finally
+              if the  compiler run  time option  requesting a listing is
+              used and   no listing  file  is  specified,  the  compiler
+              writes it to standard error.
+
+              The options  available to  control the  behaviour  of  the
+              compiler are  listed below.   The options  to the compiler
+              can also  be passed  as -Qoption in addition to the syntax
+              given below.   This is to make it easier for the front-end
+              programs (typically  called CC)   to decide  which options
+              belong  to  the  compiler  phase.   Not  all  options  are
+              necessarily available  in all  versions of the compiler as
+              some of them are dependent on the settings in the compiler
+              configuration file  at  the  time  that  the  compiler  is
+              actually built.
+
+
+         GENERAL OPTIONS
+
+              These are  options that  are not  dependent on  the target
+              processor type,  and are  general in  nature.   Where  the
+              option can  be a list, then multiple options from the list
+              can be  specified separated  by commas.   There must be no
+              spaces between the options in this case.
+
+              -?        Display a  message   giving  the  full  list  of
+                        options available  in this particular version of
+                        the compiler.    It  also  details  the  default
+                        settings for the parameters.  This option can be
+                        very useful as it always reflects the choices of
+                        settings in the compiler configuration file that
+                        were actually  used when generating this version
+                        of the compiler.  If you find a parameter option
+                        listed in  this document  appears to be ignored,
+                        then this  is the way to check if the version of
+                        the compiler  you are  actually using  has  been
+                        built with that option enabled.
+
+                        The values listed  are  organised  so  that  the
+                        first section  applies to  setting global to all
+                        variants of  the  compiler,  and  then  sections
+                        specific to each target processor type for which
+                        support has  been included when the compiler was
+                        built.
+
+                        The output is  normally too  long to  fit onto a
+                        single screen,  so you may need to redirect into
+                        a file to see all the options.
+
+              -v        Output additional information during the compile
+                        process.   If the compiler was built without the
+                        VERBOSE configuration  option set  then this  is
+                        merely a  message giving  the version  number of
+                        the compiler.    If  the  VERBOSE  configuration
+                        option was  used when  the compiler  was  built,
+                        then additional  progress information  is output
+                        during the compile process.
+
+                        Default:  The compiler  as   supplied   is   not
+                                  normally built with the VERBOSE option
+                                  and merely provides the version number
+                                  message if -v is used.
+
+              -warn=n   Control  the   severity  level  of  warning  and
+                        diagnostic messages  that will  be output during
+                        the compilation process.  Messages with a higher
+                        severity value (i.e. less severe) than the value
+                        specified will  not be  output.   See  later for
+                        more  information  on  the  effect  of  possible
+                        values for n.
+
+                        Default: -warn=3
+
+              -error=n  Make messages that are normally only warnings to
+                        be treated  as errors  instead.  The  value of n
+                        specifies what  severity of  messages that would
+                        normally be  only warnings  are  instead  to  be
+                        treated as errors.  This option is often used in
+                        conjunction with the maxerr option..
+
+                        Default: -error=0
+
+              -maxerr=n Sets the maximum error  count to the value of n.
+                        This is  the maximum  number of errors that will
+                        be  reported  before  the  compiler  abandons  a
+                        compile.  As  one  error  can  cause  others  to
+                        occur, in  a cascade  effect, it is often a good
+                        idea to set this to a low value in the region of
+                        10-20 errors which fits on one screen.
+
+                        Default: -maxerr=200
+
+              -debug=option_list
+                        This option is  only available  in a  version of
+                        the compiler  built with the DEBUG configuration
+                        option defined.   It  is  used  to  control  the
+                        amount of  debug information  that is written to
+                        the listing  file.  The  option_list can  be any
+                        combination of the following:
+                             global
+                             peep
+                             expr
+                             code
+                             register
+                             symbol
+
+                        Default:  No debug information output.
+
+                        N.B. The DEBUG   configuration    option    when
+                             building the  compiler is normally only set
+                             if  you  are  developing  new  code  to  be
+                             included in  the compiler  or investigating
+                             faults.  It  is  therefore  never  normally
+                             included  in   any  generally   distributed
+                             binaries.
+
+              -align=yes|no
+                        All processors tend  to have  default alignments
+                        at which  they generate most efficient code. The
+                        compiler will  use the  setting  of  the  -align
+                        option to  decide whether  to use  the processor
+                        optimum  alignment,   or  ask  the  compiler  to
+                        attempt to  use a  different alignment.   A  yes
+                        value  for  this option  means align  structures
+                        and unions  using the  same rules  as applied to
+                        the member  that  has  the  strictest  alignment
+                        rules, while  no means use the default value for
+                        the processor type.    In particular if you want
+                        structures or  unions which  only contain 'char'
+                        data types  to be  packed as closely as possible
+                        (and therefore  possibly start on odd addresses)
+                        you must use the -align=yes setting.
+
+                        Default:  -align=yes for Intel targets
+                                             (any boundaries)
+                                  -align=no  for 68000 and ARM targets
+                                             (even boundaries)
+                                  -align=yes for TMS C30 targets
+                                             (even boundaries)
+              -asm=yes|no
+                        Specifies whether  the use  of the  asm  keyword
+                        should be  allowed in your C source.  Use of the
+                        asm keyword  is not  part of  ANSI  C  and  will
+                        definitely result in non-portable code.
+
+                        Support for the  asm keyword  is not included in
+                        the compiler unless the ASM configuration option
+                        is set at the time the compiler is built.  We do
+                        not normally include such support in binaries we
+                        put on general distribution.
+
+                        Default:  -asm=no
+
+              -extension=yes|no
+                        Specifies  whether   options  that   are   under
+                        consideration for  inclusion in  the next ANSI C
+                        standard (amendment 2) should be included.
+
+                        Support for these  options will only be included
+                        in the  compiler if the EXTENSIONS configuration
+                        option is  set when  the compiler  is built.  We
+                        normally do  include such  an option in binaries
+                        we put  on general  distribution except when the
+                        size of  the compiler  is constrained  by memory
+                        limits. For details of what options are affected
+                        by this  keyword refer  to the  section later in
+                        this document labelled "EXTENSIONS TO ANSI C".
+
+                        Default:  -extensions=no
+
+              -extern=yes|no
+                        Output details  of   external  symbols  in  this
+                        module to the listing file.  This is intended in
+                        the future  to provide the basis of a lint-style
+                        facility  to  provide  cross-module  consistency
+                        checking.
+
+                        Whether support for  this option  is included in
+                        the  compiler  is  controlled  by  the  EXTERNAL
+                        configuration option at the time the compiler is
+                        built.  We  do not normally include such support
+                        in binaries we put on general distribution.
+
+                        Default:  -extern=no
+
+              -fcheck=yes|no
+                        This option is  only relevant in versions of the
+                        compiler that  were configured  at build time to
+                        not include support for floating point, but that
+                        did have  the FLOAT_CHECK  configuration  option
+                        set. Setting  -fcheck=yes  means  that  floating
+                        point keywords  will be  recognised and you will
+                        get errors  output  if  you  try  and  use  such
+                        keywords.  Setting  -fcheck=no means  that these
+                        keywords are not recognised as C keywords.
+
+                        Default: fcheck=no
+
+              -format=yes|no
+                        Activate additional  checks for the 'printf' and
+                        'scanf'  families   of  library   routines.   If
+                        active, then the parameters following the format
+                        string are  checked as being compatible with the
+                        format string.
+
+                        This option   is    only   available    if   the
+                        FORMAT_CHECK configuration option was set at the
+                        time the  compiler it  is built.  This option is
+                        very useful  so we  normally try and include it,
+                        but the  support is  sometimes removed  to  save
+                        memory when this is critical.
+
+                        Default:  -format=yes         (check parameters)
+
+              -icode    Output run-time  debugging  information  to  the
+                        listing file.  Intended mainly for debugging the
+                        compiler itself.
+
+                        This option is  only available  if the  compiler
+                        was built  with the  ICODE configuration  option
+                        defined.  This  option is  not normally  defined
+                        for   binaries    that   we   put   on   general
+                        distribution.
+
+                        Default:  -icode=no
+
+              -int=16|32
+                        Specify whether  the length  of int declarations
+                        should be  16 bit  (same as a short) or a 32 bit
+                        (same as a long).  There is a lot of code around
+                        that assumes
+                             sizeof(int)==sizeof(char *)
+                        so getting this  setting correct for your target
+                        platform is important.
+
+                        Default:  c386:  -int=32
+                                  c68:   -int=16 (MINIX systems)
+                                         -int=32 (QDOS/SMS systems)
+                                  c86:   -int=16 (Psion 3a systems)
+                                  c30:   -int=32
+
+              -lattice=yes|no
+                        Older versions of  Lattice C had partial support
+                        of prototypes  in which  a  variable  number  of
+                        parameters  was   indicated  by   finishing  the
+                        parameter list  with a  comma (rather  than  the
+                        ANSI style  of using  ,...).  The  use  of  this
+                        option means  the Lattice  syntax will  also  be
+                        accepted.
+
+                        Default:  -lattice=no
+
+              -list=yes|no
+                        Control  listing  of  symbol table.
+
+                        Support for this option is only available if the
+                        LIST configuration  option was included when the
+                        compiler was  built. This option is primarily an
+                        aid to helping us debug the compiler, so support
+                        for this  option would  not normally be included
+                        in any distribute binaries.
+
+                        Default: -list=no
+
+
+              -obsolete=yes|no
+                        Specifies whether  warnings should  be generated
+                        if you  use an  option that is currently part of
+                        the  ANSI   C  standard,   but  which  the  ANSI
+                        committee have warned may be removed from future
+                        versions of  the ANSI  C standard.   Examples of
+                        this  is   support  for   K&R   style   function
+                        definitions.
+
+                        Default:  -obsolete=no             (no warnings)
+
+              -packenum=yes|no
+                        Specify whether  the  compiler  should  use  the
+                        smallest  integer   type  that   is  capable  of
+                        containing all  the enumeration  values that are
+                        defined for  a particular  enumeration type.  If
+                        -packenum=no is  in effect then 'int' is used as
+                        the enumeration type.
+
+                        This option is  only supported  if the  PACKENUM
+                        configuration option  was set  at the  time  the
+                        compiler was  built.  We  normally do  have this
+                        option supported  in  any  binaries  we  put  on
+                        general distribution.
+
+                        Default:  -packenum=no
+
+              -revbit=yes|no
+                        Control  the   order  in   which  the   compiler
+                        allocates  the   bits  in   a   bitfield.    The
+                        -revbit=yes option  causes the  bitfield  to  be
+                        allocated starting  from the  highest number bit
+                        downwards, rather than the default of allocating
+                        them from bit 0 upwards.
+
+                        Default:  -revbit=no            (start at bit 0)
+
+              -topspeed=yes|no
+                        Control whether  certain specific  extensions to
+                        the C  syntax that  are used  by the  TopSpeed C
+                        compiler should be treated as valid or not.
+
+                        N.B. The fact that  the syntax  is accepted does
+                             not mean  that  the  same  effect  will  be
+                             obtained as  when used  under TopSpeed - in
+                             most cases  the additional  information  is
+                             simply ignored.
+
+                        Whether this  option is  supported is determined
+                        by whether the TOPSPEED configuration option was
+                        set at the time the compiler was built.
+
+                        Default:  -topspeed=no
+
+              -trad=yes|no
+                        Determine whether  the  compiler  should  reject
+                        most of  the ANSI extensions to the original K&R
+                        definition and  work  instead  in  "traditional"
+                        mode.  For  more detail on what ANSI options are
+                        not supported  when this  option is set, see the
+                        section  later   in   this   document   on   K&R
+                        Compatibility Mode.
+
+                        Default:  -trad=no
+
+              -uchar=yes
+                        Specifies  whether   the  char   data  type   is
+                        considered as  an  unsigned  integer  type  with
+                        values in  the range  0  to  255,  or  a  signed
+                        integer type with the range +127 to -128.
+
+                        Default:  -uchar=no                (signed char)
+              GENERAL CODE GENERATION OPTIONS
+
+              These are options that affect the code generation process,
+              but that are not dependent on the target processor type.
+
+              -g        Output  additional   information  for  debugging
+                        purposes.    Branch    optimisation   is    also
+                        suppressed  even  if  the  -O  option  has  been
+                        specified.  The current effect of this option is
+                        to include  line  directives  in  the  generated
+                        assembler output,  plus the  text of the current
+                        source line as a comment.  Not all the assembler
+                        can accept  the line  directive, so you may find
+                        that you  cannot generate  the object  code from
+                        such an  assembler source  file.  This can still
+                        be useful  if you  wish to  see exactly  which C
+                        source lines caused particular assembler code to
+                        be generated.
+
+                        Default:  No debugging information is generated.
+
+              -O        Specifies that maximum optimisation available is
+                        to be  used.  This  can significantly reduce the
+                        size  of  the  generated  code,  and  will  also
+                        normally slightly  improve on run time.  It can,
+                        however,  slow  down  the  compilation  process.
+                        You can  also use  the -peep  option to  turn on
+                        just certain parts of the optimisation process.
+
+                        Note that this  option is  ignored if  the -g or
+                        -opt=no  options   are  also  specified  in  the
+                        command line.
+
+                        Default:  The  optimisation  triggered  by  this
+                                  option is not performed.
+
+              -code=yes|no
+                        Specifies whether code is to be generated, or if
+                        this run  is merely  being  used  to  check  for
+                        errors in  the source  code.   The  advantage of
+                        specifying the -code=no option if you are merely
+                        looking for errors is that the compiler will run
+                        faster if no attempt is made to generate code.
+
+                        Default:  -code=yes
+
+              -longdouble=yes|no
+                        If set to 'yes' then 'long double' is treated as
+                        being  a   distinct  type   from  'double'  with
+                        different support routines.
+
+                        Default:  -longdouble=no
+
+                        NOTE. The software  support routines  for  'long
+                              double' are  not currently  available  for
+                              use  with   c386/c86/c68  so   you   would
+                              normally only  consider using  this option
+                              if generating inline FPU instructions.
+
+              -opt=yes|no
+                        Control the  operation of  the global optimiser.
+                        Normally the  optimiser is  active as it results
+                        in more efficient code.  If you wish to suppress
+                        all global  optimisations then  you can  specify
+                        the -opt=no  option.  You would not normally use
+                        this option  unless you  suspect an error in the
+                        optimiser.   Using   the  -opt=no   option  will
+                        override the -O option if it is also specified.
+
+                        Default:  -opt=yes
+
+              -prefix=string
+                        This allows the prefix that is added to external
+                        symbol  names  (normally  either  an  underscore
+                        character, or a null string) to be changed.  The
+                        compiler takes  whatever follows the equals sign
+                        as the string value.  Quotes should NOT be added
+                        unless  required   by  the   parameter   parsing
+                        mechanism of the host operating system.
+
+                        Default:  This is  really   determined  by   the
+                                  standards  of   the  target  operating
+                                  system.  As issued the setting is:
+                                       -prefix=_
+
+              -reg=yes|no
+                        Specifies constraints  on how  the  compiler  is
+                        allowed  to  allocate  variables  to  registers.
+                        Normally the  compiler will  try to do automatic
+                        allocation of  variables to  registers according
+                        to their  run-time usage.   The  -reg=no  option
+                        forces the  use of  register variables only when
+                        explicitly requested by the programmer.
+
+                        Default: -reg=yes
+
+              -separate=yes|no
+                        Determine whether  the compiler  should allocate
+                        strings and constants in the same segment as the
+                        code, or in a separate data segment.
+
+                        Default:  -separate=no
+
+              -stackcheck=yes|no
+                        Specify whether  calls   should  be  made  to  a
+                        support routine  to perform  stack checks at the
+                        start of  each function.  To use this option, it
+                        is necessary to have implemented the appropriate
+                        (system dependent) support routine.
+
+                        Default:  -stackcheck=no
+
+              -stackopt=safest|minimum|average|maximum
+                        Used to  control   whether   the   'lazy   stack
+                        updating'  optimisation   is  to  be  used.  The
+                        meanings of the various values are:
+
+                        safest    Suppress this  level of  optimisation.
+                                  It is advisable to suppress lazy stack
+                                  optimisation  on  routines  which  are
+                                  recursive in nature.  Failure to do so
+                                  may  lead  to  excessive  stack  space
+                                  being  required  to  successfully  run
+                                  this program.
+
+                        minimum   A certain amount  of  optimisation  is
+                                  done, but  nothing that  is considered
+                                  dangerous.  This is the safest mode of
+                                  optimisation assuming  you allow  this
+                                  type of optimisation at all.
+
+                        average   Allow optimisation for functions whose
+                                  name starts with an underscore.
+
+                        maximum   Allow optimisation for functions whose
+                                  name starts  with  an  underscore,  or
+                                  which  are   called  via   a  function
+                                  variable.  This  effectively optimises
+                                  all function calls.
+
+                        See the section  on optimisation  later in  this
+                        document for  more detail on the implications of
+                        the various settings for this optimisation.
+
+                        Default:  -stackopt=minimum
+
+              -trace=yes|no
+                        Control  the   generation  of   run-time   trace
+                        information.  Intended  in the  future  to  help
+                        support a source code debugger.  However, at the
+                        moment  this  capability  is  incomplete.   This
+                        option is  only available  if the  compiler  was
+                        built with  the TRACE  configuration option set.
+                        The compiler  as normally supplied is not set to
+                        have this option built in.
+
+                        Default:  -trace=no
+
+              -trans=yes|no
+                        This option is  used if  you are  working  on  a
+                        system which  can only  support symbols names of
+                        limited length.   It allows  you to make certain
+                        all names  in the  assembler output  are only  8
+                        characters in  length (a  special  algorithm  is
+                        used for names that are longer than this).  This
+                        is used  if the  assembler phase  cannot  handle
+                        long C  names.  Support  for this option is only
+                        included if  the TRANSLATE  configuration option
+                        was set  when the  compiler was  built.  As most
+                        modern systems  can support  longer symbol names
+                        we normally  omit support  for  this  option  in
+                        binaries that are put on general distribution.
+
+                        Default:  -trans=no
+
+
+         MOTOROLA 68K OPTIONS
+
+              The options  listed in  this section apply when generating
+              code for  Motorola 68K  family of  processors.  They  will
+              only  be   available  if  support  for  the  Motorola  68K
+              processors was  specified at  the time  the  compiler  was
+              built.
+
+              -codemode=absolute|small|large
+                        This option is  used to  tell the  compiler what
+                        addressing modes  to use  for jump instructions.
+                        The meanings of the options are:
+
+                        absolute  Any generated  jump  instructions  use
+                                  absolute addressing  mode.   Typically
+                                  this means  that runtime relocation of
+                                  the  generated  program  needs  to  be
+                                  done.
+                        small     Jump instructions  will  use  relative
+                                  addressing modes  assuming the  'small
+                                  model'.  This means that all target of
+                                  jump instructions  are within a 16-bit
+                                  displacement of  the source.   If  you
+                                  set this  and it  turns out  not to be
+                                  true you  will  almost  certainly  get
+                                  errors when  you  try  and  link  your
+                                  code.
+                        large     Jump instructions  will  use  relative
+                                  addressing modes  assuming the  'large
+                                  model'  This means that all targets of
+                                  jump instructions  are within a 32-bit
+                                  displacement of the source (which will
+                                  always be true).
+
+                        Note that although  the small  and large options
+                        generate   position    independent   code,   the
+                        resulting   program   will   not   be   position
+                        independent unless  any supplied  libraries  you
+                        intend to  use have  also been  generated to use
+                        this option,  and any  variables (that  are  not
+                        auto  variables)  are  accessed  using  position
+                        relative addressing.
+
+                        Default:  -codemodel=absolute
+
+              -datamodel=absolute|small|large
+                        This option is  used to  tell the  compiler what
+                        addressing modes  to use  for accessing  program
+                        variables. The meanings of the options are:
+
+                        absolute  Variables are  accessed using absolute
+                                  mode.   Typically   this  means   that
+                                  runtime relocation  of  the  generated
+                                  program needs to be done.
+                        small     Variables are  accessed  using  'small
+                                  model' addressing.  This means  16-bit
+                                  displacements   from    the   register
+                                  specified in  the -regdata  parameter.
+                                  If you  set this  and it turns out not
+                                  to be  true you  will almost certainly
+                                  get errors  when you try and link your
+                                  code.
+                        large     Variables are  accessed  using  'large
+                                  model' addressing.   This means 32-bit
+                                  displacements   from    the   register
+                                  specified in the -regdata parameter.
+
+                        Note that the  code generated  by the  small and
+                        large options requires the address of a specific
+                        external label  to be  loaded into  the register
+                        specified  by  the  -regdata  parameter  as  all
+                        addresses are  generated as  displacements  from
+                        this label.   Typically  this  is  done  in  the
+                        program start-up module.
+
+                        Only change this option from the default if your
+                        library supplier  tells you that you can, or you
+                        are very sure you know what you are doing.  Also
+                        there is  normally not  much to  be gained  from
+                        using this  option unless any supplied libraries
+                        you intend  to use  have also  been generated to
+                        use this option.
+
+                        Default:  -datamodel=absolute
+
+              -fpu=yes|no
+                        Specify whether  operations  involving  floating
+                        point variables should generate in-line calls to
+                        a hardware floating point unit, or whether calls
+                        are made  instead to  library support  routines.
+                        Using library  support routines  allows floating
+                        point operations  to be  carried out  purely  in
+                        software.
+
+                        Default:  -fpu=no
+
+              -fpureturn=yes|no
+                        This option is used to tell the compiler whether
+                        the library  routines  are  such  that  floating
+                        point results  are returned  in the hardware FPU
+                        registers, or  in normal  registers.   Note  you
+                        should not  normally change  this value from the
+                        default  unless   you  have   been  specifically
+                        advised to do so.
+
+                        Default:  -fpureturn=no
+
+              -interrupt=yes|no
+                        This option is  used to decide whether functions
+                        should  be  terminated  with  a  RTS  or  a  RTE
+                        instruction.   You  would want  a RTS  in normal
+                        code, and a RTE in an interrupt handler.
+
+                        The way that you   would most  likely  use  this
+                        option is by  by using it with an inline #pragma
+                        statement rather  than as a command line option.
+                        In otherwords along the lines of:
+                             #pragma interrupt=yes
+                             void special_func()
+                             {
+                                  .... code for function
+                             }
+                             #pragma interrupt=no
+                        This would have  the effect  of only  the single
+                        function specified  having a  RTE instruction to
+                        terminate it  with all  others having  an RTS as
+                        the return instruction.
+
+                        Default:  -interrupt=no
+
+              -peep=none|peepopt_list|all
+                        Control the  level of peephole optimisation that
+                        should be  done. Past  experience has shown that
+                        some of  the more  obscure bugs  reported on the
+                        compiler are  those where the peephole optimiser
+                        part  of   the  compiler  has  made  an  invalid
+                        optimisation.   You  would  therefore  use  this
+                        option if  you suspect  that  the  compiler  has
+                        generated incorrect  code, and  you want to look
+                        at what would be generated if some or all of the
+                        the peephole optimisation was not done.
+
+                        The meanings of the options are:
+
+                        none      All peephole     optimisations     are
+                                  suppressed.
+
+                        all       All peephole     optimisations     are
+                                  performed.
+
+                        You can also exercise  a finer  level of control
+                        by specifying  the exact combination of peephole
+                        optimisations that  you want  from the following
+                        options:
+                        instruction    This controls whether instruction
+                                  sequences should  be replaced  by more
+                                  effecient combinations.
+
+                        jumps     This     controls     whether     jump
+                                  optimisation  should   be  used  which
+                                  tries to  common up  re-occurring bits
+                                  of  code.    This  normally   produces
+                                  significant  size   savings   in   the
+                                  generated code.
+
+                        flow      This tries to  analyse the flow of the
+                                  code to  eliminate redundant  loads of
+                                  registers.  A  significant size  savig
+                                  normally  results  from  this  option.
+                                  However if  it goes wrong, the results
+                                  can be rather unpredictable.
+
+                        Default:  -peep=all
+
+              -probe=no|yes
+                        Specify whether stack probes should be generated
+                        each time a stack frame is generated.  These can
+                        be  desirable   if  using   the  compiler  in  a
+                        multi-tasking environment and with a 680x0 based
+                        system which has hardware protection for invalid
+                        memory accesses.  The problem is that not enough
+                        space is  always left  on  the  stack  to  store
+                        information for a restart of an instruction, and
+                        stack probes  insure that  the stack  has enough
+                        allocated memory to accommodate the needs of the
+                        routine.   Support   for  this  option  is  only
+                        included if  the PROBES configuration option was
+                        set when the compiler was built.
+
+                        Default:  -probe=no
+
+                        Note:     The compiler  as   supplied   is   not
+                                  normally  set   to  have  this  option
+                                  compiled in.   Also there  is no point
+                                  in attempting to use it if your system
+                                  does  not   have  hardware  that  will
+                                  detect  attempts   to  access   memory
+                                  addresses that are outside the stack.
+
+
+              -regdata=an
+                        Specify which address  register is to be used as
+                        the index register for access to variables. This
+                        parameter is only relevant if the setting of the
+                        -datamode specifies  that absolute addressing is
+                        not being  used. Note that no check is made that
+                        the settings  do not  conflict with  any of  the
+                        other -regxxxx options.
+
+                        Default: -regdata=a5
+
+              -regframe=an
+                        Specify which address  register is to be used as
+                        the frame  pointer. Note  that no  check is made
+                        that the  settings do  not conflict  with any of
+                        the other -regxxxx options.
+
+                        Default: -regframe=a6
+
+              -regtemp=register_list
+                        Specify which  registers are  treated as scratch
+                        registers.  Note that no check is made to ensure
+                        that you have left enough for the compiler to be
+                        able to  sensibly generate  code,  or  that  the
+                        settings do  not conflict  with any of the other
+                        -regxxxx options.
+
+                        Default: -regtemp=d0,d1,d2,a0,a1,fp0,fp1,fp2
+
+              -regunused=register_list
+                        Specify which  registers  should  not  be  used.
+                        This would  be used if you needed to ensure that
+                        a particular  register was  never corrupted  for
+                        some reason.    Note that  issued libraries will
+                        not have been built with this setting, so use in
+                        average programs  is not  much  use  unless  the
+                        libraries are  rebuilt to  match.  Note  that no
+                        check is  made that the settings do not conflict
+                        with any of the other -regxxxx options.
+
+                        Default: -regunused=
+
+              -target=n Used to  specify   the  target  processor  type.
+                        Values supported are:
+                             68000
+                             68010
+                             68020
+                             68030
+                             68040
+
+                        Default:  -target=68000
+
+
+
+              If support  for multiple  processors and/or assemblers was
+              configured when  the compiler  was built,  then a  you can
+              specify a  68k target  with a specific assembler using the
+              following options:
+
+              -ack68k   Generate 680x0  code.   Use  the  ACK  assembler
+                        syntax for the output.
+
+              -cpm68k   Generate 680x0  code.   Use  the  CPM  assembler
+                        syntax for the output.
+
+              -gas68K   Generate 680x0  code.   Use  the  GNU  assembler
+                        syntax for the output.
+
+              -qmc68k   Generate 680x0  code.  Use  the  QMAC  assembler
+                        syntax for the output.
+
+
+
+         INTEL 386 OPTIONS
+
+              The options  in this  section apply when generating 32-bit
+              code for Intel 386 (or better) processors.  They will only
+              be available  if support  for the  Intel 386 processor was
+              specified at the time the compiler was built.
+
+              -fpu=yes|no
+                        Specify whether  operations  involving  floating
+                        point variables should generate in-line calls to
+                        a hardware floating point unit, or whether calls
+                        are made  instead to  library support  routines.
+                        Using library  support routines  allows floating
+                        point operations  to be  carried out  purely  in
+                        software.
+
+                        Default:  -fpu=yes
+
+                        N.B. We do not supply  suitable library routines
+                             to do  software emulation of floating point
+                             with the compiler.
+
+              -fpureturn=yes|no
+                        This option is used to tell the compiler whether
+                        the library  routines  are  such  that  floating
+                        point results  are returned  in the hardware FPU
+                        registers, or  in normal  registers.   Note  you
+                        should not  normally change  this value from the
+                        default  unless   you  have   been  specifically
+                        advised to do so.
+
+                        Default:  -fpureturn=no
+
+              -peep=none|peepopt_list|all
+                        Control the  level of peephole optimisation that
+                        should be  done. Past  experience has shown that
+                        some of  the more  obscure bugs  reported on the
+                        compiler are  those where the peephole optimiser
+                        part  of   the  compiler  has  made  an  invalid
+                        optimisation.   You  would  therefore  use  this
+                        option if  you suspect  that  the  compiler  has
+                        generated incorrect  code, and  you want to look
+                        at what would be generated if some or all of the
+                        the peephole optimisation was not done.
+
+                        The meanings of the options are:
+
+                        none      All peephole     optimisations     are
+                                  suppressed.
+
+                        all       All peephole     optimisations     are
+                                  performed.  It is equivalent to giving
+                                  -peep=flow.
+
+                        You can also exercise  a finer  level of control
+                        by specifying  the exact combination of peephole
+                        optimisations that  you want  from the following
+                        options:
+
+                        flow      This tries to  analyse the flow of the
+                                  code to  eliminate redundant  loads of
+                                  registers.  A  significant size  savig
+                                  normally  results  from  this  option.
+                                  However if  it goes wrong, the results
+                                  can be rather unpredictable.
+
+                        Default:  -peep=all
+
+
+              If support for multiple assemblers and/or processors types
+              was specified  when the  compiler was  built, then  a  386
+              processor  target   plus  a   specific  assembler  can  be
+              specified using the following options:
+
+              -bas386   Generate 386  code.  Use  the syntax  for  Bruce
+                        Evan's 386 assembler for the output.
+
+              -gas386   Generate 386  code.  Use  the GNU  386 assembler
+                        syntax for the output.
+              -masm386  Generate  386  code.   Use  the  Microsoft  MASM
+                        assembler syntax for the output
+
+              -sysv386  Generate 386  code.  Use the Unix SVR4 assembler
+                        syntax for the output.
+
+
+
+
+         INTEL 8086 OPTIONS
+
+              The options  listed in  this section apply when generating
+              16-bit code  for use  on Intel processors.  They will only
+              be available  if support for the Intel 8086 processor type
+              was specified at the time the compiler was built.
+
+              -fpu=yes|no
+                        Specify whether  operations  involving  floating
+                        point variables should generate in-line calls to
+                        the a  hardware floating  point unit, or whether
+                        calls  are   made  instead  to  library  support
+                        routines. Using  library support routines allows
+                        floating point  operations  to  be  carried  out
+                        purely in software.
+
+                        Default:  -fpu=yes
+
+              -peep=none|peepopt_list|all
+                        Control the  level of peephole optimisation that
+                        should be  done. Past  experience has shown that
+                        some of  the more  obscure bugs  reported on the
+                        compiler are  those where the peephole optimiser
+                        part  of   the  compiler  has  made  an  invalid
+                        optimisation.   You  would  therefore  use  this
+                        option if  you suspect  that  the  compiler  has
+                        generated incorrect  code, and  you want to look
+                        at what would be generated if some or all of the
+                        the peephole optimisation was not done.
+
+                        The meanings of the options are:
+
+                        none      All peephole     optimisations     are
+                                  suppressed.
+
+                        all       All peephole     optimisations     are
+                                  performed.  It is equivalent to giving
+                                  -peep=flow.
+
+                        You can also exercise  a finer  level of control
+                        by specifying  the exact combination of peephole
+                        optimisations that  you want  from the following
+                        options:
+
+                        flow      This tries to  analyse the flow of the
+                                  code to  eliminate redundant  loads of
+                                  registers.  A  significant size  savig
+                                  normally  results  from  this  option.
+                                  However if  it goes wrong, the results
+                                  can be rather unpredictable.
+
+                        Default:  -peep=all
+
+              -pointer=16|32
+                        Specifies that  the code  should be generated to
+                        conform to  the small  memory model  (64K data +
+                        64K code segments) which uses 16 bit pointers or
+                        the large model which uses 32 bit pointers.
+
+                        Default:  -pointer=16
+
+
+              If support  for multiple  processors and/or assemblers was
+              configured when  the compiler  was  built,  then  you  can
+              specify the  target to  be a 8086 processor and a specific
+              assembler can be specified using the following options:
+
+              -bas86    Generate 8086  code.  Use  the syntax  for Bruce
+                        Evan's 16 bit 8086 assembler for the output.
+
+              -gas86    Generate  8086  code.   Use  the  GNU  assembler
+                        syntax for the output.
+
+              -masm86   Generate 8086  code.   Use  the  Microsoft  MASM
+                        assembler syntax for the output
+
+              -sysv86   Generate 8086 code.  Use the Unix SVR4 assembler
+                        syntax for the output.
+
+
+
+         TEXAS INSTRUMENTS TMSC30 PROCESSOR OPTIONS
+
+              The options  listed in this section will only be available
+              if support  for the Texas Instruments TMSC30 DSP processor
+              was specified at the time the compiler was built.
+
+              NOTE The TMSC30 support was developed by and is maintained
+                   by:
+                                            Ivo Oesch,
+                        Selzweg 1,
+                        3422 Kirchberg,
+                        Switzerland.
+                   email: b19oesch@isbe.ch (valid until March 1997)
+
+
+              -collect=yes|no
+                        This option is  used to  control  the  level  of
+                        effort  that  is  put  into  removing  redundant
+                        moves.  The 'yes' value implies try harder.
+
+                        N.B. This option is  likely  to  be  removed  or
+                             combined with  some  other  option  in  the
+                             future.
+
+              -delayed=n
+                        This controls the  condition under which delayed
+                        branches are  used.  The values of 'n' should be
+                        in the  range 0  to  3.   The  meaning  oif  the
+                        different vales is as follows:
+
+                         0   No delayed branches are used
+
+                         1   At least one useful instruction must follow
+                             to be  able to  use a  delayed  branch,  or
+                             alternatively up  to to  2 nops are allowed
+                             to be  added to  be able  to use  a delayed
+                             branch.
+
+                         2   At least two useful instruction must follow
+                             to be  able to  use a  delayed  branch,  or
+                             alternatively not more than 1 nop.
+
+                         3   All three   instructions    following   the
+                             delayed branch must be useful to be able to
+                             use a delayed branch.
+
+                        The implementation of  this option  is  done  by
+                        taking 'useful'  instructions  from  before  the
+                        branch (i.e.  the branch  instruction  is  moved
+                        backwards in  the generated  instruction stream,
+                        and  if  this  is  not  sufficient  also  moving
+                        instructions  from   the  branches   target  and
+                        adjusting the target location accordingly.
+
+              -forcedsave=none|option_list|all
+                        Forces the compiler  to save specified registers
+                        on function  entry and restore them when leaving
+                        a  function.    The  'option_list'  may  be  any
+                        combination of the following register names:
+
+                        none      No registers are saved.
+
+                        all       All registers
+
+                        You can specify  specific registers by using any
+                        combination of the following (comma separated):
+
+                        r0,r1,r2,r3,r4,r5,r6,r7
+                        ar0,ar1,ar2,ar3,ar4,ar5,ar6,ar7
+                        dp,ir0,ir1,bk,sp,st,ie,if,iof,rs,re,rc
+
+                        In addition you  can  use  rn  to  mean  all  r?
+                        registers and arn to mean all ar? registers.
+
+                        It usually will  only makes  sense to  use  this
+                        option for special interrupt routines, so should
+                        not be switched on via the comand line.
+
+                        The most likely way you would use this option is
+                        by including the following type of code sequence
+                        in your source:
+                             #pragma forcedsave=all
+                                                      special
+                        Interruptroutine
+                                                      #pragma
+                        forcedsave=none
+
+                                                 (This option was sdded
+                        since I needed it to get a  realtime-operating
+                        system running, and it was needed for
+                        context-switching - I had to force a save of all
+                        registers onto the stack before switching the
+                        context (Reload SP and FRAMEPTR))
+
+
+              -mul32=yes|no
+                        If enabled then  real 32-bit  multiplication  is
+                        used  for   longs.   If  not  enabled  then  the
+                        TMS320C30 24-bit multiplciation instructions are
+                        used for  longs (and  also any  shorter integral
+                        type).
+
+              -optbranch=node|low|medium|hard
+                        Control the  effort that  the peephole optimiser
+                        puts into  optimising branch  isntructions.  The
+                        values have the following effects:
+
+                        none      No branch optimisation is done
+                        low       Only moving  of  blocks  or  replacing
+                                  conditional  jumps   over  loads  with
+                                  conditional loads.
+
+                        medium    In addition to  the above, if the code
+                                  before a  branch  instruction  is  the
+                                  same as  that before the target of the
+                                  branch, then move the branch backwards
+                                  and try  to  eliminate  any  resulting
+                                  redundant code.
+
+                        hard      In addtion  to   the  above,  try  and
+                                  common up  any  instruction  sequences
+                                  leading up  to a  branch to  the  same
+                                  location.
+
+              -parallel=none|normal|all
+                        *** DJW *** Not  sure what  this does  but it is
+                        present in the code.
+
+              -peep=none|peepopt_list|all
+                        Control the  level of peephole optimisation that
+                        should be  done. Past  experience has shown that
+                        some of  the more  obscure bugs  reported on the
+                        compiler are  those where the peephole optimiser
+                        part  of   the  compiler  has  made  an  invalid
+                        optimisation.   You  would  therefore  use  this
+                        option if  you suspect  that  the  compiler  has
+                        generated incorrect  code, and  you want to look
+                        at what would be generated if some or all of the
+                        the peephole optimisation was not done.
+
+                        The meanings of the options are:
+
+                        none      All peephole     optimisations     are
+                                  suppressed.
+
+                        all       All peephole     optimisations     are
+                                  performed.
+
+                        You can also exercise  a finer  level of control
+                        by specifying  the exact combination of peephole
+                        optimisations that  you want  from the following
+                        options:
+
+                        flow      Used to enable the data flow analyzer.
+                                  The  data   flow  analyser  will  walk
+                                  through  the  generated  code  keeping
+                                  track of  registers and  attempting to
+                                  replace  each   data  access   with  a
+                                  cheaper operation if possible.
+
+                                  CAUTION:  This optimisation could lead
+                                  you to  violate a  volatile constraint
+                                  that you  tried  to  apply  at  the  C
+                                  level.  A  work-around  is  to  add  a
+                                  dummy 'asm'  statement' something like
+                                  asm("*Dummy, stops dataflow analyzer")
+                                  before any  statement  which  accesses
+                                  operandas  with  volatile  qualifiers.
+                                  This stops the dataflow analyzer being
+                                  able to  do any  replacements at  this
+                                  point.
+
+                                  Using    this     option    can    add
+                                  significantly to  the compile  time  -
+                                  typically about a sixth.
+
+                        pipeline  This is  used   to   control   whether
+                                  optimizations  should   be  done  that
+                                  attempt to minimise pipeline conflicts
+                                  arising  from  the  usage  of  address
+                                  registers as  operands in instructions
+                                  and  in   address   generation.    The
+                                  optimisation involves re-ordering code
+                                  sequences where possible to avoid such
+                                  conflicts.
+
+                        3operand  Converts  wherever   it  is   possible
+                                  two operand  instructions  into  three
+                                  operand instructions.  This  may  open
+                                  new  paths  for  the  other  optimiser
+                                  stages.
+
+                        parallel  Controls    whether    the    peephole
+                                  optimiser  should   attempt   to   use
+                                  instructions that  can be  executed in
+                                  parallel where  possible.  It involves
+                                  replacing specific  instructions  with
+                                  their parallel equivalents.  Currently
+                                  only ldi||ldi,  ldi||sti and  sti||sti
+                                  combinations are supported.
+
+                        remap     Controls remapping  of registers.  For
+                                  example an
+                                       ldi  rx,ry
+                                  is removed if  ry can be replaced with
+                                  rx in  the following code or if rx can
+                                  be replaced  by ry  in the  preceeding
+                                  code sequence.
+
+                                  This optimisation  adds  significantly
+                                  to the compile time of programs.
+
+                        debug     *** DJW ***
+                                  Not sure what this does but is allowed
+                                  for in  the parameter  options present
+                                  in the code.
+
+                        Default:  -peep=all
+
+
+              -probe=no|yes
+                        specify whether stack probes should be generated
+                        when each stack frame is built.   This option is
+                        only  available   if  the   PROBES  option   was
+                        configuration option  was set  when the compiler
+                        was built.
+
+                        Default:  -probe=no
+
+              -pseq=string
+                        This option would  rarely be  changed as  it  is
+                        used for  fine tuning of the peephole optimiser.
+                        It allows  you to  control both  the  number  of
+                        passes made  by the peephole optimiser, and also
+                        the  specific   optimisations  that   should  be
+                        attempted in  each branch.   The 'string' passed
+                        as    a     parameter    is    in    the    form
+                        nnn/n...n/nnn/.../n where  n is a number between
+                        0  and   6.   Each   number  controls   specific
+                        optimisations that  are done in that pass of the
+                        optimiser, and  the slashes  separate passes  of
+                        the optimiser.
+
+                        The meanings of  the various numbers used in the
+                        string are as follows:
+
+                         0   Do only simple standard optimisations
+                         1   Combine forward.   Arithmetic  instructions
+                             with a following load is combined to give a
+                             3-op instruction wherever possible.
+                         2   Combine backward.   Arithmetic instructions
+                             with a  preceeding load is combined to give
+                             a 3-op instruction wherever possible.
+                         3   Commutative.      If      a     commutative
+                             arithmetic/locical instruction  is followed
+                             be a  load and  the load  can be avoided if
+                             the operands  are swapped then this is done
+                             and the load deleted.
+                         4   Do the optimisations that are controlled by
+                             the -remap option as longas it is active.
+                         5   Do the optimisations that are controlled by
+                             the  -collect  option  as  long  as  it  is
+                             active.
+                         6   Do the optimisations that are controlled by
+                             the  -dataflow  option  as  long  a  it  is
+                             active.
+
+                        The default  value   currently  built  into  the
+                        compiler is:
+                             -pseq=54321/6/543210
+                        If you find a  sequence that give better results
+                        then please let Ivo know (email address is)
+
+              -ramconst=yes|no
+                        If enabled then  large integer  constants  (more
+                        than 16  bits) are  put into  the .const segment
+                        which must be in the same data page as all other
+                        data  segments.   If  not  enabled,  then  large
+                        constants are  constructed using  ldi, shift and
+                        or instructions.
+
+                        Whether this option  is  relevant  or  not  will
+                        depend on  whether you are constrained for space
+                        in the data page.
+
+              -shortfloat=n
+                        Controls  the   cases  in   which  short   float
+                        constants are used according to the value of 'n'
+                        as follows:
+
+                         0   Short float constants  are only  used if we
+                             are absolutely  sure  that  they  will  not
+                             bring any  loss in  precision in  the given
+                             constant.
+
+                         1   Constants of  the type  'float' are  always
+                             represented in  short form  if they  are in
+                             range.   Constants  of  type  'double'  and
+                             'long double' only if there is also no loss
+                             in precision.
+
+                         2   All floating    point     constants     are
+                             represented in  short form  if they  are in
+                             range (between -255 and +255) even if there
+                             is a loss in precision.
+
+              If support  for multiple  processors and/or assemblers was
+              specified when  the  compiler  was  built,  then  you  can
+              specify the  target to  be a  TI MSC030  processor  and  a
+              specific assembler  can be  specified using  the following
+              options:
+
+              -rosc30   Generate code for the TI TMSC30 processor in the
+                        Rossin assembler  format.  This  should also  be
+                        compatible  with   the  official   TI  assembler
+                        format.
+
+
+
+         ENVIRONMENT VARIABLES
+
+              If the  compiler has  been built  to  support  environment
+              variables, then  the environment variable that corresponds
+              to the  name of  that version of the compiler (i.e."C386",
+              "C86", "C68" or "C30") is checked to see if it is present,
+              and if so is assumed to contain options in the same format
+              as  the  command  line  options.    This  is  done  before
+              processing the  command line.   Command line  options will
+              therefore over-ride  the environment  variable settings in
+              the event of conflict.
+
+              The environment  variable method  is a very convenient way
+              of setting  defaults (such  as the warning level) when you
+              want a different one to the one built into the compiler.
+
+
+
+         EXIT CODES
+
+              The compiler returns the following error codes:
+
+              0         EXIT_SUCCESS.  The  compilation was  successful.
+                        That is  the source file was compiled, and there
+                        were no fatal errors.
+              other     EXIT_FAILURE.  One  or  more  fatal  compilation
+                        errors were reported.
+
+
+         SUPPORT FOR #pragma DIRECTIVES
+
+              The ANSI  C standard  provides the  #pragma statement as a
+              way of  allowing compilers  to support  non-standard  (and
+              typically non-portable)  extensions to  C.  The support in
+              the compiler for #pragma is behaves as follows:
+
+              a)   If the text following  the #pragma statement is valid
+                   for a  command line option, then it is interpreted as
+                   being one.  No check is made if this is sensible.
+
+                   A typical  use   for  this  facility  is  to  perhaps
+                   temporarily turn  up a  warning  level  for  a  small
+                   section of the program.
+
+                   Another possible use is to dynamically change some of
+                   the code  generation options  such as  the  level  of
+                   optimisation.  If  trying to  take  account  of  this
+                   facility please note that code is only generated when
+                   the end  of a  function is  reached, and  it  is  the
+                   settings for  code generation  at that point that are
+                   used.  It  is not possible to change such settings on
+                   a statement level basis.
+
+              b)   If the text  following  the  #pragma  option  is  not
+                   recognised  then  the  #pragma  statement  is  simply
+                   ignored.
+
+              N.B. Please note that there is a high chance that we might
+                   change the  above rules for #pragma support in future
+                   release of the compiler.
+
+
+        SUPPORT FOR asm KEYWORD
+
+              It is possible to build support for the 'asm' keyword into
+              the compiler.  This is, however, a very limited support in
+              that it suffers from the following limitations:
+
+                -  The text of the  assembler code  that is  passed as a
+                   parameter to  the 'asm' keyword is not syntax checked
+                   in any  way -  it is simply passed unchanged into the
+                   generated assembler file.
+
+                -  If you want to  reference a  global variable then you
+                   need to add any prefixes (typically an underscore) to
+                   the names yourself.
+
+                -  It is not  possible   to  reference  static  or  auto
+                   variables as these have internally generated labels.
+
+              We have  no immediate plans to upgrade this support in any
+              way.   The   use  of   the  'asm'  keyword  is  completely
+              non-portable and  not part  of the ANSI standard, so we do
+              not feel  the need  to invest  much  work  in  getting  it
+              working.   After  all you  can always  write free-standing
+              assembler routines  that are added to your program at link
+              time.
+
+
+        EXPLOITING COMPILER OPTIMISATIONS
+
+              This  section  discusses  the  optimisation  methods  used
+              within the  compiler and how you can code to exploit these
+              too maximum advantage.
+
+              The philosophy  that was used when developing the compiler
+              was  to   try  and  strike  a  good  balance  between  the
+              efficiency of  the optimisations  that are  done  and  the
+              code/runtime penalties  of doing  the optimisations in the
+              first place.
+
+              The decision  was made to limit the optimisations that are
+              will be  done to  those that  can be  done by  pure static
+              analysis of  the generated  code.  More complex methods of
+              optimisation have  been avoided.    The result  has been a
+              family of  compilers that  produce surprisingly  good code
+              without  too   much  penalty   in  the   runtime  size  or
+              performance of the compilers.
+
+              To understand  some of the following sections, you have to
+              realise that  the code  generation of the compiler happens
+              in two basic stages:
+
+              a)   Generic code is  generated that  will work  under all
+                   situations.  No  consideration is given at this stage
+                   as to  whether the particular values of operands mean
+                   that shorter  variants of instructions could be used.
+                   At  this   stage  the   following  optimisations  are
+                   performed:
+                        - Allocating variables to registers
+                        - Removing redundant stack updates.
+
+              b)   The peephole optimiser  is invoked  that looks at the
+                   generated code  to see  how it  can be improved.  The
+                   optimisations that occur at this stage are:
+
+                        - Choosing optimum code sequences.
+                        - Commoning up repeated code sequences
+                        - Eliminating redundant or unnecessary code.
+
+              The programmer  can often  increase the  effectiveness  of
+              these   optimisation    processes    by    writing    code
+              appropriately.
+
+
+              Allocating Variables to Registers
+
+              The compiler  will try  and optimise the use of registers.
+              You can  stop this  automatic allocation  of variables  to
+              register by  using  the  -reg=no  runtime  option  to  the
+              compiler.
+
+              The compiler  first allocates  any variables for which the
+              programmer has  explicitly used  the keyword register, and
+              then (assuming  there are  still free registers) allocates
+              further variables  to registers  using an  algorithm  that
+              looks at  how frequently they are referenced in the source
+              program.   This  algorithm considers variables as suitable
+              for holding  in registers  if they  are referenced  enough
+              times so  that the overhead of loading them into registers
+              is less  than the  gains in code generation size of having
+              them in registers.
+
+              This results in the following tips:
+
+              a)   Avoid using the  register keyword unnecessarily.  The
+                   built  in  algorithms  for  allocating  variables  to
+                   registers are  very  good,  and  often  will  achieve
+                   better results than the programmer.
+
+
+              b)   Consider assigning variables used in loops explicitly
+                   with  the   register  keyword.  Because  only  static
+                   analysis techniques  are used, the compiler optimises
+                   for  space,   and  may   not  realise  the  run  time
+                   performance advantage  of keeping  loop variables  in
+                   registers  (albeit possibly at the cost of increasing
+                   code size).
+
+
+              Removing Redundant Stack Updates      "Lazy stack updates"
+
+              If there  are  several  calls  to  functions  without  any
+              intervening transfers  of control,  then the  compiler can
+              accumulate the stack tidying operations normally performed
+              after such  calls and  do them  all at  as late a stage as
+              possible.   This   means   that   multiple   small   stack
+              adjustments can  be replaced  by a  single larger  one (or
+              even sometimes  not do  it at all if the end of a function
+              is reached first).  This optimisation results therefore in
+              both size and speed gains.
+
+              There are  times, however,  when it  is inadvisable  to do
+              this optimisation.   You can therefore exert tight control
+              over exactly this optimisation by using the -stackopt=xxxx
+              runtime option.  The values  of  xxx  have  the  following
+              effect:
+
+              safest    This disables this optimisation completely.
+
+                        This is advisable  if you  have  routines  which
+                        make any  significant number  of recursive calls
+                        (either  directly   or  indirectly   via   other
+                        routines).  This  is because  it is  likely that
+                        there will be obsolete parameters left occupying
+                        space at the point of recursion.  This can cause
+                        excessive stack usage if the recursion is to any
+                        depth.
+
+              minimum   This is the  safest form  of stack  optimisation
+                        and is  the default  compiler  operation.   With
+                        this option, stack optimisation is done unless a
+                        function call  is found  which is to alloca(), a
+                        function whose  name starts  with an underscore,
+                        or a  function that  is being  called indirectly
+                        via a function variable (which means its name is
+                        indeterminate).
+
+                        This behaviour is  to allow  for the  occasional
+                        routine (typically  an assembler  routine  in  a
+                        library) that directly manipulates the stack and
+                        can return  with the  stack set  to a  different
+                        value to  that on  entry.  Note  that standard C
+                        routines cannot exhibit this behaviour.
+
+              average   This option allows  for optimisation of calls to
+                        routines  that   contain  an   underscore.   Its
+                        behaviour  is   otherwise   as   described   for
+                        n=minimum.
+
+                        This option can  have significant  gains in  the
+                        situation in  which underscores  are being added
+                        to the  user defined  names for  the purposes of
+                        name hiding within libraries.
+
+              maximum   This option allows  for optimisation of calls to
+                        routines that are called via a function variable
+                        (and whose name is therefore indeterminate).
+
+                        This level of  optimisation can  have  a  larger
+                        gain than is at first apparent.  This is because
+                        the C68  optimisation for  the use  of registers
+                        can result in the address of a frequently called
+                        function being  held  in  a  register  variable.
+                        This level of optimisation allows the lazy stack
+                        optimisation to  be applied  to  such  calls  as
+                        well.
+
+                        This level of  optimisation should  be safe  for
+                        pure C  code.  However, it is not the default as
+                        it is  very difficult  to  track  down  problems
+                        arising from  doing lazy stack optimisation when
+                        it is incorrect to allow it.
+
+
+              Choosing Optimum Code Sequences
+
+              This optimisation  is simply  a case of examining the code
+              generated looking  for common  code sequences  that can be
+              replace by  faster and/or  shorter ones.   This  level  of
+              optimisation can be disabled by using the -opt=no keyword.
+              However, there  is normally  little to  gain by  disabling
+              this optimisation  unless you  suspect an  error as it has
+              little detrimental  effect on compilation speed.
+
+
+              Commoning up repeated code sequences
+
+              The compiler  will attempt to common up repeated sequences
+              of code within a function.  This can result in significant
+              reduction in code size.  However, as this optimisation can
+              impose a  significant  time  penalty  on  the  compilation
+              process, it  is only  invoked if  the -O runtime option is
+              supplied to the compiler.
+
+              To maximise  the potential  gains that will be achieved by
+              this optimisation the following tips may be useful:
+
+              a)   Try and ensure that  the code sequences leading up to
+                   return statements or break statements within a switch
+                   construct are the same.  This will allow the compiler
+                   to only  generate the  code once  and  implement  all
+                   repeated occurrences  of such code as simple branches
+                   to the first one.
+
+              b)   If you have such  sequences that simply differ by one
+                   variable,  then   it  may  be  worth  assigning  that
+                   variable to  a temporary  one and  using that if as a
+                   result a larger sequence of code is common.
+
+
+              Removing Redundant or Unreferenced Code
+
+              This optimisation is done only if the -O runtime option to
+              the compiler  was used.    It looks  for any code sequence
+              that cannot  be reached.   If the  code in  question was a
+              direct result  of the  way the programmer wrote the source
+              code then,  if level  4 warnings  are active,  appropriate
+              warning messages  will have been output during the parsing
+              stage.   However,  this situation can also arise as result
+              of the  effects  of  previous stages  in the  optimisation
+              process.
+
+
+
+
+         KNOWN BUGS AND LIMITATIONS
+
+              The following are  known bugs  in the  4.5 release  of the
+              compiler.
+
+                -  Adjacent wide string literals are not concatenated.
+
+              The following undefined behaviours are not detected:
+
+                -  An attempt is  made to  modify a  string  literal  of
+                   either form.
+
+                -  An object is  modified more than once, or is modified
+                   and accessed  other than  to determine the new value,
+                   between two sequence points.
+
+                -  The value  of   an  uninitialised   object  that  has
+                   automatic storage  duration is used before a value is
+                   assigned.
+
+
+         ANSI FEATURES NOT SUPPORTED
+
+              The following  features specified in the ANSI standard are
+              NOT supported
+
+              -    Trigraphs.  It  is possible, however, that you have a
+                   pre-processor that  handles trigraphs,  in which case
+                   this is  done  there  rather  than  in  the  compiler
+                   program.
+
+
+
+         ANSI EXTENSIONS SUPPORTED
+
+              If the  -extensions=yes run-time  option is  used and  the
+              EXTENSIONS configuration  option was set when the compiler
+              was built,  then the following additional functionality is
+              supported.  These  are based  on the proposed amendment to
+              ANSI C that has not yet been ratified.
+
+              -    The C++ style  of  comment  is  allowed  (i.e.  those
+                   starting with the // sequence).
+
+              -    The 'restrict'  keyword   is   recognised   and   the
+                   associated syntax rules for restricted pointers.
+
+              -    Other new reserved  words such  as 'class', 'private'
+                   and 'public'  are recognised  and flagged  as  errors
+                   when used as variable names.
+
+
+         CHANGES TO FEATURES IN K&R COMPATIBILITY MODE
+
+              If K&R  compatibility  mode  is  specified  by  using  the
+              -trad=yes run-time  option,  then  the  following  changes
+              occur in the features supported by the compiler:
+
+              -    The long double qualifier is not allowed.
+
+              -    The use of the  long float qualifier as a synonym for
+                   double is permitted.
+
+              -    The const keyword is not allowed.
+
+              -    The volatile keyword is not allowed.
+
+              -    The signed keyword is not allowed.
+
+              -    String concatenation is not performed.
+
+              -    Single copies of identical strings are not generated.
+                   Instead separate  copies will be generated every time
+                   a string is used.
+
+              -    ANSI style function prototypes are not allowed.
+
+              -    ANSI style function declarations are not allowed.
+
+
+         ERROR AND WARNING LEVELS
+
+              The errors and warnings within the compiler are classified
+              into various  severity levels.   The higher the level, the
+              more pedantic  the level  of messages that are output.  By
+              default all  messages with  severity 0 are errors, and all
+              those with higher levels are merely warnings.  The -warn=n
+              and -error=n  runtime parameter  options allow the user to
+              vary the default treatment of these levels.
+
+              The compiler is normally supplied with warning level 3 set
+              as the  default warning  level (if  not  changed  via  the
+              command line  or in  an environment variable).  It is good
+              practice to  try and  write  code  that  compiles  without
+              warnings even  at levels  4 or  5.  There  are  then  less
+              likely to  be subtle  bugs lurking  in your  code that are
+              coding mistakes  that  are  difficult  to  spot.   A  real
+              zealous coder will definitely want to achieve level 6, and
+              possibly level  7.  You  have to  be a  zealot to  want to
+              expend the  effort required to get code to compile warning
+              free at level 8.
+
+              The levels currently supported are as follows:
+
+              0    Messages at this  level are  always errors.   If  you
+                   specify this as a warning level, then effectively all
+                   warning messages are disabled.
+
+              1    These are severe warnings that should not normally be
+                   suppressed.   They  typically relate  to problems  at
+                   the code  generation stage  of  the  compiler  or  to
+                   constructs which only some compilers will allow.
+
+              2    These relate to  problems with the code that normally
+                   indicate problems  or potential  problems.  They  are
+                   typically easy  to fix - normally by adding a cast or
+                   something similar.
+
+              3    This level relates  to  warnings  that  are  commonly
+                   encountered when  porting code.  The warnings at this
+                   level may  not indicate  an error,  but  they  should
+                   certainly be checked out.
+
+              4    This level of  warning indicates  problems  that  are
+                   often encountered  in porting,  but that are probably
+                   not an  error.   It  is still a good idea to get your
+                   own code  to compile cleanly at this level of warning
+                   as it will minimise problems later.
+
+              5.   This level  of   warning  is   for  short  cuts  that
+                   experienced C  programmers often  use, but  that  are
+                   occasionally done  in error.   You are most likely to
+                   find this  level useful  when trying to track down an
+                   error that  you are  having trouble  locating.  It is
+                   good practice to write code that is warning free even
+                   at this level.
+
+              6.   This level is very strict.   It is primarily intended
+                   to help  spot code  that might  cause problems if you
+                   intend to  port the  program to  another  machine  or
+                   compiler.
+
+              7    This is an extremely  pedantic level.  It is intended
+                   to allow  you to  help you  write  extremely  "clean"
+                   code.   It  will  also  help  with  porting  programs
+                   although the warnings generated at this level are for
+                   items that have been found to be less likely to cause
+                   problems than those reported at level 6.
+
+              8.   This mode is  extremely strict.   So much so, that it
+                   is not  always possible  to write  the code in such a
+                   way as to completely eliminate all level 8 warnings.
+
+              ERROR AND WARNING MESSAGES
+
+              The following  is a list of the error messages that can be
+              output by  the compiler.   In most  cases the messages are
+              self-explanatory, but  where this  is not  so,  additional
+              information is given about the possible cause of the error
+              message.
+
+              Where  variable  information  can  be  inserted  into  the
+              message, then  this has  been specified  using the  printf
+              format string method.
+
+              LEVEL 0
+
+              This level  of message  is always  an error.    It is  not
+              possible to  make the  compiler treat such messages merely
+              as warnings.
+
+              & operator may not be applied to bitfields
+
+                   The ANSI standard does not allow the address operator
+                   to be aplied to bit-fields.
+
+              & operator on register variable '%s'
+
+                   The ANSI standard does not allow the & operator to be
+                   used on  variables that  have been qualified with the
+                   register keyword.
+
+              { expected on initialiser
+
+                   If you are initialising  a complex  structure such as
+                   an array or structure, then the initialisation values
+                   should be enclosed in braces.
+
+              an object type expected
+
+                   A reference  to   an  object  was  expected  but  not
+                   encountered.  This  could, for  example, be generated
+                   by attempting  to increment/decrement  a pointer to a
+                   function.
+
+              arithmetic type expected
+
+                   an integral type  (long, int,  short or  char)  or  a
+                   floating point type(float, double or long double) was
+                   expected.
+
+              break not allowed here
+
+                   A break statement was  encountered when  not in a do,
+                   while, for or switch statement.
+
+              cannot nest function definition '%s()'
+
+                   The ANSI  C   standard  does   not   allow   function
+                   definitions to be nested.
+
+              cannot subtract a pointer from an integral value
+
+                   It is only allowable  to subtract  an integral  value
+                   (long, int,  short or  char) from  a pointer, and not
+                   the other way around.
+
+              case not allowed here
+
+                   A case statement has been encountered when not within
+                   a switch statement.
+
+              character constant unterminated or too long
+
+                   Either the terminating  quote character  was  missing
+                   from the  character constant  or else  there were too
+                   many characters within the character constant.
+
+              constant expression expected
+
+                   During a variable  initialisation an  expression  was
+                   encountered which is not a constant expression.
+
+              constant expression exceeds representable range of type '%s'
+
+                   This will normally  occur when  you  try  and  either
+                   assign or  initialise a variable with a constant that
+                   is outside the range that will fit in the given type.
+
+              constant integer expression expected
+
+                   During a variable  initialisation an  expression  was
+                   encountered  which   is  not   a  constant   integral
+                   expression.
+
+              continue not allowed here
+
+                   A continue statement  has been  encountered when  not
+                   within a do, while or for statement.
+
+              declared argument '%s' missing
+
+                   A K&R function  definition   has  an   entry  in  the
+                   parameter  definition   list  which  is  not  in  the
+                   parameter list of the function.
+
+              duplicate case label 'case %ld'
+
+                   A case statement has  been encountered  for  a  value
+                   which has  already been  associated with  a  previous
+                   case statement inside the same switch statement.
+
+              duplicate default label in case
+
+                   A default label  has already  been encountered inside
+                   the  switch   statement.   Only  one  such  label  is
+                   allowed.
+
+              duplicate label '%s'
+
+                   The label has  already been  found within the current
+                   block.
+
+              enumeration constant too large
+
+                   An enumeration value  has been  defined which  is too
+                   large to fit within an 'int' type.
+
+              error dereferencing a pointer
+
+                   An attempt has  been made to derefence an object that
+                   cannot be dereferenced.  An example might be to try
+                        *i = 3;
+                   where i is an integer.
+
+              error doing a cast
+
+                   An attempt to  perform an illegal cast operation.  An
+                   example might  be an attempt to cast a structure to a
+                   structure of a different size.
+
+              error while scanning a parameter list
+
+                   This implies  that   the  compiler   has  encountered
+                   something unexpected while scanning a parameter list.
+                   It is  commonly caused  by a  misplaced comma,  or  a
+                   mispelled type keyword.
+
+              expression expected
+
+                   An expression was expected and not encountered.  This
+                   can happen,  for example, if the condition in an 'if'
+                   statement is missing.
+
+              extern definition of '%s' redeclared static
+
+                   You have  earlier  declared  as  globally  visible  a
+                   function or  variable that  you have  now defined  as
+                   static and therefore limited to the current scope.
+
+              floating point constant expected
+
+                   An attempt was  made to  initialise a  floating point
+                   variable  with   an  expression  that  could  not  be
+                   evaluated to a floating point constant.
+
+              function declarator not allowed here
+
+                   This can be encountered  if an  attempt  is  made  to
+                   write a  function definition which returns a function
+                   - it  is only  possible to  return  a  pointer  to  a
+                   function.
+
+              function returning array type
+
+                   A function is  not allowed  to return  an array type.
+                   It can only return a pointer.
+
+              function type expected
+
+                   An attempt has  been made to call a function by using
+                   an variable which is not a function pointer.
+
+              function '%s' declared but never defined
+
+                   This will occur  if you put a forward declaration for
+                   a function  in a  file, and  then never  define  that
+                   function.   It  could also  occur  if  you  meant  to
+                   forward declare  a library  function, but omitted the
+                   'extern' storage class specifier.
+
+              function '%s()' default promotion / prototype mismatch
+
+                   This is typically  caused  by  mixing  ANSI  and  K&R
+                   methods of function declaration and definition.
+
+                   This is of  particular importance for functions which
+                   have parameters  of types  'char', 'short' or 'float'
+                   as the  parameter promotion rules for these types are
+                   different  for   K&R  and   ANSI   declarations   and
+                   definitions.
+              function '%s()' mismatched number of arguments
+
+                   The number of  parameters does  not agree between two
+                   different declarations for the same function.
+
+              function '%s()' prototype mismatch
+
+                   This indicates that  the for  the specified function,
+                   there are  incompatible definitions or  declarations.
+                   This can  be either  in the  type  returned,  or  the
+                   number or types of the parameters.
+
+              general error
+
+                   This error means  that a consistency check within the
+                   compiler   has    failed.     Please    report    the
+                   circumstances that  caused the  problem, and  ideally
+                   provide  a  sample  of  code  that  can  be  used  to
+                   reproduce the problem.
+
+                   It is preferable if  any code  that  is  supplied  to
+                   illustrate a  problem has already been passed through
+                   the   C    pre-processor.    This    eliminates   any
+                   dependencies on system specific header files.
+
+              identifier expected
+
+                   The name of an identifier was expected but some other
+                   token wa found instead.
+
+              identifier list not allowed on function declaration
+
+                   A function declaration has been encountered which has
+                   a K&R style paramter list.  Such a list is only valid
+                   on   function    definitions   and    not    function
+                   declarations.
+
+              illegal cast from '%s' to '%s'
+
+                   You have specified  a cast operation between to types
+                   that are not cast compatible.
+
+              illegal character '%c'
+
+                   A printable character  has been  encountered  in  the
+                   source which is not legally allowed in any C token.
+
+              illegal field width
+
+                   You have specified a width to a bit field that is too
+                   large.  ANSI  restricts bit  field widths to being no
+                   larger than that of the 'int' data type.
+
+              illegal initialization
+
+                   The compiler has  recognised that  you are  trying to
+                   initialize a variable, but the type of initialization
+                   you are trying to do is not permitted.
+
+              illegal redeclaration of '%s'
+
+                   The function/variable has been declared in a way that
+                   is incompatible with an earlier use.
+
+              illegal 'sizeof' operation
+
+                   An attempt has been  made to take the size of an item
+                   that does  not have  a size  attribute.   An  example
+                   might be to try and take the sizeof a function name.
+
+              illegal storage class
+
+                   A storage specifier  has been  used multiple times or
+                   else in an inappropriate place.
+
+              illegal type combination
+
+                   Type specifiers have been used in a combination which
+                   is not  valid.  An  example might  be to  try and use
+                   "short char".
+
+              illegal unprintable character (value=0x%x)
+
+                   An unprintable character  has been encountered in the
+                   source which  is not  legally allowed  in a  C source
+                   value.  As  it is  unprintable the  hexadecimal value
+                   that corresponds  to its  internal representation  is
+                   given in the error message.
+
+              "implicit conversion to pointer on register variable '%s'"
+
+              "incomplete '%s' declaration"
+
+              "initialization invalid"
+
+              "integral type expected"
+
+                   A variable with an integral type (long, int, short or
+                   char) was expected.
+
+              "l-value required"
+
+                   A l-value is  simply an  expression which it is legal
+                   to have on the left side of an assignment expression.
+                   This  means  that  you  have  an  assignment  (or  an
+                   implicit assignment) where this is not true.
+
+              "modified 'const' value"
+
+                   An attempt has  been made  to change  the value of an
+                   object that was declared as 'const'.
+
+              "parameter count incorrect for function %s"
+
+                   The number of  parameters passed in the function call
+                   does not  agree with  the number that is specified as
+                   required in the function prototype.
+
+              "pointer type expected"
+
+
+              "problem with pre-processor output"
+
+                   This indicates that  what looks  like a  preprocessor
+                   symbol (one  starting with #) was found in the source
+                   file, and it was not one that the compiler expects to
+                   get past the pre-processor.  This is typically caused
+                   by trying  to use the compiler on raw C source before
+                   it has gone through the C pre-processor.
+
+              "qualifier already specified"
+
+                   This means that there are duplicate qualifiers of the
+                   same type  referring to the same variable or function
+                   declaration/definition.  The  second one  will simply
+                   be ignored, but the source should be corrected.
+
+              "qualifier mismatch"
+
+                   When comparing two  type definitions  the 'const'  or
+                   'volatile' qualifiers do not match.
+
+              "'restrict' only allowed on pointer types"
+                   The 'restrict'  qualifier  can  only  be  applied  to
+                   variables that are of pointer type.
+
+              "return expression of type void"
+
+                   It is not possible  to  return  an  expression  which
+                   evaluates to type void.
+
+              "return value specified to void function"
+
+                   A return statement  has been found that is attempting
+                   to return  a value for a function that was defined as
+                   returning void (i.e. no value returned).
+
+              "scalar type expected"
+
+                   A type which is  an integral  type (long, int, short,
+                   char) or  a floating  point type (float, double, long
+                   double) or a pointer was expected.
+
+              "string constant unterminated or too long"
+
+                   This message may  well occur  well after the point at
+                   which the string constant started.  It is quite often
+                   caused   by   mismatched   comments   or   #if/#endif
+                   directives.
+
+              "tag usage '%s' mismatch"
+
+                   An attempt to  use a  struct, union or enum tage more
+                   than once  but applied  to a different type than that
+                   used in the original use.
+
+              "too many initializers"
+
+                   The number of  initializer values  would  exceed  the
+                   size of the variable space allocated to hold them.
+
+              "type specifier '%s' already specified"
+
+                   A type specifier has  been used  more than  once.  An
+                   example might be:
+                        int int i;
+
+              "type mismatch error"
+
+                   When comparing two type definitions for compatibility
+                   they did not match.
+
+              "type/operand has unknown size"
+
+                   An attempt has been  made to  use the  size of a type
+                   when the type is an incomplete type and therefore has
+                   not size information available.
+
+              "undefined identifier '%s'"
+
+                   An attempt to  use an  identifier before  it has been
+                   defined.  A  common cause  is that  the name has been
+                   misplet.
+
+              "undefined label '%s'"
+
+                   A goto statement is attempting to go to a label which
+                   has not been defined within the current scope.
+
+              "unexpected end of file"
+
+                   This is typically caused  by a  mismatch between  the
+                   number of start and close braces.
+
+              "unexpected symbol '%s' found"
+
+                   This simply means that the symbol shown was not legal
+                   at this  point, and  the compiler  has been unable to
+                   specify the error more accurately.
+
+              "value of escape sequence out of valid range"
+
+                   The backslash  escape  character  has  been  used  to
+                   define a  character constant with a value that is too
+                   large to  fit into the range of values that are legal
+                   for a character.
+
+              "visibility specifier '%s' only allowed with 'class'"
+
+                   You can only use this type of visibility specifier in
+                   conjunction with  a class  declaration or  definition
+                   (ANSI extension).
+
+              "void parameter is passed to function %s"
+
+                   An attempt to  pass a  parameter which  has a type of
+                   'void'.  This is not allowed.
+
+              "'%s' is not a struct/union member"
+
+                   You have  used  the  specified  variable  name  in  a
+                   context in  which a structure or union member name is
+                   required, and  the name  is not defined as being part
+                   of the structure or union in question.
+
+              LEVEL 1
+
+              This level  of message  is  used  to  indicate  code  that
+              although allowed  by C  is extremely  bad coding practice,
+              and as a result is normally not what the programmer meant.
+
+              "bit field type should be unsigned or int"
+
+                   The type for a  bitfield should  be of  type  int  or
+                   unsigned int.   Some compiler allow other types (such
+                   as short) but this is an extension to ANSI and is not
+                   portable.
+
+              "extern definition of '%s' redeclared static"
+
+
+
+              LEVEL 2
+
+              This level  of warning  is used  to indicate code that may
+              well not  be an error.  However, experience has shown that
+              in reality  the code  does not perform the action that was
+              intended.
+
+              "conversion between incompatible types '%s' and '%s'"
+
+                   This message indicates that the two types in question
+                   are not  defined by  the C standard to be compatible.
+                   If you  really mean  the statement,  then the message
+                   can be suppressed by use of a suitable cast.
+
+              "format string for %s() incorrect"
+
+                   This indicates that  the format  string for  a format
+                   string for  a routine from the specified printf/scanf
+                   family of  routines  is  incorrect.   Typically  this
+                   means that  there is  a % symbol that is not followed
+                   by a legal conversion character.
+
+              "size of parameter %d changed by prototype on function %s"
+
+                   This implies that  an implicit  cast was applied as a
+                   result of  a prototype  being in  scope.  Care  would
+                   need to  be  taken  when  porting  such  code  to  an
+                   environment which  does not have an ANSI compatible C
+                   compiler.
+
+                   It is often a  good idea  to add  an explicit cast to
+                   such calls  as this  at least  makes it clear what is
+                   happening, and will make code more portable.
+
+              "'sizeof' value is zero"
+
+              "'sizeof' value %d is greater than '65535'"
+
+                   This will occur when the size of a sizeof operator is
+                   set to  be only  16 bits,  and the result of a sizeof
+                   operator is larger than 16 bits.
+
+                   The data type returned  by the  sizeof operator is in
+                   fact determined  by the  value defined for TP_SIZE in
+                   the configuration  file (config.h) used when c386/c68
+                   was compiled.  It is important that this value should
+                   agree with  the value  defined  for  size_t  in  your
+                   system include files.
+
+              "\x not followed by any hex characters"
+
+                   The \x sequence that  ANSI specifies as being used as
+                   an escape  sequence to  introduce a hex character was
+                   not followed  by values  that could be interpreted as
+                   hex.
+
+
+              LEVEL 3
+
+              This level  of message indicates code that is probably not
+              an error,  but is  untidy.   Messages in this category can
+              normally be  suppressed by  making simple modifications to
+              the source code.
+
+
+              "constant %ld not within range of type '%s'"
+
+                   You have tried to  assign a  constant to  a  variable
+                   that is  too large  to fit  into a  variable of  that
+                   type.  An  explicit cast will eliminate this warning,
+                   but a  better solution  is to  change either the data
+                   type or the constant so that the warning is no longer
+                   relevant.
+
+                   Note that there  is one  case where you sometimes get
+                   an unexpected  complaint about  a  negative  constant
+                   being out  of range.   This occurs  when  you  use  a
+                   bitwise not  operator on  a signed  field.   This  is
+                   potentially non-portable.   The recommended  solution
+                   is to  only use  this operator  on unsigned fields or
+                   unsigned constants  (so you can normally just add a U
+                   to the end of the constant to make it usnigned).
+
+              "conversion between incompatible pointer types"
+
+                   Very common message  when a  pointer of  one type  is
+                   assigned to a pointer of a different type.  Inserting
+                   the relevant cast will suppress this message.
+
+              "dangerous truncation of pointer to '%s'"
+
+                   You have tried to store a pointer in an integral type
+                   that is not large enough to hold pointers without the
+                   risk  of   losing  information.   This  is  typically
+                   because a programmer has made the assumption that the
+                   size of a pointer is the same as sizeof(int).  If you
+                   mean it  then add  an  explicit  cast  to  stop  this
+                   warning being generated.
+
+              "division by zero"
+
+                   You have tried to  divide an  expression  by  a  zero
+                   constant.   This  is typically because a more complex
+                   expression, possibly  involving pre-processor macros,
+                   has evaluated to zero.
+
+              "dubious %s declaration; use tag only"
+
+                   This normally means that a structure or union pointer
+                   has been  encountered using  a tag which has not been
+                   defined.
+
+                   This can often happen  when a  tag is encountered for
+                   the first  time in a function prototype.  As this tag
+                   goes  out  of  scope  at  the  end  of  the  function
+                   prototype this  means that  you can  never  call  the
+                   function with  a parameter  of the  correct type.  To
+                   avoid this  problem either  the structure  definition
+                   must precede  the  prototype,  or  you  must  forward
+                   declare the structure type before the prototype.
+
+              "escape ignored in sequence '\%c'"
+
+                   The character following  the \  is not  one  that  is
+                   supported as  a valid escape sequence.  The effect is
+                   that the  \ character is lost, and the next character
+                   is handled unchanged.
+
+              "function '%s' declared but never defined"
+
+                   This normally  means   that  there   is   a   forward
+                   declaration for  a static function, but that the code
+                   defining that function is not present.
+
+              "implicitly declared function: 'int %s()'"
+
+                   This means that  there is no declaration (either ANSI
+                   or K&R) in scope for this function.   If the function
+                   is a  standard library  function, then  it means that
+                   the relevant header file has not been included.
+
+              "no value specified in 'return' statement"
+
+                   This occurs when  a return  statement is  found for a
+                   function that  has an  implicit int type.   It can be
+                   suppressed by  defining the  function to  be of  type
+                   void.
+
+              "parameter before ',...' causes undefined behaviour"
+
+                   The last parameter  before a  varardic parameter list
+                   is of  a type  that may  cause  undefined  behaviour.
+                   This is  because the  type of  that parameter is such
+                   that it  cannot safely  be  used  within  the  macros
+                   defined in the stdarg.h header file.
+
+              "qualifier inconsistent with type 'void'"
+
+                   This implies a  const or  volatile qualifier  used in
+                   conjunction with a void type.
+
+              "redeclaration of '%s'"
+
+                   The define variable or function has been defined more
+                   than once.   This is  typically because it is defined
+                   in multiple  different header  files.  It  is a  good
+                   idea to  try and  set up  header files  so that  each
+                   variable or  function is only defined in one place to
+                   avoid any  potential confusion that might later arise
+                   if you change one declaration and not the other one.
+
+              "returning address of a local variable"
+
+                   You have returned  the address  of a  local  variable
+                   (i.e. one on the stack).  This is very unlikely to be
+                   what you meant to do.
+
+              "using out of scope declaration for %s"
+
+                   This means  that  an  externally  linked  routine  or
+                   variable is  used outside  the block  in which it was
+                   declared.
+
+                   This is commonly caused  by using  routines for which
+                   the correct  header file has not been defined as this
+                   causes an  implicit declaration  at the  first usage,
+                   and then  this message subsequent functions which use
+                   that same routine.
+
+              "'%s' is always positive"
+
+                   This message occurs  if you try and test and unsigned
+                   value for  being a  negative value  (i.e.  less  than
+                   zero).  This  does  not  make  sense,  so  is  almost
+                   certainly a logic flaw in your program.
+
+
+              LEVEL 4
+
+              Messages at  this level  are not strictly speaking errors,
+              but they  do indicate  code that  could be  improved.   In
+              particular, they indicate code that might have portability
+              problems.
+
+              "& operator on function ignored"
+
+                   The & operator was specified on a function reference.
+                   It is not required as it is implicit.
+
+              "%d expression to '?:' operator cast to void"
+
+                   You appear to  be throwing away the specified result.
+                   Did you meant to?
+
+              "argument '%s' implicitly declared 'int'"
+
+                   This means that  an argument  to a  function has been
+                   specified which has not been explicitly given a type.
+                   It has  therefore been  treated as an int.  Declaring
+                   the argument  type explicitly  will stop this message
+                   being generated.
+
+              "array type used in '%s' statement"
+
+                   An array type was  used as  the condition for an 'if'
+                   or 'switch'  statement.   Although  legal  this  will
+                   almost always not be what was intended.
+
+              "definition of '%s' hides an earlier definition"
+
+                   This occurs when  a variable name is used in an inner
+                   block that  has the same name as one that has a wider
+                   scope.  It is just a warning that during the duration
+                   of the  block the variable at the outer level will be
+                   inaccessible.
+
+                   The commonest cause  is when  the name of a parameter
+                   to a  function is  the same as that used for a global
+                   variable.
+
+              "empty statement"
+
+                   An empty  statement   has  been   found  following  a
+                   construct like an if or  while statement.
+
+                   There are situations  in which  this is  exactly what
+                   the programmer  meant, but it might also be due to an
+                   accidental semicolon being present.
+
+                   If you meant to have an empty statement then a way to
+                   eliminate this  warning is  to simply put a statement
+                   at the appropriate place of the form:
+                        (void)variable;
+                   The cast to void  will mean  that the  optimiser will
+                   ensure that no code is generated, but the presence of
+                   the statement  tells the compiler that you know there
+                   is not a missing statement or extra semi-colon.
+
+              "function '%s' redeclared, assumed static"
+
+
+              "if statement has no effect"
+
+                   The if statement has an empty statement in the result
+                   branch.  This  does not  normally make much sense, so
+                   you probably did not mean it.
+              "implicit cast of pointer loses const/volatile qualifier"
+
+                   An assignemnt of  a variable  which has  a 'const' or
+                   'volatile' has  been made to a variable which doe not
+                   have  the   corresponding   'const'   or   'volatile'
+                   qualifier.
+
+              "K&R style function"
+
+                   This message will only be output if the -obsolete=yes
+                   runtime option  to the compiler has been used.  It is
+                   a warning  that in  the future  that support  for K&R
+                   style function  definitions may  be removed  from the
+                   ANSI C standard.
+
+              "parameter %d to function %s() promoted to '%s'"
+
+                   This means that  the size  of a parameter was changed
+                   according to  K&R promotion rules.   This message can
+                   be suppressed  by having  an ANSI  style prototype of
+                   function definition in scope, or by using an explicit
+                   cast.
+
+              "pointer difference between different pointer types"
+
+                   You have subtracted  to pointers  of different types.
+                   This  construct  is  potentially  non-portable.   The
+                   portable way  is to cast both pointers to long before
+                   doing the subtraction.
+
+              "shift by %d" outside range of '%s'"
+
+                   You have attempted to  shift a value by more than the
+                   number of  bits in the field which will always result
+                   in zero.  Did you mean this?
+
+              "statement not reached"
+
+                   This message means  that the statement in question is
+                   preceded by  a  construct  that  means  program  flow
+                   cannot reach the statement.
+
+                   A typical cause  might be  code that follows a return
+                   statement without  a label.   This  can  quite  often
+                   happen  in  the  more  subtle  context  of  a  switch
+                   statement in which all cases are terminated by return
+                   statements, but  there is then code following the end
+                   of the switch statement.
+
+              "storage specifier not at start of definition"
+
+                   The ANSI  C  standard  has  declared  that  a  future
+                   version  of   the  standard   may   require   storage
+                   specifiers  to   be  used   only  at   the  start  of
+                   definitions.  The  current  version  of  the  ANSI  C
+                   standard allows more leeway.
+
+
+              LEVEL 5
+
+              "! operator used with a constant expression"
+
+                   It is very unusual  to use  the not  operator with  a
+                   constant expression  - you can always rewrite such an
+                   expression  to   eliminate  the   need  for  the  not
+                   operator.  It  is much  more likely  that you  really
+                   meant to use some other operator.
+
+              "'%s' has 'const' qualifier but is not initialised"
+
+                   As you can never  change a  variable of const type it
+                   does not  make  much  sense  not  to  initialise  it.
+                   Another common mistake is that you meant this to be a
+                   declaration of  an external  variable but you omitted
+                   the extern keyword.
+
+              "'%s' modified and accessed between sequence points"
+
+                   The standard for  the C  language allows the compiler
+                   implementor some  latitude about  the order  in which
+                   expressions are  evaluated,  but  also  defines  very
+                   carefully the sequence points at which the programmer
+                   can assume the result has been calculated.
+
+                   If you use a  construct that both modifies a variable
+                   abd accesses  its value between such points, then the
+                   result is implementation defined and therefore almost
+                   certainly non-portable.
+
+              "'%s' modified more than once between sequence points"
+
+                   The standard for  the C  language allows the compiler
+                   implementor some  latitude about  the order  in which
+                   expressions are  evaluated,  but  also  defines  very
+                   carefully the sequence points at which the programmer
+                   can assume the result has been calculated.
+
+                   If you use a construct that modifies a variable twice
+                   between   such    points,   then    the   result   is
+                   implementation defined and therefore almost certainly
+                   non-portable.
+
+              "assignment of negative value to '%s'"
+
+                   You have assigned  a negative  value to  an  unsigned
+                   type.  This  means that  the  value  will  simply  be
+                   stored using  the bit  pattern of the negative number
+                   and will  normally result  in  a  large  value  being
+                   stored.  If  you meant  this and want to suppress the
+                   warning simply add an explicit cast.
+
+              "assignment in conditional context"
+
+                   This means that  there was no conditional test found,
+                   so it  is possible  you put  an assignment  when  you
+                   meant to  put an equality test.   This message can be
+                   suppressed by  testing the  result of  an  assignment
+                   against zero.
+
+              "dangling 'else' statement"
+
+                   This is a warning that a construct of the form
+
+                        if (test)
+                             ...
+                        else
+                             if (test2)
+                                  ...
+                             else
+
+                   has been encountered,  and it  is possible  that  the
+                   last 'else'  statement is  not associated with the if
+                   statement that the programmer mean.  Use of braces to
+                   clarify the statement will suppress this warning.
+
+              "format mismatch with parameter %d on function %s"
+
+                   This message is  output when  checking format strings
+                   for the  'printf' and  'scanf' families  of  routines
+                   against the following parameters.  This indicates the
+                   parameter is  not of the type indicated by the format
+                   string.
+
+              "ignored return value from function %s"
+
+                   This means that you did not use the return value from
+                   a function.   Inserting  a  (void)  cast  before  the
+                   function call will suppress this message.
+
+              "label '%s' declared but not used"
+
+                   A common cause of  this can  be  leaving  the  'case'
+                   keyword of  a branch of a switch statement.  This can
+                   be remarkably  hard to  spot sometimes as the code is
+                   still syntactically correct.
+
+              "mismatch on storage specifier"
+
+                   The function  definition   has  a  different  storage
+                   qualifier on  a parameter  than the prototype for the
+                   function.   Typically this is the inconsistent use of
+                   the register  keyword.   This  is  currently  allowed
+                   under the ANSI C standard, but not recommended.
+
+              "no prototype defined on called function %s"
+
+                   This occurs if  the function has been earlier defined
+                   via a  K&R definition, and there is no ANSI prototype
+                   in scope.
+
+              "no value specified in implicit 'return' statement"
+
+                   The end of a  function definition has been reached so
+                   that there  is an  implicit return.   The type of the
+                   function is  not void so in theory there should be an
+                   explicit return  statement with  a  value.   However,
+                   much C code is written so that the type of a function
+                   is defaulted  (which means  it becomes  int) and  the
+                   return value  of a  function is  not used. Explicitly
+                   declaring the  function type  as void  will stop this
+                   message being output.
+
+              "result of expression has been discarded"
+
+                   You have asked  the compiler  to calculate  something
+                   and then  never used  the  result.   This  code  will
+                   therefore be ignored.
+
+              "unary '-' applied to unsigned expression"
+
+                   The expression is unsigned, so if the result would be
+                   negative you  may not  get the  result you expect (it
+                   will become a large positive number!).
+
+              "variable '%s' may be used before set"
+
+                   It appears that  you have  used  the  above  variable
+                   before you have assigned a value to it.
+                   Sometimes this will happen in loops and it may not be
+                   obvious how to suppress the message.
+
+              "variable/function '%s' not used"
+
+                   There is a  variable and/or  function that  has  been
+                   declared but not used.
+
+                   This check is  done at  the end  of a function/block.
+                   This means  that for  a  variable,  the  line  number
+                   quoted with this message is that for the brace at the
+                   end of  the block  that defines  the unused variable.
+                   For an unused static function, the line number quoted
+                   will typically  correspond to  the end  of the source
+                   file.
+
+
+              LEVEL 6
+
+              The warnings  that occur  at this  level are  not normally
+              relevant to the average user.
+
+              "a cast from '%s' to '%s' loses accuracy"
+
+                   This is really not  a problem  if the  action is what
+                   was  intended.  You  can  eliminate  the  warning  by
+                   putting in an explicit cast.
+
+                   The purpose  of   this  warning   is   to   highlight
+                   situations  in   which  there   may  be  an  implicit
+                   assumption built  into the  code as  to the size of a
+                   field of  a particular type, which may not be true on
+                   the current machine.
+
+              "constant promoted to '%s'"
+
+                   A constant has  been implicitly  promoted due  to the
+                   way it  has been used.  You can avoid this warning by
+                   either making  sure the constant is of the right type
+                   or adding a cast.
+
+              "expression involving floating point"
+
+                   There is an  expression that involves floating point,
+                   and you  are working  with a  version of the compiler
+                   that recognises  the keywords for floating point, but
+                   that is not able to generate code for floating point.
+
+              "implicit cast of '%s' to enumeration value"
+
+                   An integral type  (long, int,  short, char)  has been
+                   assigned to  a variable  which is  of an  enumeration
+                   type.  You  can add an explicit cast to eliminate the
+                   warning.
+
+              "initialisation incomplete - remaining fields zeroed"
+
+                   This message  is   output   if   the   initialisation
+                   statement  supplied   for  a   data  item  would  not
+                   initialise all elements of that item.
+
+                   There are often  times when  this is exactly what the
+                   programmer meant to do, but occasionally it is due to
+                   the initialisation being incomplete.
+
+              "parameter before ',...' causes undefined behaviour"
+                   Technically this  is the  same warning as the message
+                   with the same text that is output at warning level 2.
+                   We move  the warning to level 6 when the parameter in
+                   question  is  a  function  pointer  because  this  is
+                   actually more  likely to  give the expected behaviour
+                   than the  other types  that cause the level 2 version
+                   of the message.
+
+              "possibly unnecessary cast from '%s' to '%s'"
+
+                   You have added some  explicit casts  that seem  to be
+                   unnecessary and  may result  in redundant  code being
+                   generated.
+
+              "use of 'char' is possibly non-portable"
+
+                   The ANSI standard allows  the 'char'  data type to be
+                   either  signed   or  unsigned  as  an  implementation
+                   defined decision.    You should  therefore be wary of
+                   making assumptions about whether characters or signed
+                   or unsigned  if  you  want  to  write  code  that  is
+                   portable  between   different   machines,   or   even
+                   different compilers on the same machine.
+
+              "use of 'char' as array index is possibly non-portable"
+
+                   The C standard  leaves   it  up  to  the  implementor
+                   whether the  'char' data  type is signed or unsigned.
+                   You can  eliminate this  warning by  either  using  a
+                   different data  type or  adding an  explicit cast  to
+                   either 'signed char' or 'unsigned char'.
+
+
+              LEVEL 7
+
+              The warnings  that occur  at this  level are  not normally
+              relevant to the average user.  They are extremely pedantic
+              in nature and are normally only really relevant to tidying
+              up the code.
+
+              "C++ keyword used"
+
+                   This says that you have used a name for an identifier
+                   that would be a reserved word with a C++ compiler.
+
+              "constant expression used in '%s' statement"
+
+                   A constant expression has been used for the condition
+                   in an  'if' or  'switch' statement.   This  does  not
+                   really  make  much  sense.   This  warning  can  help
+                   pinpoint the situation in which the condition test is
+                   not quite what you meant it to be.
+
+              "function not using ANSI style parameters"
+
+                   A function has  been found  that is  using K&R  style
+                   methods  of  declaring  its  parameters.   ANSI  have
+                   declared their  intent to  remove  support  for  this
+                   construct in future releases of the ANSI C standard.
+
+              "implicit cast of 0 to pointer type"
+
+                   This occurs when the constant zero has been used in a
+                   circumstance (normally  as a parameter to a function)
+                   in which  a pointer  type  is  expected.    The  ANSI
+                   standard specifically  allows zero to be used in such
+                   circumstances without  an explicit  cast to a pointer
+                   type as  an equivalent  to  the  NULL  pointer  type.
+                   However, most  modern systems  will define NULL using
+                   something like:
+                        #define NULL ((void *)0)
+                   in which case NULL  can be  used instead of zero when
+                   you really  mean it which will stop this warning from
+                   being output.
+
+              "partially elided braces on initializer"
+
+                   This rather  cryptic   message  can  be  output  when
+                   initialising unions,  arrays and  structures.  The  C
+                   standard  says   that  initialisers   for  all   such
+                   constructs should  ideally have  braces around  them.
+                   This message  therefore means  that the  bounds of  a
+                   particular element  of the  data structure  had to be
+                   deduced from  its position in the initialisation list
+                   rather than being explicitly bounded by braces.
+
+                   The requirement to  suppress this message is that the
+                   values for  an union,  array or  structure must start
+                   and end  with braces.    In the  case of more complex
+                   structures such  as an array of structures there must
+                   be braces  around the  whole set  of values  (ie  the
+                   array) and  also braces  around the  values for  each
+                   occurrence of the structure.
+
+              "signed types with bitwise operator possibly non-portable"
+
+                   ANSI states that  if you try to do bitwise operations
+                   with   negative    number,   then   the   result   is
+                   implementation defined.   The implementation  is free
+                   to decide  on whether  the sign  bit is propagated or
+                   not.   Such   code  will   therefore  somitemis  give
+                   different results on different compilers.
+
+              "switch has no 'default' statement"
+
+                   It is always a  good idea to have a default statement
+                   in all  switch constructs.   If you  do not expect to
+                   get there, then simply include a line of the form
+                        assert(0);
+                   as the operation to  be performed.  That way you will
+                   pick up  any logic errors which result in the default
+                   branch unexpectedly being taken.
+
+              "unnecessary cast to 'void'"
+
+                   This is when a  void expression is explicitly cast to
+                   a void.  This is a null operation, so you do not need
+                   to specify the void.
+
+
+              LEVEL 8
+
+              The warnings  that occur  at this  level are  not normally
+              relevant to the average user.  They are extremely pedantic
+              in nature  and are normally only relevant to those who are
+              writing code  that has  to conform  to  the  very  highest
+              standards -  perhaps  for  applications  that  are  safety
+              critical as an example.
+
+              It can be very difficult to eliminate all warnings at this
+              level.  As  a result,  whether the  warnings at this level
+              are even  output at all is determined by the configuration
+              options set at the time the compiler is built.
+
+              "%s has already been declared"
+
+                   You have declared  the function or variable more than
+                   once.  The  definitions  are  the  same  so  this  is
+                   harmless, but you might want to see if you can remove
+                   one of the declarations to avoid any potential future
+                   problems where you change one declaration and not the
+                   other one.
+
+              "'%s' has not been previously declared"
+
+                   This will occur  if the first time the compiler comes
+                   across an  externally visible  function is when it is
+                   defined.  It is good practise to have declarations of
+                   all such  functions used  in a  shared header file if
+                   they are not.
+
+              "implicit cast from '%s' to '%s'"
+
+                   This occurs  when   an   assignment   or   expression
+                   evaluation generates  an implicit  cast.   There  are
+                   times when  due to the way the compiler works it will
+                   not be possible to eliminate this warning.
+
+
+         AUTHOR(s)
+
+              Versions prior to release 4.0:
+                   Christoph van Wullen.
+
+              ANSIfication work  and other  enhancements in  Release 4.0
+              and later releases:
+
+                   Keith Walker
+                        email: kdw@oasis.icl.co.uk
+                        (bug fixes, IEEE support, ANSIfication)
+                   Dave Walker
+                        email: d.j.walker@x400.icl.co.uk
+                        (IEEE support, Errors/Warnings, documentation)
+
+              TMSC30 support:
+
+                   Ivo Oesch
+                        Selzweg 1, 3422 Kirchberg, Switzerland
+                        email: b19oesch@isbe.ch (valid til march 1997)
+         CHANGE HISTORY
+
+              The following  is the change history of this document (not
+              the compiler  itself).  It  is intended  to help users who
+              are upgrading to identify the changes that have occurred.
+
+              12 Jun 93    - Added full list  of error messages that can
+                             be output by the compiler.
+
+              10 Jul 93    - Added specification of new -frame parameter
+                             option for C68 variant.
+
+              10 Oct 93    - Checked that list of error/warning messages
+                             corresponds to  those actually in C68 v4.3,
+                             and expanded some of the explanations.
+
+              19 Mar 94    - Updated to add  new parameter types for C68
+                             Release 4.4  and also  updated the lists of
+                             error and warning messages.
+
+              28 Apr 94      Major Revision
+                           - Major changes to  the  section  that  talks
+                             about optimisation methods.
+                           - Updated lists of error and warning messages
+                             bring it in line with those that can now be
+                             output by the compiler.
+
+              21 May 94    - Added descriptions of -align and -packenum.
+                             Updated lists of warning messages.
+
+              10 Nov 95    - Updated list of error and warning messages.
+                           - Merged in known bug list.
+
+              24 Nov 95    - Added  description   for  -prefix   runtime
+                             parameter option.
+
+              07 Sep 96      Major Revision
+                           - Updated  all   parameter  descriptions   to
+                             conform to the new syntax.
+                           - Added descriptions of  new parameters  that
+                             have been added.
+                           - Re-ordered the  options description to more
+                             clearly  show   which  options   are   only
+                             relevant  to  particular  target  processor
+                             types.
+                           - Updated lists of error messages and warning
+                             messages to  bring it  in line with current
+                             compiler version.
+
+              04 Oct 96    - The -short  and   -small  runtime   options
+                             renamed to  -int and -pointer respectively,
+                             and the list of valid options changed.
+
+              16 Nov 96    - Documented changed  options  to  the  -peep
+                             parameter, and various larger scale changes
+                             within the TMSC30 specific parameters.
+
+              10 Dec 96    - Documented new  -interrupt option  for  use
+                             with the 68K code generator.
+
+
