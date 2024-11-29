@@ -44,7 +44,7 @@
 #define	SEQUENCE		/* Check sequence points                     */
 #define	SIGNAL			/* Catch internal signal to exit graceful    */
 				/* requires the signal() call                */
-#undef	STACK_CHECK		/* Library routine to check stack size       */
+#define	STACK_CHECK		/* Library routine to check stack size       */
 #undef	TOPSPEED		/* Enable Topspeed compiler extensions       */
 #define	TRANSLATE		/* Include output names translation option   */
 #define	TYPEOF			/* Include __typeof__ keyword                */
