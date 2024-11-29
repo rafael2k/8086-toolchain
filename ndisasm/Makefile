@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -O -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BIN_DIR = ../host-bin/
+BINDIR = ../host-bin
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
@@ -49,14 +49,14 @@ NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
 all: ndisasm
 
-nasm: directory $(NASM)
-	$(CC) -o $(BIN_DIR)nasm $(NASMO)
+nasm: $(NASM)
+	$(CC) -o $(BINDIR)/nasm $(NASMO)
 
-ndisasm: directory $(NDISASM)
-	$(CC) -o $(BIN_DIR)ndisasm $(NDISASM)
+ndisasm: $(NDISASM)
+	$(CC) -o $(BINDIR)/ndisasm $(NDISASM)
 
 directory:
-	$(MKDIR_P) $(BIN_DIR)
+	$(MKDIR_P) $(BINDIR)
 
 # These files contains all the standard macros that are derived from
 # the version number.
@@ -111,8 +111,8 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) nasm.1 $(mandir)/man1/nasm.1
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
-clean:
-	rm -f *.o $(BIN_DIR)ndisasm
+clean: directory
+	rm -f *.o $(BINDIR)/ndisasm
 	$(MAKE) -C rdoff clean
 
 rdf:
