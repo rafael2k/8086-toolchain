@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -O -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BINDIR = .
+BINDIR=../host-bin
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
@@ -40,7 +40,7 @@ NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: $(BINDIR)/nasm $(BINDIR)/ndisasm
+all: $(BINDIR)/ndisasm
 
 $(BINDIR)/nasm: $(NASM)
 	$(CC) -o $(BINDIR)/nasm $(NASM)

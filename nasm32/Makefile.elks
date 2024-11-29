@@ -32,7 +32,7 @@ LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,optio
 CFLAGS = -I.
 PERL = perl
 MKDIR_P = mkdir -p
-BINDIR = .
+BINDIR=../elks-bin
 
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
