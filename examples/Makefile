@@ -8,7 +8,7 @@ endif
 
 C86LIB=/home/rafael2k/programs/devel/8086-toolchain/libc
 
-INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86DIR)/libc/include
+INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
 DEFINES=-D__C86__ -D__STDC__
 
 CPPFLAGS=$(INCLUDES) $(DEFINES)
