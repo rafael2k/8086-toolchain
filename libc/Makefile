@@ -11,7 +11,7 @@ C86FLAGS="-O -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackchec
 CPPFLAGS=$(INCLUDES) $(DEFINES)
 CFLAGS=$(C86FLAGS)
 ASFLAGS=-f as86
-ARFLAGS=q
+ARFLAGS=r
 LDFLAGS=-0 -i
 
 OBJS=syscall.o c86lib.o
