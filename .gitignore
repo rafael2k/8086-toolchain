@@ -1,4 +1,7 @@
-bin/*
+host-bin/*
+elks-bin/*
 *.o
 assembler/macros.c
-*.out
+nasm32/macros.c
+nasm32/nasm
+nasm32/ndisasm
