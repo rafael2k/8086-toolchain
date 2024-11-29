@@ -8,23 +8,109 @@
  *  size86:    Summary sizes of the data in a binary file.
  *  nm86:      The symbol table of the binary file.
  *
- * None of these programs have any options.
- * This may be a minor problem with nm86.
- *
  * Copyright (c) 1999 by Greg Haerr <greg@censoft.com>
  * Added archive file reading capabilties
  */
 
 #include <stdio.h>
-#ifdef __STDC__
 #include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
 #include <string.h>
-#include "const.h"
-#include "ar.h"
-#include "obj.h"
+
+/* config.h - configuration for linker */
+/* Copyright (C) 1994 Bruce Evans */
+/* one of these target processors must be defined */
+
+#undef  I8086			/* Intel 8086 */
+#define I80386			/* Intel 80386 */
+#undef  MC6809			/* Motorola 6809 */
+
+/* one of these target operating systems must be defined */
+
+#undef  EDOS			/* generate EDOS executable */
+#define MINIX			/* generate Minix executable */
+
+/* these may need to be defined to suit the source processor */
+
+#undef HOST_8BIT		/* enable some 8-bit optimizations */
+
+#ifndef __AS386_16__
+#define S_ALIGNMENT	4	/* source memory alignment, power of 2 */
+				/* don't use for 8 bit processors */
+				/* don't use even for 80386 - overhead for */
+				/* alignment cancels improved access */
+#endif
+
+/* Any machine can use long offsets but i386 needs them */
+#ifdef I80386
+#define LONG_OFFSETS
+#endif
+
+/* these must be defined to suit the source libraries */
+
+#define CREAT_PERMS	0666	/* permissions for creat() */
+#define EXEC_PERMS	0111	/* extra permissions to set for executable */
+
+/* obj.h - constants for Introl object modules */
+/* Copyright (C) 1994 Bruce Evans */
+#ifndef OMAGIC
+# ifdef I80386
+#  define OMAGIC 0x86A3
+# endif
+
+# ifdef I8086
+#  define OMAGIC 0x86A0
+# endif
+
+# ifdef MC6809
+#  define OMAGIC 0x5331
+# endif
+#endif
+
+#ifdef LONG_OFFSETS
+# define cntooffset cnu4
+# define offtocn u4cn
+#else
+# define cntooffset cnu2
+# define offtocn u2cn
+#endif
+
+#ifdef MC6809			/* temp don't support alignment at all */
+# define ld_roundup( num, boundary, type ) (num)
+#else
+# define ld_roundup( num, boundary, type ) \
+	(((num) + ((boundary) - 1)) & (type) ~((boundary) - 1))
+#endif
+
+#define MAX_OFFSET_SIZE 4
+#define NSEG 16
+
+/* flag values |SZ|LXXXX|N|E|I|R|A|SEGM|, X not used */
+
+#define A_MASK 0x0010		/* absolute */
+#define C_MASK 0x0020		/* common (internal only) */
+#define E_MASK 0x0080		/* exported */
+#define I_MASK 0x0040		/* imported */
+#define N_MASK 0x0100		/* entry point */
+#define R_MASK 0x0020		/* relative (in text only) */
+#define SEGM_MASK 0x000F	/* segment (if not absolute) */
+#define SA_MASK 0x2000		/* offset is storage allocation */
+#define SZ_MASK 0xC000		/* size descriptor for value */
+#define SZ_SHIFT 14
+
+/* ar.h*/
+#define ARMAG "!<arch>\n"
+#define SARMAG 8
+#define ARFMAG "`\n"
+
+struct ar_hdr {
+	char	ar_name[16],
+		ar_date[12],
+		ar_uid[6],
+		ar_gid[6],
+		ar_mode[8],
+		ar_size[10],
+		ar_fmag[2];
+};
 
 FILE * ifd;
 char * ifname;
@@ -85,6 +171,7 @@ int multiple_files = 0;
 int byte_order = 0;
 
 int opt_o;
+int opt_d;
 
 long size_text, size_data, size_bss;
 long tot_size_text=0, tot_size_data=0, tot_size_bss=0;
@@ -113,12 +200,21 @@ char ** argv;
       case 's': display_mode = 1; break;
       case 'n': display_mode = 2; break;
       case 'o': opt_o++; break;
+      case 'd': opt_d++; break;
       }
       else
 	 multiple_files++;
    }
 
-   if( !multiple_files ) exit(1);
+   if( !multiple_files ) 
+   {
+		printf("Usage %s [-s][-d][-n] a.out|archive|objfile...\n", argv[0]);
+		printf("Default displays a.out header info\n");
+		printf("	-s text/data/bss size\n");
+		printf("	-d hex dump of text/data segs\n");
+		printf("	-n symbol information\n");
+		exit(1);
+   }
 
    multiple_files = (multiple_files>1);
 
@@ -419,7 +515,7 @@ read_syms()
       symtab[i].symtype = get_word();
       symtype = (symtab[i].symtype & 0x3FFF);
 
-      if (symtab[i].nameoff == -1 || symtab[i].symtype == -1) {
+      if (symtab[i].nameoff == -1U || symtab[i].symtype == -1U) {
 	 printf("!!! EOF in symbol table\n");
 	 break;
       }
@@ -450,7 +546,7 @@ disp_syms()
       offset = symtab[i].offset;
 
       symtype &= 0x3FFF;
-      if (nameoff > str_len || nameoff < 0)
+      if (nameoff > str_len || (int)nameoff < 0)
 	 symnames[i] = strtab + str_len;
       else
 	 symnames[i] = strtab+nameoff;
@@ -761,6 +857,8 @@ static char * byteord[] = { "LITTLE_ENDIAN", "(2143)","(3412)","BIG_ENDIAN" };
    else
       printf("NO SYMBOLS\n");
    printf("\n");
+
+   if (!opt_d) return;
 
    printf("TEXTSEG\n");
    fseek(ifd, (long)h_len, 0);
