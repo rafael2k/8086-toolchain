@@ -1,41 +1,43 @@
 ##
-#
-#
-# @file
-# @version 0.1
+# Look https://github.com/ghaerr/elks/blob/master/elks/tools/bin/ecc
+# for a compiler driver which greatly simplifies things
+
+ifeq ($(strip ${TOPDIR}),)
+	TOPDIR_=/home/rafael2k/programs/devel/elks
+endif
+
+C86LIB=/home/rafael2k/programs/devel/8086-toolchain/libc
+
+INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86DIR)/libc/include
+DEFINES=-D__C86__ -D__STDC__
+
+CPPFLAGS=$(INCLUDES) $(DEFINES)
+CFLAGS=-O -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+ASFLAGS=-f as86
+LDFLAGS=-0 -i -L$(C86LIB)
 
 CPP=../host-bin/cpp86
 CC=../host-bin/c86
 AS=../host-bin/nasm
 LD=../host-bin/ld86
-AR=../host-bin/ar86
-
-all: test
 
 
 all: test
 
-test: test.o clib.a
-	$(LD) -0 -i test.o clib.a -o test
+
+all: test
+
+test: test.o
+	$(LD) $(LDFLAGS) test.o -lc86 -o test
 
 test.o: test.asm
-	$(AS) -f as86 test.asm -o test.o
+	$(AS) $(ASFLAGS)  test.asm -o test.o
 
 test.asm: test.i
-	$(CC) -O test.i test.asm
+	$(CC) $(CFLAGS) -O test.i test.asm
 
 test.i: test.c clib.h
-	$(CPP) test.c -o test.i
-
-clib.a: syscall.o c86lib.o
-	rm -f clib.a
-	$(AR) qv clib.a syscall.o c86lib.o
-
-syscall.o: ../libc/syscall.asm
-	$(AS) -f as86 ../libc/syscall.asm -o syscall.o
-
-c86lib.o: ../libc/c86lib.asm
-	$(AS) -f as86 ../libc/c86lib.asm -o c86lib.o
+	$(CPP) $(CPPFLAGS) test.c -o test.i
 
 clean:
 	rm -f *.o *.a *.i test.asm

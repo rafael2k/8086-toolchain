@@ -2,31 +2,36 @@ CPP=cpp86
 CC=c86
 AS=nasm
 LD=ld86
-AR=ar86
+
+TOPDIR=/home/rafael2k/programs/devel/elks
+
+C86LIB=/home/rafael2k/programs/devel/8086-toolchain/libc
+
+INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
+DEFINES=-D__C86__ -D__STDC__
+
+CPPFLAGS=$(INCLUDES) $(DEFINES)
+CFLAGS=-O -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+ASFLAGS=-f as86
+LDFLAGS=-0 -i -L$(C86LIB)
+
 
 all: test
 
-test: test.o clib.a
-	$(LD) -0 -i test.o clib.a -o test
+
+all: test
+
+test: test.o
+	$(LD) $(LDFLAGS) test.o -lc86 -o test
 
 test.o: test.asm
-	$(AS) -f as86 test.asm -o test.o
+	$(AS) $(ASFLAGS)  test.asm -o test.o
 
 test.asm: test.i
-	$(CC) -O test.i test.asm
+	$(CC) $(CFLAGS) -O test.i test.asm
 
 test.i: test.c clib.h
-	$(CPP) test.c -o test.i
-
-clib.a: syscall.o c86lib.o
-	rm -f clib.a
-	$(AR) qv clib.a syscall.o c86lib.o
-
-syscall.o: ../lib/syscall.asm
-	$(AS) -f as86 ../lib/syscall.asm -o syscall.o
-
-c86lib.o: ../lib/c86lib.asm
-	$(AS) -f as86 ../lib/c86lib.asm -o c86lib.o
+	$(CPP) $(CPPFLAGS) test.c -o test.i
 
 clean:
 	rm -f *.o *.a *.i test.asm
