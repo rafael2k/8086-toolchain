@@ -39,7 +39,7 @@ NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o parser.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: $(BINDIR)/nasm
+all: $(BINDIR)/nasm $(BINDIR)/ndisasm
 
 $(BINDIR)/nasm: $(NASM)
 	$(CC) -o $(BINDIR)/nasm $(NASM)

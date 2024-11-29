@@ -60,7 +60,7 @@ NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 all: $(BINDIR)/nasm
 
 $(BINDIR)/nasm: $(NASM)
-	$(LINK) -o $(BINDIR)/nasm $(NASMO)
+	$(LINK) -o $(BINDIR)/nasm $(NASM)
 
 $(BINDIR)/ndisasm: $(NDISASM)
 	$(LINK) -o $(BINDIR)/ndisasm $(NDISASM)
