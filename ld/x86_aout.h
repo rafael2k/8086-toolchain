@@ -37,7 +37,8 @@ struct	exec {			/* a.out header */
   Long		a_data;		/* size of data segment in bytes */
   Long		a_bss;		/* size of bss segment in bytes */
   Long		a_entry;	/* entry point */
-  Long		a_total;	/* total memory allocated */
+  unsigned short a_total;	/* total memory allocated */
+  unsigned short a_minstack;	/* minimum stack size */
   Long		a_syms;		/* size of symbol table */
 
   /* SHORT FORM ENDS HERE */

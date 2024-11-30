@@ -7,12 +7,13 @@ struct	exec {			/* a.out header */
   unsigned char	a_cpu;		/* cpu id */
   unsigned char	a_hdrlen;	/* length of header */
   unsigned char	a_unused;	/* reserved for future use */
-  unsigned short a_version;	/* version stamp (not used at present) */
+  unsigned short a_version;	/* version number */
   long		a_text;		/* size of text segement in bytes */
   long		a_data;		/* size of data segment in bytes */
   long		a_bss;		/* size of bss segment in bytes */
   long		a_entry;	/* entry point */
-  long		a_total;	/* total memory allocated */
+  unsigned short a_total;	/* total memory allocated */
+  unsigned short a_minstack;	/* minimum stack size */
   long		a_syms;		/* size of symbol table */
 				/* SHORT FORM ENDS HERE */
 

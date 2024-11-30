@@ -336,8 +336,8 @@ bool_pt argxsym;
             fatalerror("data segment too large for 16bit");
     }
 
-    if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
-       heap_top_value = endoffset + 0x8000;
+    //if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
+       //heap_top_value = endoffset + 0x8000;
     if( heap_top_value > 0x10000 && !bits32 ) heap_top_value = 0x10000;
     setsym("__heap_top", (bin_off_t)heap_top_value);
 
@@ -678,8 +678,12 @@ PRIVATE void writeheader()
 	offtocn((char *) &header.a_entry, page_size(),
 		sizeof header.a_entry);
 
+    offtocn((char *) &header.a_version, (bin_off_t) 1,
+	    sizeof header.a_version);
     offtocn((char *) &header.a_total, (bin_off_t) heap_top_value,
 	    sizeof header.a_total);
+    offtocn((char *) &header.a_minstack, (bin_off_t) stack_value,
+	    sizeof header.a_minstack);
     if( FILEHEADERLENGTH )
        writeout((char *) &header, FILEHEADERLENGTH);
 }
