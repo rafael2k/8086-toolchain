@@ -549,8 +549,8 @@ void endblock P0 (void)
 		    check_complete (tp);
 #endif /* SYNTAX_CORRECT */
 #ifdef CPU_DEFINED
-		    put_storage (sp);	/* tentative definition */
 		    put_reference (sp);
+		    put_storage (sp);	/* tentative definition */
 #endif /* CPU_DEFINED */
 		}
 	    }
