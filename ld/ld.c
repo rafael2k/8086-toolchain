@@ -18,6 +18,7 @@
 PUBLIC bin_off_t text_base_value = 0;	/* XXX */
 PUBLIC bin_off_t data_base_value = 0;	/* XXX */
 PUBLIC bin_off_t heap_top_value  = 0;	/* XXX */
+PUBLIC bin_off_t stack_value  = 0;	/* XXX */
 PUBLIC int headerless = 0;
 #ifndef VERY_SMALL_MEMORY
 PUBLIC int v7 = 0;
@@ -182,7 +183,7 @@ char **argv;
 		if (errno != 0)
 		    use_error("invalid data address");
 		break;
-	    case 'H':		/* heap top address */
+	    case 'H':		/* heap size */
 		if (arg[2] == 0 && ++argn >= argc)
 		    usage();
 		errno = 0;    
@@ -191,7 +192,18 @@ char **argv;
 		else
 		   heap_top_value = strtoul(arg+2, (char **)0, 16);
 		if (errno != 0)
-		    use_error("invalid heap top");
+		    use_error("invalid heap size");
+		break;
+	    case 'S':		/* min stack size */
+		if (arg[2] == 0 && ++argn >= argc)
+		    usage();
+		errno = 0;
+		if (arg[2] == 0 )
+		   stack_value = strtoul(argv[argn], (char **)0, 16);
+		else
+		   stack_value = strtoul(arg+2, (char **)0, 16);
+		if (errno != 0)
+		    use_error("invalid stack size");
 		break;
 	    case 'l':		/* library name */
 		tfn = buildname(libprefix, arg + 2, libsuffix);

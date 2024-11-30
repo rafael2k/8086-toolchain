@@ -22,4 +22,5 @@ extern int  cpm86;			/* Generate CP/M-86 CMD header */
 
 extern bin_off_t text_base_value;	/* Base address of text seg */
 extern bin_off_t data_base_value;	/* Base or alignment of data seg */
-extern bin_off_t heap_top_value;	/* Minimum 'total' value in x86 header */
+extern bin_off_t heap_top_value;	/* Heap size */
+extern bin_off_t stack_value;	        /* Minimum stack size */

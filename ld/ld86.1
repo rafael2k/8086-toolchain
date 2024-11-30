@@ -13,6 +13,7 @@ ld86 \- Linker for as86(1)
 .RB [ -Olibfile ]
 .RB [ -Ttextaddr ]
 .RB [ -Hheapsize ]
+.RB [ -Sstacksize ]
 .RB [ -Ddataaddr ]
 .B infile...
 
@@ -52,7 +53,10 @@ add file libdir-from-search/crtx.o to list of files linked
 data base address follows (in format suitable for strtoul)
 .TP
 .B -H
-the top of heap (initial stack) address (in format suitable for strtoul)
+the heap size in format suitable for strtoul (default 4096)
+.TP
+.B -S
+the minimum stack size in format suitable for strtoul (default 4096)
 .TP
 .B -Lx
 add dir name x to the head of the list of library dirs searched
