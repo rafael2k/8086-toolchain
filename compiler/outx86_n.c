@@ -1103,12 +1103,12 @@ PRIVATE void put_literals P0 (void)
 }
 */
 
+#if 0
 /*
  * write out the type of the symbol
  */
 static void puttype P1 (const TYP *, tp)
 {
-#if 0
     if (tp == NIL_TYP) {
 	/* runtime support routine */
 	oprintf ("function");	// Was far
@@ -1149,8 +1149,8 @@ static void puttype P1 (const TYP *, tp)
 	oprintf ("object");     // Was byte
 	break;
     }
-#endif
 }
+#endif
 
 /* put the definition of an external name in the ouput file */
 /* assembler can find out about externals itself. This also has the
