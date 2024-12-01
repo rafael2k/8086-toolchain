@@ -177,7 +177,7 @@ objdump(c)
    for (k = objptr; k < OBJMAX; ++k)
       printf("    ");
 
-   printf("    | \"");
+   printf("\t| \"");
 
    for (k = 0; k < objptr; ++k)
       {

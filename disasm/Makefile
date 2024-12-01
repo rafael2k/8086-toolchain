@@ -1,4 +1,4 @@
-# Makefile for dis
+# Makefile for disasm86
 
 # @(#) Makefile, Ver. 2.1 created 00:00:00 87/09/01
 # Makefile for 8088 symbolic disassembler
@@ -24,23 +24,18 @@
 # the initialization  data in the lookup tables.  It should not
 # be necessary to alter the formats of the tables.
 
-#CC=bcc
 CFLAGS=-O
 LDFLAGS=
-PREFIX=/usr
+BINDIR=../host-bin
 
 OBJ = disrel.o dismain.o distabs.o dishand.o disfp.o
 
-all:	dis86
+all:	$(BINDIR)/disasm86
 
-dis86:	$(OBJ)
-	$(CC) $(LDFLAGS) -o dis86 $(OBJ)
-
-install:	dis86
-	install -m 755 -s dis86   $(DIST)$(PREFIX)/bin/dis86
-	install -m 644    dis86.1 $(DIST)$(PREFIX)/man/man1/dis86.1
+$(BINDIR)/disasm86:	$(OBJ)
+	$(CC) $(LDFLAGS) -o $(BINDIR)/disasm86 $(OBJ)
 
 $(OBJ): dis.h a.out.h
 
 clean realclean:	
-	rm -f *.bak *.lst *.o dis86
+	rm -f *.lst *.o $(BINDIR)/disasm86

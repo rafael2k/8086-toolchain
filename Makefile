@@ -20,6 +20,7 @@ host:
 	make -C ld
 	make -C ar
 	make -C make
+	make -C disasm
 	make -C nasm32
 	make -C emulator
 	make -C libc
@@ -44,6 +45,7 @@ cleanhobjs:
 	make -C ld clean
 	make -C ar clean
 	make -C make clean
+	make -C disasm clean
 	make -C nasm32 clean
 	make -C emulator clean
 	make -C libc clean
