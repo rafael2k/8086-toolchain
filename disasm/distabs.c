@@ -197,10 +197,10 @@ struct opcode optab[] =             /* Table of opcode data */
    "\tuse\top32",    sbhand,  1,    1,             /* 0x66  */
    "\tuse\tadr32",   sbhand,  1,    1,             /* 0x67  */
    "\tpush\t",       mihand,  3,    3,             /* 0x68  */
-   /* NULL,             dfhand,  0,    0,             /* 0x68  */
+// NULL,             dfhand,  0,    0,             /* 0x68  */
    NULL,             dfhand,  0,    0,             /* 0x69  */
    "\tpush\t",       mihand,  2,    2,             /* 0x6a  */
-   /* NULL,             dfhand,  0,    0,             /* 0x6a  */
+// NULL,             dfhand,  0,    0,             /* 0x6a  */
    NULL,             dfhand,  0,    0,             /* 0x6b  */
    NULL,             dfhand,  0,    0,             /* 0x6c  */
    NULL,             dfhand,  0,    0,             /* 0x6d  */
@@ -492,13 +492,15 @@ lookup(addr,type,kind,ext)
       return (b);
 
    if (segflg)
+      {
       if (segflg & 1)
          type = N_TEXT;
       else
          type = N_DATA;
-
+      }
    for (k = 0, best.i = -1; k <= symptr; ++k)
       if (symtab[k].n_value == addr)
+         {
          if ((j = symtab[k].n_sclass & N_SECT) == type)
             {
             best.t = j;
@@ -511,6 +513,7 @@ lookup(addr,type,kind,ext)
             best.t = j, best.i = k;
          else if (symrank[type][j] > symrank[type][best.t])
             best.t = j, best.i = k;
+         }
 
    if (best.i >= 0)
       return (getnam(best.i));

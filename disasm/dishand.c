@@ -305,6 +305,7 @@ imhand(j)
       offset = (n << 8) | m;
       }
    else if (oflag)
+      {
       if (oflag == 2)
          {
          FETCH(m);
@@ -320,6 +321,7 @@ imhand(j)
             n = 0;
          offset = n | m;
          }
+      }
 
    switch (j & 3)
       {
@@ -426,10 +428,12 @@ mvhand(j)
    if ((m == 0x84) || (m == 0x85)      /* Kind of kludgey   */
     || (m == 0xc4) || (m == 0xc5)
     || (m == 0x8d))
+      {
       if (m & 0x40)
          m |= 0x03;
       else
          m |= 0x02;
+      }
 
    printf("%s\t%s\n",optab[j].text,mtrans(m,k,TR_STD));
 

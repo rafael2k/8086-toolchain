@@ -128,6 +128,7 @@ extern struct exec HDR; /* Holds the object file's header   */
                         /* Macro for byte input primitive   */
 /* #define FETCH(p)  ++PC; p = getchar() & 0xff; objbuf[objptr++] = p */
 static int _F_;
+_PROTOTYPE(int Fetch, (void));
 #define FETCH(p)  (p)=_F_ = Fetch(); if(_F_<0) {printf("???\n"); return FRV; }
 #define FRV
 
@@ -163,7 +164,7 @@ _PROTOTYPE(void mahand, (int j ));
 _PROTOTYPE(void mjhand, (int j ));
 
 /* dismain.c */
-_PROTOTYPE(void main, (int argc, char **argv ));
+_PROTOTYPE(int main, (int argc, char **argv ));
 
 /* distabs.c */
 _PROTOTYPE(char *getnam, (int k ));

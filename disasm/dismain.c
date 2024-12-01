@@ -221,7 +221,7 @@ register int type;
    register int k;
    static char b[48], c[32];
 
-   if (symptr < 0)
+   if (symptr < 0) {
       if ((type == N_TEXT)
        || ((type == N_DATA) && ( ! objptr ) && ( ! zcount )))
          {
@@ -231,8 +231,9 @@ register int type;
             sprintf(b,"D%05.5lx:",PC);
          return (b);
          }
-      else
+   } else {
          return (NULL);
+   }
 
    for (k = 0; k <= symptr; ++k)
       if ((symtab[k].n_value == PC)
@@ -271,6 +272,7 @@ prolog()
 
    for (j = flag = 0; j <= symptr; ++j)
       if ((symtab[j].n_sclass & N_CLASS) == C_EXT)
+         {
          if (((symtab[j].n_sclass & N_SECT) > N_UNDF)
           && ((symtab[j].n_sclass & N_SECT) < N_COMM))
             {
@@ -287,16 +289,19 @@ prolog()
                putchar('\n');
             }
          else
+            {
             if (symtab[j].n_value)
                {
                char *c = getnam(j);
                printf("\t.comm\t%s,0x%08.8lx",c,
-                symtab[j].n_value);
+                (unsigned long)symtab[j].n_value);
                if (++flag == 1)
                   printf("\t| Internal global\n");
                else
                   putchar('\n');
                }
+            }
+         }
 
    if (flag)
       putchar('\n');
@@ -311,7 +316,7 @@ prolog()
          putchar('\t');
          if (strlen(c) < 8)
             putchar('\t');
-         printf("| Undef: %05.5lx\n",relo[j].r_vaddr);
+         printf("| Undef: %05.5lx\n", (unsigned long)relo[j].r_vaddr);
          }
 
    if (flag)
@@ -322,7 +327,7 @@ prolog()
       if ((symtab[j].n_sclass & N_SECT) == N_ABS)
          {
          char *c = getnam(j);
-         printf("%s=0x%08.8lx",c,symtab[j].n_value);
+         printf("%s=0x%08.8lx",c, (unsigned long)symtab[j].n_value);
          if (++flag == 1)
             {
             printf("\t\t");
@@ -379,7 +384,7 @@ distext()
    prolog();
 
    printf("\t.text\t\t\t| loc = %05.5lx, size = %05.5lx\n",
-    PC,HDR.a_text);
+    PC, (unsigned long)HDR.a_text);
    fflush(stdout);
 
    segflg = 0;
@@ -406,7 +411,7 @@ distext()
 
 }/* * * * * * * * * *  END OF  distext()  * * * * * * * * * */
 
-Fetch()
+int Fetch()
 {
    int p;
    ++PC;
@@ -458,7 +463,7 @@ disdata()
       end = HDR.a_text + HDR.a_data;
 
    printf("\t.data\t\t\t| loc = %05.5lx, size = %05.5lx\n",
-    PC,HDR.a_data);
+    PC, (unsigned long)HDR.a_data);
 
    segflg = 0;
 
@@ -506,7 +511,7 @@ static void disbss()
       end = HDR.a_text + HDR.a_data + HDR.a_bss;
 
    printf("\t.bss\t\t\t| loc = %05.5lx, size = %05.5lx\n",
-    PC,HDR.a_bss);
+    PC, (unsigned long)HDR.a_bss);
 
    segflg = 0;
 
@@ -538,7 +543,7 @@ static void disbss()
   *                                                         *
   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+int
 main(argc,argv)
 
    int argc;                  /* Command-line args from OS  */
@@ -644,6 +649,7 @@ main(argc,argv)
       fatal(PRG,"symbol table overflow");
 
    if (relnum)                            /* Get reloc data */
+      {
       if (lseek(fd,reloff,0) != reloff)
          fatal(PRG,"lseek error");
       else
@@ -652,8 +658,10 @@ main(argc,argv)
             read(fd, (char *) &relo[relptr],sizeof(struct reloc));
          relptr--;
          }
+      }
 
    if (tabnum)                            /* Read in symtab */
+      {
       if (lseek(fd,taboff,0) != taboff)
          fatal(PRG,"lseek error");
       else
@@ -662,6 +670,7 @@ main(argc,argv)
             read(fd, (char *) &symtab[symptr],sizeof(struct nlist));
          symptr--;
          }
+      }
 
    close(fd);
 
