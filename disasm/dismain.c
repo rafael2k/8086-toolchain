@@ -283,7 +283,7 @@ prolog()
                putchar('\t');
                if (strlen(c) < 8)
                   putchar('\t');
-               printf("| Internal global\n");
+               printf("| Public symbols\n");
                }
             else
                putchar('\n');
@@ -296,7 +296,7 @@ prolog()
                printf("\t.comm\t%s,0x%08.8lx",c,
                 (unsigned long)symtab[j].n_value);
                if (++flag == 1)
-                  printf("\t| Internal global\n");
+                  printf("\t| Public symbols\n");
                else
                   putchar('\n');
                }
