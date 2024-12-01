@@ -25,7 +25,7 @@ all: $(BINDIR)/disasm86
 $(BINDIR)/disasm86:	$(OBJ)
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-.c.o:
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $*.o $<
 
 $(OBJ): dis.h a.out.h
