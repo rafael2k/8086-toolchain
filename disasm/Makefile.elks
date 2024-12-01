@@ -10,7 +10,8 @@ CLBASE = -melks-libc -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff
 CLBASE += -fno-inline -fno-builtin-printf -fno-builtin-fprintf
 WARNINGS = -Wall -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare
 INCLUDES = -I$(TOPDIR)/include -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
-CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(LOCALFLAGS)
+DEFINES = -D__ELKS__
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
 LDFLAGS = $(CLBASE)
 LDLIBS =
 
@@ -30,4 +31,4 @@ $(BINDIR)/disasm86:	$(OBJ)
 $(OBJ): dis.h a.out.h
 
 clean:	
-	rm -f *.lst *.o $(BINDIR)/disasm86
+	rm -f *.o $(BINDIR)/disasm86
