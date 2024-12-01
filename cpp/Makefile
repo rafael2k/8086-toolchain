@@ -1,4 +1,4 @@
-CFLAGS=-O2 -pipe -Wall -Wstrict-prototypes
+CFLAGS=-O3 -Wall -Wstrict-prototypes
 
 BINDIR=../host-bin
 

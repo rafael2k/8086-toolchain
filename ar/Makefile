@@ -4,7 +4,7 @@
 
 BINDIR =../host-bin/
 LIBDIR	=/usr/bin
-CFLAGS	=-O2 -pipe
+CFLAGS	=-O3
 LDFLAGS	=
 DEFS	=
 OBJS    = ar.o

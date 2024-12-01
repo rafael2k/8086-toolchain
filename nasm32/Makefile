@@ -12,7 +12,7 @@
 
 prefix = /usr/local
 CC = cc
-CFLAGS = -O -I.
+CFLAGS = -O3 -I.
 PERL = perl
 MKDIR_P = mkdir -p
 BINDIR=../host-bin

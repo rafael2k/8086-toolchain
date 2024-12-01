@@ -24,7 +24,7 @@
 # the initialization  data in the lookup tables.  It should not
 # be necessary to alter the formats of the tables.
 
-CFLAGS=-O
+CFLAGS=-O3
 LDFLAGS=
 BINDIR=../host-bin
 
