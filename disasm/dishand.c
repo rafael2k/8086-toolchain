@@ -66,7 +66,7 @@ objout()                      /* Object-code output routine */
       return;
    else
       {
-      printf("\t|");
+      printf("\t\t\t\t|");
       if (symptr >= 0)
          printf(" %05.5lx:",(PC + 1L - (long)(objptr)));
       for (k = 0; k < objptr; ++k)

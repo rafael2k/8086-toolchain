@@ -551,11 +551,11 @@ main(argc,argv)
 
 {/* * * * * * * * * * * START OF main() * * * * * * * * * * */
 
-   char a[1024];
    register int fd;
    long taboff, tabnum;
    long reloff, relnum;
    int count;
+   char a[256];
 
    PRG = invoker(*argv);
 
