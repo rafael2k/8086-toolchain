@@ -14,7 +14,7 @@ ASFLAGS=-f as86
 ARFLAGS=r
 LDFLAGS=-0 -i
 
-OBJS=syscall.o c86lib.o
+OBJS=syscall.o syscall2.o c86lib.o
 
 all: libc86.a
 
@@ -22,10 +22,7 @@ libc86.a: $(OBJS)
 	rm -f libc86.a
 	$(AR) $(ARFLAGS) libc86.a $(OBJS)
 
-syscall.o: syscall.asm
-	$(AS) $(ASFLAGS) -o $@ $^
-
-c86lib.o: c86lib.asm
+%.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $^
 
 clean:
