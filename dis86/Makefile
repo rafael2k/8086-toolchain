@@ -31,19 +31,16 @@ PREFIX=/usr
 
 OBJ = disrel.o dismain.o distabs.o dishand.o disfp.o
 
-all:	dis88
+all:	dis86
 
-dis88:	$(OBJ)
-	$(CC) $(LDFLAGS) -o dis88 $(OBJ)
+dis86:	$(OBJ)
+	$(CC) $(LDFLAGS) -o dis86 $(OBJ)
 
-install:	dis88
-	install -m 755 -s dis88   $(DIST)$(PREFIX)/bin/dis86
-	install -m 644    dis88.1 $(DIST)$(PREFIX)/man/man1/dis86.1
+install:	dis86
+	install -m 755 -s dis86   $(DIST)$(PREFIX)/bin/dis86
+	install -m 644    dis86.1 $(DIST)$(PREFIX)/man/man1/dis86.1
 
 $(OBJ): dis.h a.out.h
 
-a.out.h:
-	ln -s ../libc/include/a.out.h .
-
 clean realclean:	
-	rm -f *.bak *.lst *.o core dis88 a.out.h
+	rm -f *.bak *.lst *.o dis86
