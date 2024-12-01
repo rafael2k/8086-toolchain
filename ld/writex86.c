@@ -2,6 +2,11 @@
 
 /* Copyright (C) 1994 Bruce Evans */
 
+/*
+ * 29 Nov 2024 Greg Haerr added ELKS v1 a.out support
+ * 30 Nov 2024 Greg Haerr fix a_data calcuation when no data segments, set a_entry
+ */
+
 #include "syshead.h"
 #include "x86_aout.h"
 #ifndef VERY_SMALL_MEMORY
@@ -289,15 +294,21 @@ bool_pt argxsym;
 	}
 
     /* adjust special symbols */
+    int hasdata = 0;
     for (seg = 0; seg < NSEG; ++seg)
     {
+	/* only count data of nonzero length */
 #ifdef DATASEGS
-	if (segsz[seg] != 0)
-	    /* only count data of nonzero length */
-#else
-	if (segsz[seg] != 0 && seg < 4)
-#endif
+	if (segsz[seg] != 0) {
 	    edataoffset = segbase[seg] + segsz[seg];
+	    if (seg != 0) hasdata = 1;
+        }
+#else
+	if (segsz[seg] != 0 && seg < 4) {
+	    edataoffset = segbase[seg] + segsz[seg];
+	    if (seg != 0) hasdata = 1;
+	}
+#endif
 	segboundary[5] = hexdigit[seg];		/* to __segX?H */
 	segboundary[6] = 'D';
 	setsym(segboundary, (tempoffset = segbase[seg]) + segsz[seg]);
@@ -320,6 +331,8 @@ bool_pt argxsym;
         }
 #endif
     }
+    if (!hasdata)
+        edataoffset = bdataoffset;              /* fixes zero data length bug */
     setsym("__etext", etextoffset);
     setsym("__edata", edataoffset);
 #ifdef DATASEGS
@@ -674,10 +687,8 @@ PRIVATE void writeheader()
 	    sizeof header.a_data);
     offtocn((char *) &header.a_bss, endoffset - edataoffset,
 	    sizeof header.a_bss);
-    if (uzp)
-	offtocn((char *) &header.a_entry, page_size(),
-		sizeof header.a_entry);
-
+    offtocn((char *) &header.a_entry, entryfirst->elsymptr->value,
+            sizeof header.a_entry);
     offtocn((char *) &header.a_version, (bin_off_t) 1,
 	    sizeof header.a_version);
     offtocn((char *) &header.a_total, (bin_off_t) heap_top_value,
