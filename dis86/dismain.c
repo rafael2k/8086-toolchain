@@ -88,7 +88,7 @@ zdump(beg)
    if (beg > 1L)
       printf("\t.zerow\t%ld\n",(beg >> 1));
    if (beg & 1L)
-      printf("\t.byte\t0\n");
+      printf("\tdb\t0\n");
 }
 
 static char *
@@ -161,7 +161,7 @@ objdump(c)
 
    if (objptr)
       {
-      printf("\t.byte\t");
+      printf("\tdb\t");
       ++retval;
       }
    else
@@ -169,7 +169,7 @@ objdump(c)
 
    for (k = 0; k < objptr; ++k)
       {
-      printf("$%02.2x",objbuf[k]);
+      printf("0x%02.2x",objbuf[k]);
       if (k < (objptr - 1))
          putchar(',');
       }
@@ -275,7 +275,7 @@ prolog()
           && ((symtab[j].n_sclass & N_SECT) < N_COMM))
             {
             char *c = getnam(j);
-            printf("\t.globl\t%s",c);
+            printf("\tglobal\t%s",c);
             if (++flag == 1)
                {
                putchar('\t');
@@ -307,7 +307,7 @@ prolog()
          {
          char *c = getnam(relo[j].r_symndx);
          ++flag;
-         printf("\t.globl\t%s",c);
+         printf("\tglobal\t%s",c);
          putchar('\t');
          if (strlen(c) < 8)
             putchar('\t');
@@ -359,26 +359,26 @@ distext()
    for (j = 0; j < (int)(HDR.a_hdrlen); ++j)
       getchar();
 
-   printf("| %s, %s\n\n",PRG,release);
+   printf("| %s, %s\n",PRG,release);
 
    printf("| @(");
 
    printf("#)\tDisassembly of %s",IFILE);
 
    if (symptr < 0)
-      printf(" (no symbols)\n\n");
+      printf(" (no symbols)\n");
    else
-      printf("\n\n");
+      printf("\n");
 
    if (HDR.a_flags & A_EXEC)
-      printf("| File is executable\n\n");
+      printf("| File is executable\n");
 
    if (HDR.a_flags & A_SEP)
       printf("| File has split I/D space\n\n");
 
    prolog();
 
-   printf("\t.text\t\t\t| loc = %05.5lx, size = %05.5lx\n\n",
+   printf("\t.text\t\t\t| loc = %05.5lx, size = %05.5lx\n",
     PC,HDR.a_text);
    fflush(stdout);
 
@@ -457,7 +457,7 @@ disdata()
    else
       end = HDR.a_text + HDR.a_data;
 
-   printf("\t.data\t\t\t| loc = %05.5lx, size = %05.5lx\n\n",
+   printf("\t.data\t\t\t| loc = %05.5lx, size = %05.5lx\n",
     PC,HDR.a_data);
 
    segflg = 0;
@@ -505,7 +505,7 @@ static void disbss()
    else
       end = HDR.a_text + HDR.a_data + HDR.a_bss;
 
-   printf("\t.bss\t\t\t| loc = %05.5lx, size = %05.5lx\n\n",
+   printf("\t.bss\t\t\t| loc = %05.5lx, size = %05.5lx\n",
     PC,HDR.a_bss);
 
    segflg = 0;

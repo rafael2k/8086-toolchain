@@ -148,7 +148,7 @@ inhand(j)
       return;
       }
 
-   printf("%s\t$%02x\n",optab[j].text,k);
+   printf("%s\t0x%02x\n",optab[j].text,k);
 
    objout();
 

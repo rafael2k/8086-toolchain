@@ -192,7 +192,7 @@ aohand(j)
          else
 	    {
 	    if( k < 100 || k > 65436 )
-	       printf("%s\tax,#%d\n",optab[j].text, (short)k);
+	       printf("%s\tax, %d\n",optab[j].text, (short)k);
 	    else
 	       printf("%s\tax,#$%04x\n",optab[j].text,k);
 	    }
@@ -360,7 +360,7 @@ imhand(j)
       case 2 :
          if (mod == 1)
 	 {
-            strcat(a,"*");
+            strcat(a,"word ");
             sprintf(b,"%d(", (short)offset);
 	 }
          else
@@ -579,13 +579,13 @@ mihand(j)
       FETCH(n);
       k = ((n << 8) | m);
       if (lookext((long)(k),(PC - 1),b))
-         printf("#%s\n",b);
+         printf(" %s\n",b);
       else
          {
          if( k < 100 || k > 65436 )
-            printf("#%d\n",(short)k);
+            printf(" %d\n",(short)k);
 	 else
-            printf("#$%04x\n",k);
+            printf(" 0x%04X\n",k);
          }
       }
    else
@@ -666,13 +666,13 @@ tqhand(j)
       FETCH(n);
       k = ((n << 8) | m);
       if (lookext((long)(k),(PC - 1),b))
-         printf("#%s\n",b);
+         printf(" %s\n",b);
       else
          {
          if( k < 100 || k > 65436 )
-            printf("#%d\n",(short)k);
+            printf(" %d\n",(short)k);
 	 else
-            printf("#$%04x\n",k);
+            printf(" 0x%04X\n",k);
          }
       }
    else
@@ -767,19 +767,19 @@ mmhand(j)
       FETCH(k);
       k = (k << 8) | j;
       if (lookext((long)(k),(PC - 1),b))
-         printf("#%s\n",b);
+         printf(" %s\n",b);
       else
          {
          if( k < 100 || k > 65436 )
-            printf("#%d\n",(short)k);
+            printf(" %d\n",(short)k);
 	 else
-            printf("#$%04x\n",k);
+            printf(" 0x%04X\n",k);
          }
       }
    else
       {
       FETCH(k);
-      printf("*%d\n",k);
+      printf(" %d\n",k);
       }
 
    objout();
@@ -884,7 +884,7 @@ iohand(j)
 
    FETCH(k);
 
-   printf("%s\t$%02.2x\n",optab[j].text,k);
+   printf("%s\t0x%02.2x\n",optab[j].text,k);
 
    objout();
 
@@ -993,9 +993,9 @@ mahand(j)
          FETCH(k);
          k = (k << 8) | j;
          if (lookext((long)(k),(PC - 1),b))
-            printf(",#%s\n",b);
+            printf(", %s\n",b);
          else
-            printf(",#$%04x\n",k);
+            printf(", 0x%04X\n",k);
          }
       else
          {

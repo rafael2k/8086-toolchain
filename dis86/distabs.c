@@ -37,12 +37,12 @@ char *REGS[] =                /* Table of register names    */
 
 char *REGS0[] =               /* Mode 0 register name table */
    {
-   "bx_si", "bx_di", "bp_si", "bp_di", "si", "di", "", "bx"
+   "bx+si", "bx+di", "bp+si", "bp+di", "si", "di", "", "bx"
    };
 
 char *REGS1[] =               /* Mode 1 register name table */
    {
-   "bx_si", "bx_di", "bp_si", "bp_di", "si", "di", "bp", "bx"
+   "bx+si", "bx+di", "bp+si", "bp+di", "si", "di", "bp", "bx"
    };
 
 int symrank[6][6] =           /* Symbol type/rank matrix    */
@@ -620,20 +620,20 @@ mtrans(c,m,type)
                }
             else
                {
-               sprintf(b,"(%s)",REGS0[rm]);
+               sprintf(b,"[%s]",REGS0[rm]);
                strcat(a,b);
                }
             break;
          case 1 :
          case 2 :
             if (mod == 1)
-               strcat(a,"*");
+               strcat(a," WORD ");
             else
                strcat(a,"#");
-            sprintf(b,"%d(", (short)offset);
+            sprintf(b,"%d[", (short)offset);
             strcat(a,b);
             strcat(a,REGS1[rm]);
-            strcat(a,")");
+            strcat(a,"]");
             break;
          case 3 :
             strcat(a,REGS[(w << 3) | rm]);
@@ -656,20 +656,20 @@ mtrans(c,m,type)
                }
             else
                {
-               sprintf(b,"(%s)",REGS0[rm]);
+               sprintf(b,"[%s]",REGS0[rm]);
                strcpy(a,b);
                }
             break;
          case 1 :
          case 2 :
             if (mod == 1)
-               strcpy(a,"*");
+               strcpy(a,"word ");
             else
                strcpy(a,"#");
-            sprintf(b,"%d(", (short)offset);
+            sprintf(b,"%d[", (short)offset);
             strcat(a,b);
             strcat(a,REGS1[rm]);
-            strcat(a,")");
+            strcat(a,"]");
             break;
          case 3 :
             strcpy(a,REGS[(w << 3) | rm]);
