@@ -39,7 +39,7 @@ LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,optio
 OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
       writex86.o writebin.o writeemu.o
 
-all: $(BINDIR)/ld86
+all: $(BINDIR)/ld86 $(BINDIR)/objdump86
 
 $(BINDIR)/ld86: $(OBJS)
 	$(LINK) $(LDFLAGS) $(OBJS) -o $@

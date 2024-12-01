@@ -191,7 +191,7 @@ aohand(j)
             printf("%s\tax,#%s\n",optab[j].text,b);
          else
 	    {
-	    if( k < 100 || k > 65436 )
+	    if( k < 100 || k > 65436U )
 	       printf("%s\tax, %d\n",optab[j].text, (short)k);
 	    else
 	       printf("%s\tax,#$%04x\n",optab[j].text,k);
@@ -368,7 +368,7 @@ imhand(j)
          else
 	 {
             strcat(a,"#");
-	    if( offset < 100 || offset > 65436 )
+	    if( offset < 100 || offset > 65436U )
                sprintf(b,"%d(", (short)offset);
 	    else
                sprintf(b,"$%04x(",offset);
@@ -386,7 +386,7 @@ imhand(j)
    if (iflag)
    {
       strcat(a,"#");
-      if( immed < 100 || immed > 65436 )
+      if( immed < 100 || immed > 65436U )
          sprintf(b,"%d", (short)immed);
       else
          sprintf(b,"$%04x",immed);
@@ -586,7 +586,7 @@ mihand(j)
          printf(" %s\n",b);
       else
          {
-         if( k < 100 || k > 65436 )
+         if( k < 100 || k > 65436U )
             printf(" %d\n",(short)k);
 	 else
             printf(" 0x%04X\n",k);
@@ -673,7 +673,7 @@ tqhand(j)
          printf(" %s\n",b);
       else
          {
-         if( k < 100 || k > 65436 )
+         if( k < 100 || k > 65436U )
             printf(" %d\n",(short)k);
 	 else
             printf(" 0x%04X\n",k);
@@ -774,7 +774,7 @@ mmhand(j)
          printf(" %s\n",b);
       else
          {
-         if( k < 100 || k > 65436 )
+         if( k < 100 || k > 65436U )
             printf(" %d\n",(short)k);
 	 else
             printf(" 0x%04X\n",k);

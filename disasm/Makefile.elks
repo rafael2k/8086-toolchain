@@ -1,0 +1,33 @@
+# Sample ELKS Makefile for ia16-elf-gcc
+
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
+endif
+
+CC = ia16-elf-gcc
+LD = ia16-elf-gcc
+CLBASE = -melks-libc -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff
+CLBASE += -fno-inline -fno-builtin-printf -fno-builtin-fprintf
+WARNINGS = -Wall -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare
+INCLUDES = -I$(TOPDIR)/include -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(LOCALFLAGS)
+LDFLAGS = $(CLBASE)
+LDLIBS =
+
+BINDIR = ../elks-bin
+LOCALFLAGS = -Wno-unused-variable -Wno-missing-braces -Wno-format
+
+OBJ = disrel.o dismain.o distabs.o dishand.o disfp.o
+
+all: $(BINDIR)/disasm86
+
+$(BINDIR)/disasm86:	$(OBJ)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+.c.o:
+	$(CC) $(CFLAGS) -c -o $*.o $<
+
+$(OBJ): dis.h a.out.h
+
+clean:	
+	rm -f *.lst *.o $(BINDIR)/disasm86
