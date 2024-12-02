@@ -7,10 +7,12 @@
         cpu     8086
 
         section .data
+        align   2
         global  _errno
 _errno: dw      0               ; global C errno
 
         section .text
+        align   2
         global  callsys
 callsys:                        ; common routine for ELKS system call
         push    bp
