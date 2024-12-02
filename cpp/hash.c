@@ -86,12 +86,12 @@ void * value;
    if( hashtable == 0 )
    {
       hashtable = malloc((hashsize+1)*sizeof(char*));
-      if( hashtable == 0 ) cfatal("Out of memory");
+      if( hashtable == 0 ) cfatal("Out of memory for hashtable");
       for(i=0; i<=hashsize; i++) hashtable[i] = 0;
    }
    /* Add record */
    hashline = malloc(sizeof(struct hashentry)+strlen(word));
-   if( hashline == 0 ) cfatal("Out of memory");
+   if( hashline == 0 ) cfatal("Out of memory for hashline");
    else
    {
       hashline->next  = hashtable[hash_val];

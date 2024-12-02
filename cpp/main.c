@@ -201,6 +201,7 @@ char * name;
    undefine_macro(name);
 
    ptr = malloc(sizeof(struct define_item) + strlen(value));
+   if(!ptr) cfatal("Out of memory for macro");
    ptr->name = set_entry(0, name, ptr);
    strcpy(ptr->value, value);
    ptr->arg_count = -1;

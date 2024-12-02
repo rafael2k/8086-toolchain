@@ -790,7 +790,7 @@ static void do_proc_define(void)
 
       len = WORDSIZE; 
       ptr = malloc(sizeof(struct define_item) + WORDSIZE);
-      if(ptr==0) cfatal("Preprocessor out of memory");
+      if(!ptr) cfatal("Out of memory for define");
       ptr->value[cc=0] = '\0';
 
       /* Add in arguments */
@@ -1249,6 +1249,7 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
    int args_found = 0;
 
    arg_list = malloc(sizeof(struct arg_store) * arg_count);
+   if(!arg_list) cfatal("Out of memory for arglist");
    memset(arg_list, 0, sizeof(struct arg_store) * arg_count);
 
    for(ac=0; *data_str && ac < arg_count; data_str++) {
@@ -1376,7 +1377,9 @@ static char *insert_substrings(char *data_str, struct arg_store *arg_list, int a
    }
 #endif
 
-   rv = malloc(4); *rv = '\0'; len = 4;
+   rv = malloc(4);
+   if(!rv) cfatal("Out of memory for insert");
+   *rv = '\0'; len = 4;
 
    while(*data_str) {
       p = curword;
