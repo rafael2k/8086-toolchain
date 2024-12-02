@@ -1,39 +1,40 @@
-# Copyright (c) 1999 Greg Haerr <greg@censoft.com>
-# This file is part of the Linux-8086 Development environment and is
-# distributed under the GNU General Public License.
+# ar86 ELKS IA16 compilation
 
-BINDIR =../elks-bin/
-LIBDIR	=/usr/bin
-CFLAGS	=-Os
-LDFLAGS	=
-DEFS	=
-OBJS    = ar.o
-# may need to replace alloca with fmemalloc for large symtabs or OWC compilation
-OBJS   += alloca.o
-
-ifeq ($(strip ${TOPDIR}),)
-	TOPDIRE=/home/rafael2k/programs/devel/elks
-else
-	TOPDIRE=${TOPDIR}
+############# Standard Section for IA16 C ##############
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
 endif
 
-CC = ia16-elf-gcc -ffreestanding -fno-inline -melks -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff -I$(TOPDIRE)/include -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/elks/include -Wall -Os -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare -D__ELKS__
-LINK = ia16-elf-gcc -melks-libc -mcmodel=small
+CC = ia16-elf-gcc
+LD = ia16-elf-gcc
+CLBASE = -melks-libc -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff
+CLBASE += -fno-inline -fno-builtin-printf -fno-builtin-fprintf
+WARNINGS = -Wall -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare
+INCLUDES = -I$(TOPDIR)/include -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
+DEFINES = -D__ELKS__
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDFLAGS = $(CLBASE)
+LDLIBS =
 
-all: $(BINDIR)ar86
+OBJS = $(SRCS:.c=.o)
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $*.o $<
 
-$(BINDIR)ar86: $(OBJS)
-	mkdir -p $(BINDIR)
-	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+############# End of Standard Section ##############
 
-install: $(BINDIR)ar86
-	install -d $(LIBDIR)
-	install -m 755 ar86 $(LIBDIR)
+BINDIR = ../elks-bin
+LOCALFLAGS = -ffreestanding
+SRCS = ar.c
+# may need to replace alloca with fmemalloc for large symtabs or use OWC compilation
+SRCS += alloca.o
+PROG = $(BINDIR)/ar86
 
-clean realclean clobber:
-	rm -f *.o $(BINDIR)ar86 ar
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJS): ar.h rel_aout.h
 
-.c.o:
-	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
+clean:
+	rm -f $(PROG) *.

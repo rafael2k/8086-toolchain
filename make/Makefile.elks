@@ -1,39 +1,38 @@
-# Makefile for make!
-EMHOME=../..
+# make ELKS IA16 compilation
 
-ifeq ($(strip ${TOPDIR}),)
-	TOPDIRE=/home/rafael2k/programs/devel/elks
-else
-	TOPDIRE=${TOPDIR}
+############# Standard Section for IA16 C ##############
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
 endif
 
-CC = ia16-elf-gcc -ffreestanding -fno-inline -melks -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff -I$(TOPDIRE)/include -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/elks/include -Wall -Os -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare -Dunix
-LINK = ia16-elf-gcc -melks-libc -mcmodel=small
+CC = ia16-elf-gcc
+LD = ia16-elf-gcc
+CLBASE = -melks-libc -mtune=i8086 -mcmodel=small -mno-segment-relocation-stuff
+CLBASE += -fno-inline -fno-builtin-printf -fno-builtin-fprintf
+WARNINGS = -Wall -Wextra -Wtype-limits -Wno-unused-parameter -Wno-sign-compare
+INCLUDES = -I$(TOPDIR)/include -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
+DEFINES = -D__ELKS__
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDFLAGS = $(CLBASE)
+LDLIBS =
 
-BINDIR=../elks-bin/
+OBJS = $(SRCS:.c=.o)
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $*.o $<
 
-OBJS	=	check.o input.o macro.o main.o \
-		make.o reader.o rules.o
+############# End of Standard Section ##############
 
-all:	$(BINDIR)make
+BINDIR = ../elks-bin
+LOCALFLAGS = -Dunix
+SRCS = check.c input.c macro.c main.c make.c reader.c rules.c
+PROG = $(BINDIR)/make
 
-install: $(BINDIR)make
-	cp $(BINDIR)make $(EMHOME)/bin/make
+all: $(PROG)
 
-cmp:	make
-	cmp $(BINDIR)make $(EMHOME)/bin/make
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+$(OBJS): h.h
 
 clean:
-	rm -f *.o $(BINDIR)make
-
-pr:
-	@pr README Makefile h.h main.c check.c input.c macro.c make.c reader.c rules.c
-
-opr:
-	make pr ^ opr
-
-$(BINDIR)make:	$(OBJS)
-	mkdir -p $(BINDIR)
-	$(LINK) -o $(BINDIR)make $(OBJS)
-
-$(OBJS):	h.h
+	rm -f $(PROG) *.o

@@ -36,7 +36,7 @@ OBJS = $(SRCS:.c=.obj)
 ############# End of Standard Section ##############
 
 BINDIR = ../elks-bin
-LOCALFLAGS = -D__UNIX__
+LOCALFLAGS =
 SRCS = main.c cpp.c hash.c token1.c token2.c
 PROG = $(BINDIR)/cpp86
 

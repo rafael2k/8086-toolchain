@@ -1,4 +1,4 @@
-# Sample ELKS Makefile for ia16-elf-gcc
+# disasm86 ELKS IA16 compilation
 
 ############# Standard Section for IA16 C ##############
 ifndef TOPDIR

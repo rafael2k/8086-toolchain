@@ -1,28 +1,32 @@
-# Copyright (c) 1999 Greg Haerr <greg@censoft.com>
-# This file is part of the Linux-8086 Development environment and is
-# distributed under the GNU General Public License.
+# ar86 host compilation
 
-BINDIR =../host-bin/
-LIBDIR	=/usr/bin
-CFLAGS	=-O3
-LDFLAGS	=
-DEFS	=
-OBJS    = ar.o
+############# Standard Section for Host C ##############
+CC = cc
+LD = cc
+CLBASE = -O3
+WARNINGS = -Wall -Wextra
+INCLUDES =
+DEFINES =
+CFLAGS = $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDFLAGS =
 
-all: $(BINDIR)ar86
+OBJS = $(SRCS:.c=.o)
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $*.o $<
 
-$(BINDIR)ar86: $(OBJS)
-	mkdir -p $(BINDIR)
-	$(CC) $(LDFLAGS) $(OBJS) -o $@
+############# End of Standard Section ##############
 
-install: $(BINDIR)ar86
-	install -d $(LIBDIR)
-	install -m 755 $(BINDIR)ar86 $(LIBDIR)
+BINDIR=../host-bin
+SRCS = ar.c
+LOCALFLAGS = -Wno-sign-compare -Wno-unused-parameter
+PROG = $(BINDIR)/ar86
 
-clean realclean clobber:
-	rm -f *.o $(BINDIR)ar86 ar
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $(PROG) $(OBJS)
 
 $(OBJS): ar.h rel_aout.h
 
-.c.o:
-	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
+clean:
+	rm -f $(PROG) $(OBJS)
