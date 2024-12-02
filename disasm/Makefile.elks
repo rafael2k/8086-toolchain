@@ -1,5 +1,6 @@
 # Sample ELKS Makefile for ia16-elf-gcc
 
+############# Standard Section for IA16 C ##############
 ifndef TOPDIR
 $(error ELKS TOPDIR is not defined)
 endif
@@ -15,20 +16,23 @@ CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
 LDFLAGS = $(CLBASE)
 LDLIBS =
 
-BINDIR = ../elks-bin
-LOCALFLAGS = -Wno-unused-variable -Wno-missing-braces -Wno-format
-
-OBJ = disrel.o dismain.o distabs.o dishand.o disfp.o
-
-all: $(BINDIR)/disasm86
-
-$(BINDIR)/disasm86:	$(OBJ)
-	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-
+OBJS = $(SRCS:.c=.o)
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $*.o $<
 
-$(OBJ): dis.h a.out.h
+############# End of Standard Section ##############
+
+BINDIR = ../elks-bin
+LOCALFLAGS = -Wno-unused-variable -Wno-missing-braces -Wno-format
+SRCS = disrel.c dismain.c distabs.c dishand.c disfp.c
+PROG = $(BINDIR)/disasm86
+
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+$(OBJS): dis.h a.out.h
 
 clean:	
-	rm -f *.o $(BINDIR)/disasm86
+	rm -f $(PROG) *.o
