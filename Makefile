@@ -11,6 +11,7 @@ elks:
 	make -C ld -f Makefile.elks
 	make -C ar -f Makefile.elks
 	make -C make -f Makefile.elks
+	make -C disasm -f Makefile.elks
 	make -C nasm32 -f Makefile.elks
 
 host:

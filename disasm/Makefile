@@ -24,18 +24,19 @@
 # the initialization  data in the lookup tables.  It should not
 # be necessary to alter the formats of the tables.
 
-CFLAGS=-O
-LDFLAGS=
-BINDIR=../host-bin
+CFLAGS = -O3
+LDFLAGS =
+BINDIR = ../host-bin
+PROG = $(BINDIR)disasm86
 
-OBJ = disrel.o dismain.o distabs.o dishand.o disfp.o
+OBJS = disrel.o dismain.o distabs.o dishand.o disfp.o
 
-all:	$(BINDIR)/disasm86
+all: $(PROG)
 
-$(BINDIR)/disasm86:	$(OBJ)
-	$(CC) $(LDFLAGS) -o $(BINDIR)/disasm86 $(OBJ)
+$(PROG): $(OBJS)
+	$(CC) $(LDFLAGS) -o $(PROG) $(OBJS)
 
 $(OBJ): dis.h a.out.h
 
-clean realclean:	
-	rm -f *.lst *.o $(BINDIR)/disasm86
+clean:
+	rm -f *.o $(PROG)

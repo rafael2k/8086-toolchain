@@ -1,4 +1,4 @@
-# make ELKS IA16 compilation
+# disasm86 ELKS IA16 compilation
 
 ############# Standard Section for IA16 C ##############
 ifndef TOPDIR
@@ -23,16 +23,16 @@ OBJS = $(SRCS:.c=.o)
 ############# End of Standard Section ##############
 
 BINDIR = ../elks-bin
-LOCALFLAGS = -Dunix
-SRCS = check.c input.c macro.c main.c make.c reader.c rules.c
-PROG = $(BINDIR)/make
+LOCALFLAGS = -Wno-unused-variable -Wno-missing-braces -Wno-format
+SRCS = disrel.c dismain.c distabs.c dishand.c disfp.c
+PROG = $(BINDIR)/disasm86
 
 all: $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-$(OBJS): h.h
+$(OBJS): dis.h a.out.h
 
-clean:
+clean:	
 	rm -f $(PROG) *.o

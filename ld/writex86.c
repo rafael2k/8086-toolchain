@@ -5,6 +5,7 @@
 /*
  * 29 Nov 2024 Greg Haerr added ELKS v1 a.out support
  * 30 Nov 2024 Greg Haerr fix a_data calcuation when no data segments, set a_entry
+ * 01 Nov 2024 Greg Haerr write NOPs (0x90) rather than NULs for padding in .text
  */
 
 #include "syshead.h"
@@ -754,5 +755,5 @@ bin_off_t count;
     if( lcount < 0 )
     	fatalerror("org command requires reverse seek");
     while (count-- > 0)
-	writechar(0);
+	writechar(curseg == 0? 0x90: 0);    /* NOTE doesn't yet write NOPs in far text */
 }

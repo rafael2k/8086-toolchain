@@ -1,32 +1,32 @@
-# Makefile for make!
-EMHOME=../..
+# make86 host compilation
 
-BINDIR=../host-bin/
+############# Standard Section for Host C ##############
+CC = cc
+LD = cc
+CLBASE = -O3
+WARNINGS = -Wall -Wextra
+INCLUDES =
+DEFINES =
+CFLAGS = $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDFLAGS =
 
-OBJS	=	check.o input.o macro.o main.o \
-		make.o reader.o rules.o
-# unix not defined under Xenix ???
-CFLAGS = -Dunix	
+OBJS = $(SRCS:.c=.o)
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $*.o $<
 
-all:	$(BINDIR)make
+############# End of Standard Section ##############
 
-install: $(BINDIR)make
-	cp $(BINDIR)make $(EMHOME)/bin/make
+BINDIR=../host-bin
+LOCALFLAGS = -Dunix -Wno-unused-parameter
+SRCS = check.c input.c macro.c main.c make.c reader.c rules.c
+PROG = $(BINDIR)/make86
 
-cmp:	make
-	cmp $(BINDIR)make $(EMHOME)/bin/make
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $(PROG) $(OBJS)
+
+$(OBJS): h.h
 
 clean:
-	rm -f *.o $(BINDIR)make
-
-pr:
-	@pr README Makefile h.h main.c check.c input.c macro.c make.c reader.c rules.c
-
-opr:
-	make pr ^ opr
-
-$(BINDIR)make:	$(OBJS)
-	mkdir -p $(BINDIR)
-	$(CC) -o $(BINDIR)make $(OBJS)
-
-$(OBJS):	h.h
+	rm -f $(PROG) $(OBJS)
