@@ -1,52 +1,52 @@
-CFLAGS=-Wall -Wstrict-prototypes
+# Sample ELKS Makefile for OpenWatcom C
 
-ifeq ($(strip ${TOPDIR}),)
-	TOPDIRE=/home/rafael2k/programs/devel/elks
-else
-	TOPDIRE=${TOPDIR}
+############# Standard Section for Open Watcom C ##############
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
 endif
 
-ifeq ($(strip ${WATCOM}),)
-	WATCOMC=/usr/bin/watcom
-else
-	WATCOMC=${WATCOM}
+ifndef WATCOM
+$(error OpenWatcom WATCOM is not defined)
 endif
 
-BINDIR=../elks-bin
+CC = owcc
+LD = owcc
+CLBASE = -mcmodel=l
+CLBASE += -bnone -march=i86 -stdc=c99
+CLBASE += -fno-stack-check -fnostdlib
+CLBASE += -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
+WARNINGS = -Wall -Wextra
+INCLUDES = -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
+INCLUDES += -I$(WATCOM)/h
+DEFINES = -D__ELKS__
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDBASE = -bos2 -s
+LDBASE += -Wl,option -Wl,dosseg
+LDBASE += -Wl,option -Wl,start=_start
+LDBASE += -Wl,option -Wl,nodefaultlibs
+LDBASE += -Wl,option -Wl,stack=0x1000
+LDBASE += -Wl,option -Wl,heapsize=0x2000
+LDFLAGS = $(LDBASE)
+LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libc.lib
 
-CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__
-#CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x2000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
+OBJS = $(SRCS:.c=.obj)
+%.obj: %.c
+	$(CC) -c $(CFLAGS) -o $*.obj $<
 
+############# End of Standard Section ##############
 
-all: $(BINDIR)/cpp86
+BINDIR = ../elks-bin
+LOCALFLAGS = -D__UNIX__
+SRCS = main.c cpp.c hash.c token1.c token2.c
+PROG = $(BINDIR)/cpp86
 
-$(BINDIR)/cpp86: main.o cpp.o hash.o token1.o token2.o
-	$(LINK) -o $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o
+all: $(PROG)
 
-clean realclean:
-	rm -f $(BINDIR)/cpp86 main.o cpp.o hash.o token1.o token2.o tmp.h
-
-maintclean: realclean
-	rm -f token1.h token2.h
-
-main.o: cc.h
-	$(CC) -c -o main.o main.c
-
-cpp.o: cc.h
-	$(CC) -c -o cpp.o cpp.c
-
-hash.o: cc.h
-	$(CC) -c -o hash.o hash.c
-
-tree.o: cc.h
-	$(CC) -c -o tree.o tree.c
+$(PROG): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
 
 token1.o: token1.h
-	$(CC) -c -o token1.o token1.c
-
 token2.o: token2.h
-	$(CC) -c -o token2.o token2.c
 
 token1.h: token1.tok
 	gperf -aptTc -N is_ctok -H hash1 token1.tok > tmp.h
@@ -55,3 +55,9 @@ token1.h: token1.tok
 token2.h: token2.tok
 	gperf -aptTc -k1,3 -N is_ckey -H hash2 token2.tok > tmp.h
 	mv tmp.h token2.h
+
+clean:
+	rm -f $(PROG) *.obj tmp.h
+
+maintclean: clean
+	rm -f token1.h token2.h
