@@ -28,6 +28,7 @@ static void check(struct name *np)
 }
 
 
+#ifndef __ELKS__
 /*
  *	Prints out the structures as defined in memory.  Good for check
  *	that you make file does what you want (and for debugging make).
@@ -49,25 +50,25 @@ void prt(void)
 	{
 		if (np->n_flag & N_DOUBLE)
 			fprintf(stderr, "%s::\n", np->n_name);
-			else
+		else
 			fprintf(stderr, "%s:\n", np->n_name);
-			if (np == firstname)
+		if (np == firstname)
 			fprintf(stderr, "(MAIN NAME)\n");
-			for (lp = np->n_line; lp; lp = lp->l_next)
-			{
-				fputc(':', stderr);
-				for (dp = lp->l_dep; dp; dp = dp->d_next)
+		for (lp = np->n_line; lp; lp = lp->l_next)
+		{
+			fputc(':', stderr);
+			for (dp = lp->l_dep; dp; dp = dp->d_next)
 				fprintf(stderr, " %s", dp->d_name->n_name);
-				fputc('\n', stderr);
+			fputc('\n', stderr);
 
-				for (cp = lp->l_cmd; cp; cp = cp->c_next)
+			for (cp = lp->l_cmd; cp; cp = cp->c_next)
 				fprintf(stderr, "-\t%s\n", cp->c_cmd);
-				fputc('\n', stderr);
-			}
 			fputc('\n', stderr);
 		}
+		fputc('\n', stderr);
 	}
-
+}
+#endif
 
 /*
  *	Look for circular dependancies.

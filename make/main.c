@@ -24,9 +24,6 @@
 
 char *          myname;
 char *          makefile;   /*  The make file  */
-#ifdef eon
-unsigned        memspace = MEMSPACE;
-#endif
 
 FILE *          ifd;        /*  Input file desciptor  */
 bool            domake = TRUE;  /*  Go through the motions option  */
@@ -74,9 +71,11 @@ int main(int argc, char** argv)
             case 's':   /*  Silent about commands  */
                 silent = TRUE;
                 break;
+#ifndef __ELKS__
             case 'p':
                 print = TRUE;
                 break;
+#endif
             case 'r':
                 rules = FALSE;
                 break;
@@ -143,8 +142,10 @@ int main(int argc, char** argv)
     fclose(ifd);    /*  Finished with makefile  */
     lineno = 0; /*  Any calls to error now print no line number */
 
+#ifndef __ELKS__
     if (print)
         prt();  /*  Print out structures  */
+#endif
 
     np = newname(".SILENT");
     if (np->n_flag & N_TARG)
@@ -165,8 +166,10 @@ int main(int argc, char** argv)
         estat = make(firstname, 0);
     else while (argc--)
     {
-        if (!print && !silent && strcmp(*argv, "love") == 0)
+#ifndef __ELKS__
+        if (!print && !silent && strcmp(*argv, "love") == 0) /* Nice! */
             printf("Not war!\n");
+#endif
         estat |= make(newname(*argv++), 0);
     }
 
@@ -180,7 +183,11 @@ int main(int argc, char** argv)
 
 static void usage(void)
 {
+#ifndef __ELKS__
     fprintf(stderr, "Usage: %s [-f makefile] [-inpqrst] [macro=val ...] [target(s) ...]\n", myname);
+#else
+    fprintf(stderr, "Usage: %s [-f makefile] [-inqrst] [macro=val ...] [target(s) ...]\n", myname);
+#endif
     exit(1);
 }
 

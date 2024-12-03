@@ -18,7 +18,7 @@
 #define DEFN1       "makefile"      /*  Default names  */
 #define DEFN2       "Makefile"
 
-#define LZ      (2048)          /*  Line size  */
+#define LZ      (256)          /*  Line size  */
 
 
 
