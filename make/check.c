@@ -28,7 +28,6 @@ static void check(struct name *np)
 }
 
 
-#ifndef __ELKS__
 /*
  *	Prints out the structures as defined in memory.  Good for check
  *	that you make file does what you want (and for debugging make).
@@ -68,7 +67,6 @@ void prt(void)
 		fputc('\n', stderr);
 	}
 }
-#endif
 
 /*
  *	Look for circular dependancies.
