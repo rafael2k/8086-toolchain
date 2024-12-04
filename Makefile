@@ -37,6 +37,7 @@ cleaneobjs:
 	make -C ld -f Makefile.elks clean
 	make -C ar -f Makefile.elks clean
 	make -C make -f Makefile.elks clean
+	make -C disasm -f Makefile.elks clean
 	make -C nasm32 -f Makefile.elks clean
 
 cleanhobjs:
