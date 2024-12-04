@@ -3,22 +3,24 @@
 ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 8086 C compiler toolchain.
 
 This is a fork of the upstream 8086-toolchain, which contains a neat NASM version, and 
-the c68/c86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
-I've also added Jody Bruchon's dev86's cpp, ld86 and ar86. Make is courtesy of 
-David Given, Carl Eric Codere and Ceriel Jacobs.
+the C86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
+It also contains Jody Bruchon et al. dev86's cpp, ld and ar. Make is courtesy of 
+David Given, Carl Eric Codere and Ceriel Jacobs, disasm (dis88) was authored by G. M. Harding
 
-- cpp, ld86 and ar86: https://codeberg.org/jbruchon/dev86
+The project currently contains:
+
+- cpp, ld and ar from dev86: https://codeberg.org/jbruchon/dev86
 - make: https://github.com/davidgiven/ack/tree/default/util/make
-- nasm: https://www.nasm.us/
-- c86: Check discussion here: https://github.com/ghaerr/elks/issues/2112
+- assembler (nasm): https://www.nasm.us/
+- C compiler (C86): See discussion at https://github.com/ghaerr/elks/issues/2112
+- disasm:  Check README inside the directory
 
-I removed all instructions above 8086 set from nasm, but 186 and 286 instructions could be re-added if needed.
-
-The relevant directories for ELKS are: assembler (nasm), ld (linker), cpp (C Preprocessor), c86 (C compiler), make (make tool) and ar (archiver).
+In order to build the ELKS binaries, gcc-ia16 is needed (you can use the one compiled by "build.sh" from ELKS source code)
+and also OpenWatcom v2 is required.
 
 To build, type "make". Elks binaries will be in "elks-bin" and host binaries in "host-bin". Build should
-work on any recent Linux or MacOS with OpenWatcom v2 installed (source the owsetenv.sh script for setting
-OpenWatcom environment variables).
+work on any recent Linux or MacOS with OpenWatcom v2 installed (source the OW owsetenv.sh script for setting
+OpenWatcom environment variables and env.sh from ELKS, or just env.sh from ELKS and wcenv.sh in libc directory of ELKS top-dir).
 
 # 8086 Toolchain (Original OLD README)
 
