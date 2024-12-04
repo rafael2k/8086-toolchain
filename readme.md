@@ -22,7 +22,7 @@ To build, type "make". Elks binaries will be in "elks-bin" and host binaries in 
 work on any recent Linux or MacOS with OpenWatcom v2 installed (source the OW owsetenv.sh script for setting
 OpenWatcom environment variables and env.sh from ELKS, or just env.sh from ELKS and wcenv.sh in libc directory of ELKS top-dir).
 
-# 8086 Toolchain (Original OLD README)
+# Original 8086 Toolchain README
 
 This is the C-based 8086 toolchain for BYU ECEn 425 (Real Time Operating
 Systems). This repo also includes [an archive of the class website][4],
@@ -68,7 +68,7 @@ This will create 5 binaries in the `./bin/` directory:
 * `c86` - The 8086 compiler
 * `emu86` - The 8086 emulator
 * `nasm` - The 8086 assembler
-* `ndiasm` - The 8086 disassembler
+* `ndisasm` - The 8086 disassembler
 * `ProgramCRT` - The terminal program used by emu86 to display Simptris.
 
  If there are any problems, you can try `cd`ing into each of the tool
