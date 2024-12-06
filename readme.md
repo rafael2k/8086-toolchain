@@ -5,7 +5,8 @@ ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 80
 This is a fork of the upstream 8086-toolchain, which contains a neat NASM version, and 
 the C86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
 It also contains Jody Bruchon et al. dev86's cpp, ld and ar. Make is courtesy of 
-David Given, Carl Eric Codere and Ceriel Jacobs, disasm (dis88) was authored by G. M. Harding
+David Given, Carl Eric Codere and Ceriel Jacobs, while disasm (dis88) was originally authored by G. M. Harding.
+Many improvements and changes by Rafael Diniz and Gregory Haerr for make all the software run on ELKS.
 
 The project currently contains:
 
