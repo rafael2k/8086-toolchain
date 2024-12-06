@@ -2,11 +2,11 @@
 # Look https://github.com/ghaerr/elks/blob/master/elks/tools/bin/ecc
 # for a compiler driver which greatly simplifies things
 
-ifeq ($(strip ${TOPDIR}),)
-	TOPDIR_=/home/rafael2k/programs/devel/elks
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
 endif
 
-C86LIB=/home/rafael2k/programs/devel/8086-toolchain/libc
+C86LIB=../libc
 
 INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
 DEFINES=-D__C86__ -D__STDC__ -DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
