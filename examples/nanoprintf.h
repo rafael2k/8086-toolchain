@@ -9,7 +9,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-//#include <stddef.h>
+/* #include <stddef.h>  - removed by rafael2k, not found... */
 
 #ifdef __C86__
 typedef unsigned char uint8_t;
@@ -17,6 +17,7 @@ typedef char int8_t;
 typedef unsigned char uint_fast8_t;
 typedef char int_fast8_t;
 typedef unsigned int * uintptr_t;
+typedef int * intptr_t;
 #endif
 
 #define NPF_VISIBILITY extern
