@@ -3,11 +3,13 @@
 extern int write(int, char *, int);
 extern void exit(int);
 
+#define BUF_SIZE 128
+
 int main()
 {
-	char buffer[128];
-	// write(1, "Hello World\n", 12);
-	npf_snprintf(buffer, 128, "Hello %s!\n", "World");
-	write(1, buffer, 13);
+	char buffer[BUF_SIZE];
+
+	int size = npf_snprintf(buffer, BUF_SIZE, "Hello %s!\n", "World");
+	write(1, buffer, size);
 	exit(0);
 }

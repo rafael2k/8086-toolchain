@@ -34,7 +34,7 @@ test.o: test.asm
 	$(AS) $(ASFLAGS)  test.asm -o test.o
 
 test.asm: test.i
-	$(CC) $(CFLAGS) -O test.i test.asm
+	$(CC) $(CFLAGS) test.i test.asm
 
 test.i: test.c
 	$(CPP) $(CPPFLAGS) test.c -o test.i

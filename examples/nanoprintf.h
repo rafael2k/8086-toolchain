@@ -689,7 +689,7 @@ int npf_vpprintf(npf_putc pc, void *pc_ctx, char const *format, va_list args) {
   while (*cur) {
     int const fs_len = (*cur != '%') ? 0 : npf_parse_format_spec(cur, &fs);
     if (!fs_len) { NPF_PUTC(*cur++); continue; }
-    cur += fs_len;
+    cur += (char *) fs_len;
 
 #if NANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS == 1
     if (fs.field_width_opt == NPF_FMT_SPEC_OPT_STAR) {
