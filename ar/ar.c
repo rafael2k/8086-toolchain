@@ -1651,6 +1651,7 @@ void make_new_symdefs(struct mapelt *mapelt, int archive_indesc)
   symcount = syms_size / sizeof (struct nlist);
   /* Allocate temporary space for the symbol entries.  */
   symbols = (struct nlist *) alloca (syms_size);
+  if (!symbols) fatal("No memory for symbols: alloca", 0);
   /* Read in the symbols.  */
   lseek (indesc, syms_offset + offset, 0);
   if (read (indesc, (char *) symbols, syms_size) != syms_size)
