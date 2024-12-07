@@ -47,13 +47,17 @@ void *nasm_malloc_log (char *file, int line, size_t size)
 void *nasm_malloc (size_t size)
 #endif
 {
+#ifdef __ELKS__
+    void *p = fmemalloc(size);
+#else
     void *p = malloc(size);
+#endif
     if (!p)
-	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
     else
-	fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
-		file, line, (long)size, p);
+        fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
+                file, line, (long)size, p);
 #endif
     return p;
 }
@@ -64,17 +68,31 @@ void *nasm_realloc_log (char *file, int line, void *q, size_t size)
 void *nasm_realloc (void *q, size_t size)
 #endif
 {
-    void *p = q ? realloc(q, size) : malloc(size);
+    void *p;
+
+#ifdef __ELKS__
+    if (!q)
+        return fmemalloc(size);
+    p = fmemalloc(size);
+    if (p) {                    /* on fail, previous memory not freed */
+        memcpy(p, q, size);     /* FIXME copies too much!! */
+        fmemfree(q);
+    }
+#else
+    p = q ? realloc(q, size) : malloc(size);
+#endif
+
     if (!p)
-	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
     else if (q)
-	fprintf(logfp, "%s %d realloc(%p,%ld) returns %p\n",
-		file, line, q, (long)size, p);
+        fprintf(logfp, "%s %d realloc(%p,%ld) returns %p\n",
+                file, line, q, (long)size, p);
     else
-	fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
-		file, line, (long)size, p);
+        fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
+                file, line, (long)size, p);
 #endif
+
     return p;
 }
 
@@ -85,10 +103,14 @@ void nasm_free (void *q)
 #endif
 {
     if (q) {
-	free (q);
+#ifdef __ELKS__
+        fmemfree (q);
+#else
+        free(q);
+#endif
+
 #ifdef LOGALLOC
-	fprintf(logfp, "%s %d free(%p)\n",
-		file, line, q);
+        fprintf(logfp, "%s %d free(%p)\n", file, line, q);
 #endif
     }
 }
@@ -102,13 +124,17 @@ char *nasm_strdup (const char *s)
     char *p;
     int size = strlen(s)+1;
 
+#ifdef __ELKS__
+    p = fmemalloc(size);
+#else
     p = malloc(size);
+#endif
     if (!p)
-	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
     else
-	fprintf(logfp, "%s %d strdup(%ld) returns %p\n",
-		file, line, (long)size, p);
+        fprintf(logfp, "%s %d strdup(%ld) returns %p\n",
+                file, line, (long)size, p);
 #endif
     strcpy (p, s);
     return p;
@@ -123,13 +149,17 @@ char *nasm_strndup (char *s, size_t len)
     char *p;
     int size = len+1;
 
+#ifdef __ELKS__
+    p = fmemalloc(size);
+#else
     p = malloc(size);
+#endif
     if (!p)
-	nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
     else
-	fprintf(logfp, "%s %d strndup(%ld) returns %p\n",
-		file, line, (long)size, p);
+        fprintf(logfp, "%s %d strndup(%ld) returns %p\n",
+                file, line, (long)size, p);
 #endif
     strncpy (p, s, len);
     p[len] = '\0';
@@ -433,7 +463,7 @@ struct RAA *raa_write (struct RAA *r, long posn, long value)
     return result;
 }
 
-#define SAA_MAXLEN 8192
+#define SAA_MAXLEN 4096
 
 struct SAA *saa_init (long elem_len) 
 {
