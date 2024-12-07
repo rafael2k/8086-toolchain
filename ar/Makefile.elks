@@ -24,6 +24,7 @@ OBJS = $(SRCS:.c=.o)
 
 BINDIR = ../elks-bin
 LOCALFLAGS =
+# larger stack for symtab alloca
 LDFLAGS += -maout-stack=8192 -maout-heap=16384
 SRCS = ar.c
 PROG = $(BINDIR)/ar86
