@@ -26,6 +26,9 @@ host:
 	make -C emulator
 	make -C libc
 
+copy:
+	cp libc/*.a elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
+
 .PHONY: clean cleanobjs
 
 clean: cleaneobjs cleanhobjs
