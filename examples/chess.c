@@ -14,12 +14,12 @@ extern void exit(int);
 #define LINE_SIZE 80
 char buffer_internal[LINE_SIZE];
 int npf_printf(const char *format, ...) {
-  va_list val;
-  va_start(val, format);
-  int const rv = npf_vsnprintf(buffer_internal, LINE_SIZE, format, val);
-  va_end(val);
-  write(1, buffer_internal, rv);
-  return rv;
+	va_list val;
+	va_start(val, format);
+	int const rv = npf_vsnprintf(buffer_internal, LINE_SIZE, format, val);
+	va_end(val);
+	write(1, buffer_internal, rv);
+	return rv;
 }
 
 
@@ -27,15 +27,15 @@ int pwstatus[8] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
 int pbstatus[8] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 };
 
 char board[8][8] = {
-                    { 'R' , 'H' , 'C' , 'K' , 'Q' , 'C' , 'H' , 'R' },
-                    { 'P' , 'P' , 'P' , 'P' , 'P' , 'P' , 'P' , 'P' },
-                    { ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
-                    { ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
-                    { ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
-                    { ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
-                    { 'p' , 'p' , 'p' , 'p' , 'p' , 'p' , 'p' , 'p' },
-                    { 'r' , 'h' , 'c' , 'k' , 'q' , 'c' , 'h' , 'r' }
-                    };
+	{ 'R' , 'H' , 'C' , 'K' , 'Q' , 'C' , 'H' , 'R' },
+	{ 'P' , 'P' , 'P' , 'P' , 'P' , 'P' , 'P' , 'P' },
+	{ ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
+	{ ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
+	{ ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
+	{ ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' , ' ' },
+	{ 'p' , 'p' , 'p' , 'p' , 'p' , 'p' , 'p' , 'p' },
+	{ 'r' , 'h' , 'c' , 'k' , 'q' , 'c' , 'h' , 'r' }
+};
 
 void display();
 void change( int , int , int , int );
@@ -137,25 +137,25 @@ void pawn( int r1 , int c1 ) // paido
 
     npf_printf( "Available are: \n" );
 
-   if( pwstatus[c1] == 1 )
+	if( pwstatus[c1] == 1 )
     {
         if( board[r1+1][c1] == ' ' )
-        npf_printf( "%c%c , " , r1+1 + 48 , c1 + 48);
+			npf_printf( "%c%c , " , r1+1 + 48 , c1 + 48);
 
         if( board[r1+2][c1] == ' ' )
-        npf_printf( "%c%c , " , r1+2 + 48 , c1 + 48);
+			npf_printf( "%c%c , " , r1+2 + 48 , c1 + 48);
 
     }
     else
     {
         if(board[r1+1][c1] == ' ' )
-        npf_printf( "%c%c , " , r1+1 + 48 , c1 + 48);
+			npf_printf( "%c%c , " , r1+1 + 48 , c1 + 48);
 
         if( check(r1+1 , c1+1) == 1 )
-        npf_printf( "%c%c , " , r1+1 + 48, c1+1 + 48);
+			npf_printf( "%c%c , " , r1+1 + 48, c1+1 + 48);
 
         if( check(r1+1 , c1-1) == 1 )
-        npf_printf( "%c%c* , " , r1+1 + 48, c1-1 + 48);
+			npf_printf( "%c%c* , " , r1+1 + 48, c1-1 + 48);
     }
 
 }
@@ -220,7 +220,7 @@ void horse( int r1 , int c1 )
     if( board[r1-2][c1-1] == ' ' )
     {
         if( (c1-1) != -1 )
-        npf_printf( "%c%c, " , r1-2 + 48, c1-1 + 48);
+			npf_printf( "%c%c, " , r1-2 + 48, c1-1 + 48);
     }
 
     if( board[r1-2][c1+1] == ' ' ) npf_printf( "%c%c, " , r1-2 + 48, c1+1 + 48);
@@ -406,21 +406,21 @@ void pawnb( int r1 , int c1 ) // paido black
     if( pbstatus[c1] == 1 )
     {
         if( board[r1-1][c1] == ' ' )
-        npf_printf( "%c%c , " , r1-1 + 48, c1 + 48);
+			npf_printf( "%c%c , " , r1-1 + 48, c1 + 48);
 
         if( board[r1-2][c1] == ' ' )
-        npf_printf( "%c%c , " , r1-2 + 48, c1 + 48);
+			npf_printf( "%c%c , " , r1-2 + 48, c1 + 48);
     }
     else
     {
         if(board[r1-1][c1] == ' ' )
-        npf_printf( "%c%c , " , r1-1 + 48, c1 + 48);
+			npf_printf( "%c%c , " , r1-1 + 48, c1 + 48);
 
         if( check2(r1-1 , c1-1) == 1 )
-        npf_printf( "%c%c* , " , r1-1 + 48, c1-1 + 48);
+			npf_printf( "%c%c* , " , r1-1 + 48, c1-1 + 48);
 
         if( check2(r1-1 , c1+1) == 1 )
-        npf_printf( "%c%c* , " , r1-1 + 48, c1+1 + 48);
+			npf_printf( "%c%c* , " , r1-1 + 48, c1+1 + 48);
     }
 
 }
@@ -431,7 +431,7 @@ void player1()
 	int tmp;
 
     npf_printf( "\nPLAYER 1 - Big Case\n" );
-    again1:
+again1:
     npf_printf( "\nEnter Position of Element to change ( RC ): " );
 	/* our scanf wrapper... scanf("%d", &p1) */
     read(0, &tmp, 1);
@@ -445,20 +445,20 @@ void player1()
 
     switch( board[r1][c1] )
     {
-        case 'P': pawn( r1 , c1 );
-                  break;
-        case 'R': rook( r1 , c1 );
-                  break;
-        case 'H': horse( r1 , c1 );
-                  break;
-        case 'C': camel( r1 , c1 );
-                  break;
-        case 'K': king( r1 , c1 );
-                  break;
-        case 'Q': queen( r1 , c1 );
-                  break;
-        default:
-			npf_printf("Invalid Position ! "); goto again1;
+	case 'P': pawn( r1 , c1 );
+		break;
+	case 'R': rook( r1 , c1 );
+		break;
+	case 'H': horse( r1 , c1 );
+		break;
+	case 'C': camel( r1 , c1 );
+		break;
+	case 'K': king( r1 , c1 );
+		break;
+	case 'Q': queen( r1 , c1 );
+		break;
+	default:
+		npf_printf("Invalid Position ! "); goto again1;
     }
 
     npf_printf( "\nEnter Position of Place to Send ( RC ): " );
@@ -482,7 +482,7 @@ void player2()
 	int tmp;
 
     npf_printf( "\nPLAYER 2 - Small Case \n");
-    again2:
+again2:
     npf_printf( "\nEnter Position of Element to change ( RC ): " );
 	/* our scanf wrapper... scanf("%d", &p1) */
     read(0, &tmp, 1);
@@ -496,19 +496,19 @@ void player2()
 
     switch( board[r1][c1] )
     {
-        case 'p': pawnb( r1 , c1 );
-                  break;
-        case 'r': rook( r1 , c1 );
-                  break;
-        case 'h': horse( r1 , c1 );
-                  break;
-        case 'c': camel( r1 , c1 );
-                  break;
-        case 'k': king( r1 , c1 );
-                  break;
-        case 'q': queen( r1 , c1 );
-                  break;
-        default: npf_printf( "Invalid Position ! " ); goto again2;
+	case 'p': pawnb( r1 , c1 );
+		break;
+	case 'r': rook( r1 , c1 );
+		break;
+	case 'h': horse( r1 , c1 );
+		break;
+	case 'c': camel( r1 , c1 );
+		break;
+	case 'k': king( r1 , c1 );
+		break;
+	case 'q': queen( r1 , c1 );
+		break;
+	default: npf_printf( "Invalid Position ! " ); goto again2;
     }
 
 
