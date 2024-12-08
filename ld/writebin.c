@@ -66,7 +66,9 @@
 
 #define ABS_TEXT_MAX 64
 
+#ifndef offsetof
 #define offsetof(struc, mem) ((int) &((struc *) 0)->mem)
+#endif
 #define memsizeof(struc, mem) sizeof(((struc *) 0)->mem)
 
 PRIVATE bool_t bits32;		/* nonzero for 32-bit executable */
