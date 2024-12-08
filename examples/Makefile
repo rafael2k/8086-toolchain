@@ -22,7 +22,7 @@ AS=../host-bin/nasm
 LD=../host-bin/ld86
 
 
-all: test
+all: test chess
 
 
 all: test
@@ -39,7 +39,20 @@ test.asm: test.i
 test.i: test.c nanoprintf.h
 	$(CPP) $(CPPFLAGS) test.c -o test.i
 
+chess: chess.o
+	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
+
+chess.o: chess.asm
+	$(AS) $(ASFLAGS)  chess.asm -o chess.o
+
+chess.asm: chess.i
+	$(CC) $(CFLAGS) chess.i chess.asm
+
+chess.i: chess.c nanoprintf.h
+	$(CPP) $(CPPFLAGS) chess.c -o chess.i
+
+
 clean:
-	rm -f *.o *.a *.i test.asm
+	rm -f *.o *.a *.i *.asm
 
 # end

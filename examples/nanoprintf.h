@@ -678,7 +678,6 @@ static void npf_putc_cnt(int c, void *ctx) {
 #define NPF_WRITEBACK(MOD, TYPE) \
   case NPF_FMT_SPEC_LEN_MOD_##MOD: *(va_arg(args, TYPE *)) = (TYPE)pc_cnt.n; break
 
-#if 1 /* this crashes C86 */
 int npf_vpprintf(npf_putc pc, void *pc_ctx, char const *format, va_list args) {
   npf_format_spec_t fs;
   char const *cur = format;
@@ -955,8 +954,6 @@ int npf_vpprintf(npf_putc pc, void *pc_ctx, char const *format, va_list args) {
 
   return pc_cnt.n;
 }
-
-#endif
 
 #undef NPF_PUTC
 #undef NPF_EXTRACT
