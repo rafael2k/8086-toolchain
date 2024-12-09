@@ -8,8 +8,8 @@
 #define NANOPRINTF_H_INCLUDED
 
 #include <stdarg.h>
-#include <stdio.h>
-/* #include <stddef.h>  - removed by rafael2k, not found... */
+/* #include <stdio.h> - removed by rafael2k, not found... gives errors */
+/* #include <stddef.h> */
 
 #ifdef __C86__
 typedef unsigned char uint8_t;
@@ -17,7 +17,7 @@ typedef char int8_t;
 typedef unsigned char uint_fast8_t;
 typedef char int_fast8_t;
 typedef unsigned int * uintptr_t;
-typedef int * intptr_t;
+typedef int *intptr_t;
 #endif
 
 #define NPF_VISIBILITY extern
@@ -25,10 +25,10 @@ typedef int * intptr_t;
 #define NPF_PRINTF_ATTR(FORMAT_INDEX, VARGS_INDEX)
 
 NPF_VISIBILITY int npf_snprintf(
-  char *buffer, size_t bufsz, const char *format, ...) NPF_PRINTF_ATTR(3, 4);
+  char *buffer, int bufsz, const char *format, ...) NPF_PRINTF_ATTR(3, 4);
 
 NPF_VISIBILITY int npf_vsnprintf(
-  char *buffer, size_t bufsz, char const *format, va_list vlist) NPF_PRINTF_ATTR(3, 0);
+  char *buffer, int bufsz, char const *format, va_list vlist) NPF_PRINTF_ATTR(3, 0);
 
 typedef void (*npf_putc)(int c, void *ctx);
 NPF_VISIBILITY int npf_pprintf(
@@ -204,12 +204,12 @@ typedef struct npf_format_spec {
 
 typedef struct npf_bufputc_ctx {
   char *dst;
-  size_t len;
-  size_t cur;
+  int len;
+  int cur;
 } npf_bufputc_ctx_t;
 
 #if NANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS == 1
-  typedef char npf_size_is_ptrdiff[(sizeof(size_t) == sizeof(ptrdiff_t)) ? 1 : -1];
+  typedef char npf_size_is_ptrdiff[(sizeof(int) == sizeof(ptrdiff_t)) ? 1 : -1];
   typedef ptrdiff_t npf_ssize_t;
 #endif
 
@@ -633,9 +633,9 @@ static int npf_bin_len(npf_uint_t u) {
 #elif NANOPRINTF_CLANG || NANOPRINTF_GCC_PAST_4_6
   #define NPF_HAVE_BUILTIN_CLZ
   #if NANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS == 1
-    #define NPF_CLZ(X) ((sizeof(long long) * CHAR_BIT) - (size_t)__builtin_clzll(X))
+    #define NPF_CLZ(X) ((sizeof(long long) * CHAR_BIT) - (int)__builtin_clzll(X))
   #else
-    #define NPF_CLZ(X) ((sizeof(long) * CHAR_BIT) - (size_t)__builtin_clzl(X))
+    #define NPF_CLZ(X) ((sizeof(long) * CHAR_BIT) - (int)__builtin_clzl(X))
   #endif
   return (int)NPF_CLZ(u);
 #endif
@@ -967,7 +967,7 @@ int npf_pprintf(npf_putc pc, void *pc_ctx, char const *format, ...) {
   return rv;
 }
 
-int npf_snprintf(char *buffer, size_t bufsz, const char *format, ...) {
+int npf_snprintf(char *buffer, int bufsz, const char *format, ...) {
   va_list val;
   va_start(val, format);
   int const rv = npf_vsnprintf(buffer, bufsz, format, val);
@@ -975,7 +975,7 @@ int npf_snprintf(char *buffer, size_t bufsz, const char *format, ...) {
   return rv;
 }
 
-int npf_vsnprintf(char *buffer, size_t bufsz, char const *format, va_list vlist) {
+int npf_vsnprintf(char *buffer, int bufsz, char const *format, va_list vlist) {
   npf_bufputc_ctx_t bufputc_ctx;
   bufputc_ctx.dst = buffer;
   bufputc_ctx.len = bufsz;
