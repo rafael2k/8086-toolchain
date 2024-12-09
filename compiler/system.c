@@ -52,6 +52,27 @@
 #include "cglbdec.h"
 #include "proto.h"
 
+#ifdef __ELKS__
+void *fmemrealloc(void *q, size_t size)
+{
+    void *p;
+
+    if (!q)
+        return fmemalloc(size);
+    p = fmemalloc(size);
+    if (p) {                    /* on fail, previous memory not freed */
+        memcpy(p, q, size);     /* FIXME copies too much!! */
+        fmemfree(q);
+    }
+
+    if (!p)
+        printf("Error in realloc\n");
+    return p;
+
+}
+#endif
+
+
 #ifndef EPOC
 
 /*

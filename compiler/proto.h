@@ -353,6 +353,18 @@ extern void check_qualifiers P_ ((const TYP *, const TYP *));
 extern void initialize_types P_ ((void));
 extern void size_type P_ ((TYP *));
 
+#ifdef __ELKS__
+
+#undef free
+#undef malloc
+#undef realloc
+
+#define	free(s)			fmemfree(s)
+#define	malloc(s)		fmemalloc(s)
+#define realloc(p,s)    fmemrealloc((p),(s))
+
+#endif
+
 #ifdef EPOC
 /*
  *   The following defines map ANSI routines onto their PLIB equivalents.
