@@ -53,6 +53,6 @@ chess.i: chess.c nanoprintf.h
 
 
 clean:
-	rm -f *.o *.a *.i *.asm
+	rm -f *.o *.a *.i *.asm test chess
 
 # end

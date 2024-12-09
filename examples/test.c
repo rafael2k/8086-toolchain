@@ -9,7 +9,6 @@ extern void exit(int);
 
 int main()
 {
-	unsigned int i = 1;
 	char buffer[BUF_SIZE];
 //	int size = read(0, buffer, 15);
 	int size = npf_snprintf(buffer, BUF_SIZE, "Hello %s!\n", "World");
