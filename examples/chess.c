@@ -1,9 +1,6 @@
 /* From https://github.com/shreejilucifer/Chess-In-C
  * ELKS port by Rafael Diniz */
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "nanoprintf.h"
 
 extern int write(int, char *, int);

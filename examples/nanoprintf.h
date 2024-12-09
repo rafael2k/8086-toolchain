@@ -49,7 +49,7 @@ NPF_VISIBILITY int npf_vpprintf(
 #ifndef NANOPRINTF_IMPLEMENTATION_INCLUDED
 #define NANOPRINTF_IMPLEMENTATION_INCLUDED
 
-#include <limits.h>
+/* #include <limits.h> -- removed by rafael2k, broken headers */
 #include <stdint.h>
 
 #ifndef NANOPRINTF_CONVERSION_BUFFER_SIZE
