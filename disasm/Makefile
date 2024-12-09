@@ -27,7 +27,7 @@
 CFLAGS = -O3
 LDFLAGS =
 BINDIR = ../host-bin
-PROG = $(BINDIR)disasm86
+PROG = $(BINDIR)/disasm86
 
 OBJS = disrel.o dismain.o distabs.o dishand.o disfp.o
 
