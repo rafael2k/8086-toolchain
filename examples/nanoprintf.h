@@ -217,9 +217,9 @@ typedef struct npf_bufputc_ctx {
   #include <intrin.h>
 #endif
 
-static int npf_max(int x, int y) { return (x > y) ? x : y; }
+int npf_max(int x, int y) { return (x > y) ? x : y; }
 
-static int npf_parse_format_spec(char const *format, npf_format_spec_t *out_spec) {
+int npf_parse_format_spec(char const *format, npf_format_spec_t *out_spec) {
   char const *cur = format;
 
 #if NANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS == 1
@@ -402,7 +402,7 @@ static int npf_parse_format_spec(char const *format, npf_format_spec_t *out_spec
 }
 
 /* static NPF_NOINLINE int npf_utoa_rev(npf_uint_t val, char *buf, uint_fast8_t base, char case_adj) */
-static int npf_utoa_rev(npf_uint_t val, char *buf, uint_fast8_t base, char case_adj)
+int npf_utoa_rev(npf_uint_t val, char *buf, uint_fast8_t base, char case_adj)
 {
 
   uint_fast8_t n = 0;
@@ -464,7 +464,7 @@ enum {
    extended further by adding dynamic scaling and configurable integer width by
    Oskars Rubenis (https://github.com/Okarss). */
 
-static int npf_ftoa_rev(char *buf, npf_format_spec_t const *spec, double f) {
+int npf_ftoa_rev(char *buf, npf_format_spec_t const *spec, double f) {
   char const *ret = NULL;
   npf_double_bin_t bin; {
     char const *src = (char const *)&f;
@@ -613,7 +613,7 @@ exit:
 #endif
 
 #if NANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS == 1
-static int npf_bin_len(npf_uint_t u) {
+int npf_bin_len(npf_uint_t u) {
 
   if (!u) { return 1; }
 
@@ -651,12 +651,12 @@ static int npf_bin_len(npf_uint_t u) {
 }
 #endif
 
-static void npf_bufputc(int c, void *ctx) {
+void npf_bufputc(int c, void *ctx) {
   npf_bufputc_ctx_t *bpc = (npf_bufputc_ctx_t *)ctx;
   if (bpc->cur < bpc->len) { bpc->dst[bpc->cur++] = (char)c; }
 }
 
-static void npf_bufputc_nop(int c, void *ctx) { (void)c; (void)ctx; }
+void npf_bufputc_nop(int c, void *ctx) { (void)c; (void)ctx; }
 
 typedef struct npf_cnt_putc_ctx {
   npf_putc pc;
@@ -664,7 +664,7 @@ typedef struct npf_cnt_putc_ctx {
   int n;
 } npf_cnt_putc_ctx_t;
 
-static void npf_putc_cnt(int c, void *ctx) {
+void npf_putc_cnt(int c, void *ctx) {
   npf_cnt_putc_ctx_t *pc_cnt = (npf_cnt_putc_ctx_t *)ctx;
   ++pc_cnt->n;
   pc_cnt->pc(c, pc_cnt->ctx);
