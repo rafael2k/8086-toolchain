@@ -36,7 +36,7 @@ test.o: test.asm
 test.asm: test.i
 	$(CC) $(CFLAGS) test.i test.asm
 
-test.i: test.c nanoprintf.h
+test.i: test.c
 	$(CPP) $(CPPFLAGS) test.c -o test.i
 
 chess: chess.o

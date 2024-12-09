@@ -7,8 +7,8 @@ extern void exit(int);
 
 int main()
 {
-	char buffer[BUF_SIZE] = "Hello World\n";
-	int size = 12;
+	char buffer[BUF_SIZE] = "Hello World!\n";
+	int size = 13;
 //	int size = read(0, buffer, 15);
 //	int size = npf_snprintf(buffer, BUF_SIZE, "Hello %s!\n", "World");
 	write(1, buffer, size);
