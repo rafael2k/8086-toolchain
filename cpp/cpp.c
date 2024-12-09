@@ -5,7 +5,9 @@
 #else
 #include <malloc.h>
 #endif
+
 #include "cc.h"
+#include "mem.h"
 
 #define CPP_DEBUG 0	/* LOTS of junk to stderr. */
 
@@ -596,7 +598,7 @@ static int realchget(void)
       if( def_ptr )
       {
 	 ch = *def_ptr++; if(ch) return (unsigned char)ch;
-	 if( def_start ) free(def_start);
+	 if( def_start ) xfree(def_start);
 	 if( def_ref ) def_ref->in_use = 0;
 
 	 def_count--;
@@ -613,7 +615,7 @@ static int realchget(void)
 	 fclose(curfile);
 	 fi_count--;
 	 curfile  = saved_files[fi_count];
-	 if(c_fname) free(c_fname);
+	 if(c_fname) xfree(c_fname);
 	 c_fname  = saved_fname[fi_count];
 	 c_lineno = saved_lines[fi_count];
 	 ch = '\n'; /* Ensure end of line on end of file */
@@ -789,7 +791,7 @@ static void do_proc_define(void)
       for(ch=ch1=pgetc(); ch == ' ' || ch == '\t' ; ch=pgetc()) ;
 
       len = WORDSIZE; 
-      ptr = malloc(sizeof(struct define_item) + WORDSIZE);
+      ptr = xalloc(sizeof(struct define_item) + WORDSIZE);
       if(!ptr) cfatal("Out of memory for define");
       ptr->value[cc=0] = '\0';
 
@@ -806,7 +808,7 @@ static void do_proc_define(void)
 	       if( cc+strlen(curword)+4 >= len)
 	       {
 		  len = cc + WORDSIZE;
-		  ptr = (struct define_item *) realloc(ptr, sizeof(struct define_item) + len);
+		  ptr = (struct define_item *) xrealloc(ptr, sizeof(struct define_item) + len);
 		  if(ptr==0) cfatal("Preprocessor out of memory");
 	       }
 	       if( cc+strlen(curword) < len)
@@ -827,7 +829,7 @@ static void do_proc_define(void)
 	       }
 	    }
             cerror("Bad #define command");
-	    free(ptr);
+	    xfree(ptr);
             while(ch != '\n') ch = pgetc();
 	    set_entry(0, name, (void*)old_value); /* Return var to old. */
 	    return;
@@ -842,7 +844,7 @@ static void do_proc_define(void)
          if( cc+4 > len )
          {
             len = cc + WORDSIZE;
-            ptr = (struct define_item *) realloc(ptr, sizeof(struct define_item) + len);
+            ptr = (struct define_item *) xrealloc(ptr, sizeof(struct define_item) + len);
             if(ptr==0) cfatal("Preprocessor out of memory");
          }
          ptr->value[cc++] = ch;
@@ -864,7 +866,7 @@ static void do_proc_define(void)
 #endif
 
       /* Clip to correct size and save */
-      ptr = (struct define_item *) realloc(ptr, sizeof(struct define_item) + cc);
+      ptr = (struct define_item *) xrealloc(ptr, sizeof(struct define_item) + cc);
       ptr->name = set_entry(0, name, ptr);
       ptr->in_use = 0;
       ptr->next = 0;
@@ -872,7 +874,7 @@ static void do_proc_define(void)
       if (old_value) {
 	 if (strcmp(old_value->value, ptr->value) != 0)
 	    cwarn("#define redefined macro");
-	 free(old_value);
+	 xfree(old_value);
       }
    }
    else cerror("Bad #define command");
@@ -893,7 +895,7 @@ static void do_proc_undef(void)
 	    /* Eeeek! This shouldn't happen; so just let it leak. */
 	    cwarn("macro undefined while it was in use!?");
 	 else
-	    free(ptr);
+	    xfree(ptr);
       }
       do_proc_tail();
    }
@@ -1249,7 +1251,7 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
    int args_found = 0;
    (void)macname;
 
-   arg_list = malloc(sizeof(struct arg_store) * arg_count);
+   arg_list = xalloc(sizeof(struct arg_store) * arg_count);
    if(!arg_list) cfatal("Out of memory for arglist");
    memset(arg_list, 0, sizeof(struct arg_store) * arg_count);
 
@@ -1260,7 +1262,7 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
 
       if (cc+2 >= len) {
 	 len += 20;
-	 arg_list[ac].name = realloc(arg_list[ac].name, len);
+	 arg_list[ac].name = xrealloc(arg_list[ac].name, len);
       }
       arg_list[ac].name[cc++] = *data_str;
       arg_list[ac].name[cc] = '\0';
@@ -1301,7 +1303,7 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
 
       if (cc+2 >= len) {
 	 len += 20;
-	 arg_list[ac].value = realloc(arg_list[ac].value, len);
+	 arg_list[ac].value = xrealloc(arg_list[ac].value, len);
       }
 
 #if 0
@@ -1339,10 +1341,10 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
 
    if (arg_list) {
       for (ac=0; ac<arg_count; ac++) {
-	 if (arg_list[ac].name) free(arg_list[ac].name);
-	 if (arg_list[ac].value) free(arg_list[ac].value);
+	 if (arg_list[ac].name) xfree(arg_list[ac].name);
+	 if (arg_list[ac].value) xfree(arg_list[ac].value);
       }
-      free(arg_list);
+      xfree(arg_list);
    }
 
    saved_ref[def_count] = def_ref;
@@ -1378,7 +1380,7 @@ static char *insert_substrings(char *data_str, struct arg_store *arg_list, int a
    }
 #endif
 
-   rv = malloc(4);
+   rv = xalloc(4);
    if(!rv) cfatal("Out of memory for insert");
    *rv = '\0'; len = 4;
 
@@ -1434,7 +1436,7 @@ static char *insert_substrings(char *data_str, struct arg_store *arg_list, int a
 	 }
 
 	 /* Other characters ... */
-	 if (cc+2 > len) { len += 20; rv = realloc(rv, len); }
+	 if (cc+2 > len) { len += 20; rv = xrealloc(rv, len); }
 	 rv[cc++] = *data_str++;
 	 continue;
       }
@@ -1459,7 +1461,7 @@ static char *insert_substrings(char *data_str, struct arg_store *arg_list, int a
 	       rv[cc++] = '"';
 	       while(*s == ' ' || *s == '\t') s++;
 	       while (*s) {
-		  if (cc+4 > len) { len += 20; rv = realloc(rv, len); }
+		  if (cc+4 > len) { len += 20; rv = xrealloc(rv, len); }
 		  if (*s == '"') rv[cc++] = '\\';
 		  rv[cc++] = *s++;
 	       }
@@ -1481,7 +1483,7 @@ static char *insert_substrings(char *data_str, struct arg_store *arg_list, int a
 	 cerror("'#' operator should be followed by a macro argument name");
       }
 
-      if (cc+2+strlen(s) > len) { len += strlen(s)+20; rv = realloc(rv, len); }
+      if (cc+2+strlen(s) > len) { len += strlen(s)+20; rv = xrealloc(rv, len); }
       strcpy(rv+cc, s);
       cc = strlen(rv);
    }
