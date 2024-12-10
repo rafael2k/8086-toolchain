@@ -7,48 +7,71 @@
 #include "cc.h"
 
 
-void *xalloc (size_t size)
-{
-	void *p;
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <errno.h>
+
+#define MAX_NEAR_ALLOC  512U   /* max size to allocate from near heap */
+
+#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+
 #ifdef __ELKS__
-    p = fmemalloc(size);
-#else
-    p = malloc(size);
-#endif
-    if (!p)
-        cfatal("Out of memory");
-    return p;
+void __far *xalloc(unsigned long size)
+{
+    char *p;
+	char __far *fp;
+    if (size <= MAX_NEAR_ALLOC) {
+        p = malloc((unsigned int)size);
+        if (p || !size)
+            return (void __far *)p;
+    }
+    fp = fmemalloc(size);
+    return fp;
 }
-
-void *xrealloc (void *q, size_t size)
+#else
+void *xalloc(unsigned long size)
 {
-    void *p;
+    return malloc(size);
+}
+#endif
 
 #ifdef __ELKS__
-    if (!q)
+void xfree(void __far *ptr)
+{
+    if (ptr == 0)
+        return;
+    if (SEGMENT(ptr) == SEGMENT(&ptr)) {    /* near pointer */
+        free((char *)ptr);
+    } else {
+        fmemfree(ptr);
+    }
+}
+#else
+void xfree(void *ptr)
+{
+	free(ptr);
+}
+#endif
+
+#ifdef __ELKS__
+void __far *xrealloc(void __far *ptr, unsigned long size)
+{
+    void __far *new;
+    if (!ptr)
         return fmemalloc(size);
-    p = fmemalloc(size);
-    if (p) {                    /* on fail, previous memory not freed */
-        memcpy(p, q, size);     /* FIXME copies too much!! */
-        fmemfree(q);
-    }
-#else
-    p = q ? realloc(q, size) : malloc(size);
-#endif
-
-    if (!p)
-        cfatal("Out of memory");
-
-    return p;
+    new = fmemalloc(size);
+    if (!new)
+        return NULL;            /* previous memory not freed */
+    memcpy(new, ptr, size);    /* FIXME copies too much!! */
+    fmemfree(ptr);
+    return new;
 }
-
-void xfree (void *q)
+#else
+void *xrealloc(void *ptr, unsigned long size)
 {
-    if (q) {
-#ifdef __ELKS__
-        fmemfree (q);
-#else
-        free(q);
-#endif
-    }
+	return realloc(ptr, size);
 }
+#endif
