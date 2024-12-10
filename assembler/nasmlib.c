@@ -15,6 +15,10 @@
 #include "nasmlib.h"
 #include "insns.h"		/* For MAX_KEYWORD */
 
+#define MAX_NEAR_ALLOC  160U   /* max size to allocate from near heap */
+
+#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+
 /* Return the `ldiv_t' representation of NUMER over DENOM.  */
 ldiv_t
 ldiv (long int numer, long int denom)
@@ -47,17 +51,31 @@ void *nasm_malloc_log (char *file, int line, size_t size)
 void *nasm_malloc (size_t size)
 #endif
 {
+	if (size == 0)
+		return NULL;
+
 #ifdef __ELKS__
-    void *p = fmemalloc(size);
+	void *p;
+
+	if (size <= MAX_NEAR_ALLOC)
+	{
+		p = malloc((unsigned int)size);
+		if (!p)
+			p = fmemalloc(size);
+	}
+	else
+	{
+		p = fmemalloc(size);
+	}
 #else
-    void *p = malloc(size);
+	void *p = malloc(size);
 #endif
-    if (!p)
-        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+	if (!p)
+		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
-    else
-        fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
-                file, line, (long)size, p);
+	else
+		fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
+				file, line, (long)size, p);
 #endif
     return p;
 }
@@ -68,32 +86,37 @@ void *nasm_realloc_log (char *file, int line, void *q, size_t size)
 void *nasm_realloc (void *q, size_t size)
 #endif
 {
-    void *p;
+	void *p;
 
 #ifdef __ELKS__
-    if (!q)
-        return fmemalloc(size);
-    p = fmemalloc(size);
-    if (p) {                    /* on fail, previous memory not freed */
-        memcpy(p, q, size);     /* FIXME copies too much!! */
-        fmemfree(q);
-    }
+	if (!q)
+		return nasm_malloc(size);
+	p = nasm_malloc(size);
+	if (p)
+	{                    /* on fail, previous memory not freed */
+		memcpy(p, q, size);     /* FIXME copies too much!! */
+		nasm_free(q);
+	}
+	else
+	{
+		nasm_free(q);
+	}
 #else
-    p = q ? realloc(q, size) : malloc(size);
+	p = q ? realloc(q, size) : malloc(size);
 #endif
 
-    if (!p)
-        nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+	if (!p)
+		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
-    else if (q)
-        fprintf(logfp, "%s %d realloc(%p,%ld) returns %p\n",
-                file, line, q, (long)size, p);
-    else
-        fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
-                file, line, (long)size, p);
+	else if (q)
+		fprintf(logfp, "%s %d realloc(%p,%ld) returns %p\n",
+				file, line, q, (long)size, p);
+	else
+		fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
+				file, line, (long)size, p);
 #endif
 
-    return p;
+	return p;
 }
 
 #ifdef LOGALLOC
@@ -102,9 +125,16 @@ void nasm_free_log (char *file, int line, void *q)
 void nasm_free (void *q)
 #endif
 {
-    if (q) {
+    if (q)
+	{
 #ifdef __ELKS__
-        fmemfree (q);
+		if (SEGMENT(q) == SEGMENT(&q)) /* near pointer */
+		{
+			free((char *)q);
+		} else
+		{
+			fmemfree(q);
+		}
 #else
         free(q);
 #endif

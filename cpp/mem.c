@@ -21,33 +21,36 @@
 #ifdef __ELKS__
 void __far *xalloc(unsigned long size)
 {
-    char *p;
+	char *p;
 	char __far *fp;
-    if (size <= MAX_NEAR_ALLOC) {
-        p = malloc((unsigned int)size);
-        if (p || !size)
-            return (void __far *)p;
-    }
-    fp = fmemalloc(size);
-    return fp;
+	if (size <= MAX_NEAR_ALLOC)
+	{
+		p = malloc((unsigned int)size);
+		if (p == NULL)
+			return (void __far *)p;
+	}
+	fp = fmemalloc(size);
+	return fp;
 }
 #else
 void *xalloc(unsigned long size)
 {
-    return malloc(size);
+	return malloc(size);
 }
 #endif
 
 #ifdef __ELKS__
 void xfree(void __far *ptr)
 {
-    if (ptr == 0)
-        return;
-    if (SEGMENT(ptr) == SEGMENT(&ptr)) {    /* near pointer */
-        free((char *)ptr);
-    } else {
-        fmemfree(ptr);
-    }
+	if (ptr == 0)
+		return;
+	if (SEGMENT(ptr) == SEGMENT(&ptr)) /* near pointer */
+	{
+		free((char *)ptr);
+	} else
+	{
+		fmemfree(ptr);
+	}
 }
 #else
 void xfree(void *ptr)
@@ -59,15 +62,15 @@ void xfree(void *ptr)
 #ifdef __ELKS__
 void __far *xrealloc(void __far *ptr, unsigned long size)
 {
-    void __far *new;
-    if (!ptr)
-        return xalloc(size);
-    new = xalloc(size);
-    if (!new)
-        return NULL;            /* previous memory not freed */
-    memcpy(new, ptr, size);    /* FIXME copies too much!! */
-    xfree(ptr);
-    return new;
+	void __far *new;
+	if (!ptr)
+		return xalloc(size);
+	new = xalloc(size);
+	if (!new)
+		return NULL;            /* previous memory not freed */
+	memcpy(new, ptr, size);    /* FIXME copies too much!! */
+	xfree(ptr);
+	return new;
 }
 #else
 void *xrealloc(void *ptr, unsigned long size)
