@@ -61,7 +61,10 @@ void *nasm_malloc (size_t size)
 	{
 		p = malloc((unsigned int)size);
 		if (!p)
+		{
 			p = fmemalloc(size);
+			nasm_malloc_error (ERR_WARNING, "Error allocating memory to the HEAP. Trying with fmemalloc().\n");
+		}
 	}
 	else
 	{
@@ -91,22 +94,26 @@ void *nasm_realloc (void *q, size_t size)
 #ifdef __ELKS__
 	if (!q)
 		return nasm_malloc(size);
-	p = nasm_malloc(size);
-	if (p)
-	{                    /* on fail, previous memory not freed */
-		memcpy(p, q, size);     /* FIXME copies too much!! */
-		nasm_free(q);
+
+	if (SEGMENT(q) == SEGMENT(&q) && size <= MAX_NEAR_ALLOC) /* near pointer and small re-alloc */
+	{
+		p = realloc(q, size);
 	}
 	else
 	{
-		nasm_free(q);
+		p = nasm_malloc(size);
+		if (p)
+		{                    /* on fail, previous memory not freed */
+			memcpy(p, q, size);     /* FIXME copies too much!! */
+			nasm_free(q);
+		}
 	}
 #else
 	p = q ? realloc(q, size) : malloc(size);
 #endif
 
 	if (!p)
-		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
+		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "Out of memory");
 #ifdef LOGALLOC
 	else if (q)
 		fprintf(logfp, "%s %d realloc(%p,%ld) returns %p\n",
@@ -500,7 +507,7 @@ struct SAA *saa_init (long elem_len)
     struct SAA *s;
 
     if (elem_len > SAA_MAXLEN)
-	nasm_malloc_error (ERR_PANIC | ERR_NOFILE, "SAA with huge elements");
+        nasm_malloc_error (ERR_PANIC | ERR_NOFILE, "SAA with huge elements");
 
     s = nasm_malloc (sizeof(struct SAA));
     s->posn = s->start = 0L;
