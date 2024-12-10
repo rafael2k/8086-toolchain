@@ -61,12 +61,12 @@ void __far *xrealloc(void __far *ptr, unsigned long size)
 {
     void __far *new;
     if (!ptr)
-        return fmemalloc(size);
-    new = fmemalloc(size);
+        return xalloc(size);
+    new = xalloc(size);
     if (!new)
         return NULL;            /* previous memory not freed */
     memcpy(new, ptr, size);    /* FIXME copies too much!! */
-    fmemfree(ptr);
+    xfree(ptr);
     return new;
 }
 #else
