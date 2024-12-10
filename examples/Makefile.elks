@@ -21,7 +21,7 @@ LDFLAGS=-0 -i -L$(C86LIB)
 all: test chess
 
 
-all: test
+all: test chess
 
 test: test.o
 	$(LD) $(LDFLAGS) test.o -lc86 -o test
