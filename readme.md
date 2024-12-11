@@ -1,4 +1,4 @@
-# ELKS 8086 Toolchain
+# Native ELKS Toolchain
 
 ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 8086 C compiler toolchain.
 
