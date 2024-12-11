@@ -821,7 +821,7 @@ PRIVATE void put_pointer P1 (const EXPR *, ep)
 }
 
 /*ARGSUSED */
-PRIVATE void put_storage P1 (const SYM *, sp)
+PRIVATE void put_storage P1 (SYM *, sp)
 {
     SIZE    size = typeof (sp)->size;
 
