@@ -18,6 +18,7 @@
 #define MAX_NEAR_ALLOC  160U   /* max size to allocate from near heap */
 
 #define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
 
 /* Return the `ldiv_t' representation of NUMER over DENOM.  */
 ldiv_t
@@ -56,30 +57,33 @@ void *nasm_malloc (size_t size)
 
 #ifdef __ELKS__
 	void *p;
+	void __far *fp;
 
 	if (size <= MAX_NEAR_ALLOC)
 	{
 		p = malloc((unsigned int)size);
-		if (!p)
+		if (NULLPTR(p))
 		{
 			nasm_malloc_error (ERR_WARNING, "Error allocating memory in the HEAP.\n");
+			p = NULL;
 		}
+		fp = (void __far *)p;
 	}
 	else
 	{
-		p = fmemalloc(size);
+		fp = fmemalloc(size);
 	}
 #else
-	void *p = malloc(size);
+	void *fp = malloc(size);
 #endif
-	if (!p)
+	if (!fp)
 		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
 	else
 		fprintf(logfp, "%s %d malloc(%ld) returns %p\n",
-				file, line, (long)size, p);
+				file, line, (long)size, fp);
 #endif
-    return p;
+    return fp;
 }
 
 #ifdef LOGALLOC
