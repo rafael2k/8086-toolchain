@@ -62,8 +62,7 @@ void *nasm_malloc (size_t size)
 		p = malloc((unsigned int)size);
 		if (!p)
 		{
-			p = fmemalloc(size);
-			nasm_malloc_error (ERR_WARNING, "Error allocating memory to the HEAP. Trying with fmemalloc().\n");
+			nasm_malloc_error (ERR_WARNING, "Error allocating memory in the HEAP.\n");
 		}
 	}
 	else
@@ -95,18 +94,11 @@ void *nasm_realloc (void *q, size_t size)
 	if (!q)
 		return nasm_malloc(size);
 
-	if (SEGMENT(q) == SEGMENT(&q) && size <= MAX_NEAR_ALLOC) /* near pointer and small re-alloc */
-	{
-		p = realloc(q, size);
-	}
-	else
-	{
-		p = nasm_malloc(size);
-		if (p)
-		{                    /* on fail, previous memory not freed */
-			memcpy(p, q, size);     /* FIXME copies too much!! */
-			nasm_free(q);
-		}
+	p = nasm_malloc(size);
+	if (p)
+	{                    /* on fail, previous memory not freed */
+		memcpy(p, q, size);     /* FIXME copies too much!! */
+		nasm_free(q);
 	}
 #else
 	p = q ? realloc(q, size) : malloc(size);

@@ -34,7 +34,7 @@
 /*
  * Memory is allocated in Blocks of 1024 longs, which form a linked list
  */
-#define BLKLEN ((size_t)1024 * sizeof(long))
+#define BLKLEN ((size_t)768 * sizeof(long))
 #define NIL_BLK ( (struct blk *) 0)
 
 /********************************************************** Type Definitions */
