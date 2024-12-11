@@ -5,3 +5,11 @@ Decompress "elks.tar" in /root. Eg:
 
 And after, source the "setenv.sh"
 # . setenv.sh
+
+To test the toolchain, go to "examples" directory and type:
+# make
+
+After some time, two binaries should be produced: test and chess. Try them!
+: )
+
+11/12/2024 - Rafael Diniz
