@@ -15,7 +15,7 @@
 #include "nasmlib.h"
 #include "insns.h"		/* For MAX_KEYWORD */
 
-#define MAX_NEAR_ALLOC  160U   /* max size to allocate from near heap */
+#define MAX_NEAR_ALLOC  16U   /* max size to allocate from near heap */
 
 #define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
 #define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
@@ -64,7 +64,7 @@ void *nasm_malloc (size_t size)
 		p = malloc((unsigned int)size);
 		if (NULLPTR(p))
 		{
-			nasm_malloc_error (ERR_WARNING, "Error allocating memory in the HEAP.\n");
+			nasm_malloc_error (ERR_WARNING, "Error allocating memory in the HEAP %d.\n", size);
 			p = NULL;
 		}
 		fp = (void __far *)p;

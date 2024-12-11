@@ -2,11 +2,8 @@
 # Look https://github.com/ghaerr/elks/blob/master/elks/tools/bin/ecc
 # for a compiler driver which greatly simplifies things
 
-ifndef TOPDIR
-$(error ELKS TOPDIR is not defined)
-endif
-
-C86LIB=../libc
+TOPDIR=/root/elks
+C86LIB=/root/libc
 
 INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
 DEFINES=-D__C86__ -D__STDC__
