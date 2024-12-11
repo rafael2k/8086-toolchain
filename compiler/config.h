@@ -142,7 +142,7 @@
 /* The following NASM option was added and was not an option of the original config file.
    Support for NASM had been built in but the NASM output code (outx86_n.c) was 
    replaced with my custom version based on the MASM version. -WSF */
-#define TARGET_NASM		// Added. -WSF
+#define TARGET_BAS		// Added. -WSF
 
 #undef	TARGET_ACK_DEFAULT	/* Default Assembler is ACK     Motorola */
 #undef	TARGET_CPM_DEFAULT	/* Default Assembler is DRI     Motorola */
@@ -156,7 +156,7 @@
 #undef	TARGET_OBJ_DEFAULT	/* Default Assembler is ObjAsm  ARM */
 #undef	TARGET_ROSSIN_DEFAULT	/* Default Assembler is Rossin */
 /* See comment above for TARGET_NASM */
-#define TARGET_NASM_DEFAULT		// Added. -WSF
+#define TARGET_BAS_DEFAULT		// Added. -WSF
 
 /*
  *	DEBUG INFORMATION
