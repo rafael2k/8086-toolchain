@@ -2,7 +2,7 @@
 
 ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 8086 C compiler toolchain.
 
-This is a fork of the upstream 8086-toolchain, which contains and old NASM version, and 
+This is a fork of the upstream 8086-toolchain, which contains and old NASM version (by Simon Tatham and Julian Hall), and 
 the C86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
 It was introduced to complete the ELKS native toolchain software by Bruce Evans, Jody Bruchon et al., namely dev86's cpp, ld, ar and as. 
 Make is courtesy of David Given, Carl Eric Codere and Ceriel Jacobs, while disasm (dis88) was originally authored by G. M. Harding.
@@ -10,7 +10,7 @@ Many improvements and changes by Rafael Diniz and Gregory Haerr for making all t
 
 The project currently contains:
 
-- cpp, ld and ar from dev86: https://codeberg.org/jbruchon/dev86
+- cpp, ld, as and ar from dev86: https://codeberg.org/jbruchon/dev86
 - make: https://github.com/davidgiven/ack/tree/default/util/make
 - assembler (nasm): https://www.nasm.us/
 - C compiler (C86): See discussion at https://github.com/ghaerr/elks/issues/2112
@@ -21,7 +21,10 @@ and also OpenWatcom v2 is required.
 
 To build, type "make". Elks binaries will be in "elks-bin" and host binaries in "host-bin". Build should
 work on any recent Linux or MacOS with OpenWatcom v2 installed (source the OW owsetenv.sh script for setting
-OpenWatcom environment variables and env.sh from ELKS, or just env.sh from ELKS and wcenv.sh in libc directory of ELKS top-dir).
+OpenWatcom environment variables and env.sh from ELKS, or just env.sh from ELKS and wcenv.sh in libc directory of 
+ELKS top-dir, after adjusting the path to OpenWatcom directory).
+
+There is a also a binary distribution available in https://github.com/rafael2k/8086-toolchain/tree/dev/elks-devdisk
 
 # Original 8086 Toolchain README
 
