@@ -36,9 +36,9 @@
               The compiler  was originally developed to run on the MINIX
               operating system, but is known to be in wide use on a wide
               variety of  other operating  systems such  as  LINUX,  TOS
-              (Atari), QDOS/SMSQ (Sinclair QL) and EPOC (Psion 3a).  The
-              source  has   been  specifically   written  with   maximum
-              portability in mind.
+              (Atari),  QDOS/SMSQ  (Sinclair QL),  EPOC  (Psion 3a)  and
+              ELKS.  The  source  has  been  specifically  written  with
+              maximum portability in mind.
 
               The  compiler   is  slightly   unusual  in  there  is  the
               capability for  simultaneous support  of  multiple  target
