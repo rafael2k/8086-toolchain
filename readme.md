@@ -13,7 +13,7 @@ The project currently contains:
 - cpp, ld, as and ar from dev86: https://codeberg.org/jbruchon/dev86
 - make: https://github.com/davidgiven/ack/tree/default/util/make
 - assembler (nasm): https://www.nasm.us/
-- C compiler (C86): See discussion at https://github.com/ghaerr/elks/issues/2112
+- C compiler (C86): http://ftp.funet.fi/pub/minix/lang/c68/ See discussion at https://github.com/ghaerr/elks/issues/2112
 - disasm:  Check README inside the directory
 
 In order to build the ELKS binaries, gcc-ia16 is needed (you can use the one compiled by "build.sh" from ELKS source code)
