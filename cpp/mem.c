@@ -26,10 +26,12 @@ void __far *xalloc(unsigned long size)
 	if (size <= MAX_NEAR_ALLOC)
 	{
 		p = malloc((unsigned int)size);
-		if (p == NULL)
-			return (void __far *)p;
+		fp = (void __far *)p;
 	}
-	fp = fmemalloc(size);
+	else
+	{
+		fp = fmemalloc(size);
+	}
 	return fp;
 }
 #else

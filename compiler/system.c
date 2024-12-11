@@ -53,23 +53,51 @@
 #include "proto.h"
 
 #ifdef __ELKS__
-void *fmemrealloc(void *q, size_t size)
+
+#define MAX_NEAR_ALLOC  64U   /* max size to allocate from near heap */
+
+#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+
+void __far *memalloc(unsigned long size)
 {
-    void *p;
-
-    if (!q)
-        return fmemalloc(size);
-    p = fmemalloc(size);
-    if (p) {                    /* on fail, previous memory not freed */
-        memcpy(p, q, size);     /* FIXME copies too much!! */
-        fmemfree(q);
-    }
-
-    if (!p)
-        printf("Error in realloc\n");
-    return p;
-
+	char *p;
+	char __far *fp;
+	if (size <= MAX_NEAR_ALLOC)
+	{
+		p = malloc((unsigned int)size);
+		fp = (void __far *)p;
+	}
+	else
+	{
+		fp = fmemalloc(size);
+	}
+	return fp;
 }
+
+void memfree(void __far *ptr)
+{
+	if (ptr == 0)
+		return;
+	if (SEGMENT(ptr) == SEGMENT(&ptr)) /* near pointer */
+		free((char *)ptr);
+	else
+		fmemfree(ptr);
+}
+
+void __far *memrealloc(void __far *ptr, unsigned long size)
+{
+	void __far *new;
+	if (!ptr)
+		return memalloc(size);
+	else
+	{
+		new = memalloc(size);
+		memcpy(new, ptr, size);    /* FIXME copies too much!! */
+		memfree(ptr);
+	}
+	return new;
+}
+
 #endif
 
 

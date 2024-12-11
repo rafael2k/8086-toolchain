@@ -359,10 +359,13 @@ extern void size_type P_ ((TYP *));
 #undef malloc
 #undef realloc
 
-#define	free(s)			fmemfree(s)
-#define	malloc(s)		fmemalloc(s)
-#define realloc(p,s)    fmemrealloc((p),(s))
+#define	free(s)			memfree(s)
+#define	malloc(s)		memalloc(s)
+#define realloc(p,s)    memrealloc((p),(s))
 
+void __far *memalloc(unsigned long size);
+void memfree(void __far *ptr);
+void __far *memrealloc(void __far *ptr, unsigned long size);
 #endif
 
 #ifdef EPOC
