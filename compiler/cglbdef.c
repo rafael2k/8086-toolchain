@@ -393,7 +393,7 @@ struct funcs *Funcs = &basx86_func;
 struct funcs *Funcs = &gasx86_func;
 
 #else
-#ifdef TARGET_SVR4_DEFAULT
+#ifdef TARGET_SYSV_DEFAULT
 struct funcs *Funcs = &sysvx86_func;
 
 #endif /* TARGET_SVR4_DEFAULT */
