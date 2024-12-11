@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#define MAX_NEAR_ALLOC  512U   /* max size to allocate from near heap */
+#define MAX_NEAR_ALLOC  64U   /* max size to allocate from near heap */
 
 #define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
 #define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)

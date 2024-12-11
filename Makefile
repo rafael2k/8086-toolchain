@@ -13,6 +13,7 @@ elks:
 	make -C make -f Makefile.elks
 	make -C disasm -f Makefile.elks
 	make -C nasm32 -f Makefile.elks
+	make -C as86 -f Makefile.elks
 
 host:
 	make -C compiler
@@ -24,6 +25,7 @@ host:
 	make -C disasm
 	make -C nasm32
 	make -C emulator
+	make -C as86
 	make -C libc
 
 copy:
@@ -42,6 +44,7 @@ cleaneobjs:
 	make -C make -f Makefile.elks clean
 	make -C disasm -f Makefile.elks clean
 	make -C nasm32 -f Makefile.elks clean
+	make -C as86 -f Makefile.elks clean
 
 cleanhobjs:
 	make -C compiler clean
@@ -53,4 +56,5 @@ cleanhobjs:
 	make -C disasm clean
 	make -C nasm32 clean
 	make -C emulator clean
+	make -C as86 clean
 	make -C libc clean

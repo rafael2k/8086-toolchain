@@ -25,7 +25,7 @@ LDBASE += -Wl,option -Wl,dosseg
 LDBASE += -Wl,option -Wl,start=_start
 LDBASE += -Wl,option -Wl,nodefaultlibs
 LDBASE += -Wl,option -Wl,stack=0x1000
-LDBASE += -Wl,option -Wl,heapsize=0x4000
+LDBASE += -Wl,option -Wl,heapsize=0x6000
 LDFLAGS = $(LDBASE)
 LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libc.lib
 
