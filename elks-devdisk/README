@@ -1,0 +1,7 @@
+Decompress "elks.tar" in /root. Eg:
+# cd /root
+# mount /dev/fd1 /mnt
+# tar xvf /mnt/elks.tar
+
+And after, source the "setenv.sh"
+# . setenv.sh
