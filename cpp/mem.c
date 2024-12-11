@@ -17,6 +17,8 @@
 #define MAX_NEAR_ALLOC  512U   /* max size to allocate from near heap */
 
 #define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
+
 
 #ifdef __ELKS__
 void __far *xalloc(unsigned long size)
@@ -26,6 +28,8 @@ void __far *xalloc(unsigned long size)
 	if (size <= MAX_NEAR_ALLOC)
 	{
 		p = malloc((unsigned int)size);
+		if (NULLPTR(p))
+			return NULL;
 		fp = (void __far *)p;
 	}
 	else
@@ -47,12 +51,9 @@ void xfree(void __far *ptr)
 	if (ptr == 0)
 		return;
 	if (SEGMENT(ptr) == SEGMENT(&ptr)) /* near pointer */
-	{
 		free((char *)ptr);
-	} else
-	{
+	else
 		fmemfree(ptr);
-	}
 }
 #else
 void xfree(void *ptr)
@@ -72,6 +73,7 @@ void __far *xrealloc(void __far *ptr, unsigned long size)
 		return NULL;            /* previous memory not freed */
 	memcpy(new, ptr, size);    /* FIXME copies too much!! */
 	xfree(ptr);
+
 	return new;
 }
 #else

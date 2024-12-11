@@ -57,6 +57,7 @@
 #define MAX_NEAR_ALLOC  64U   /* max size to allocate from near heap */
 
 #define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
+#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
 
 void __far *memalloc(unsigned long size)
 {
@@ -65,6 +66,8 @@ void __far *memalloc(unsigned long size)
 	if (size <= MAX_NEAR_ALLOC)
 	{
 		p = malloc((unsigned int)size);
+		if (NULLPTR(p))
+			return NULL;
 		fp = (void __far *)p;
 	}
 	else
@@ -89,12 +92,12 @@ void __far *memrealloc(void __far *ptr, unsigned long size)
 	void __far *new;
 	if (!ptr)
 		return memalloc(size);
-	else
-	{
-		new = memalloc(size);
-		memcpy(new, ptr, size);    /* FIXME copies too much!! */
-		memfree(ptr);
-	}
+	new = memalloc(size);
+	if (!new)
+		return NULL;            /* previous memory not freed */
+	memcpy(new, ptr, size);    /* FIXME copies too much!! */
+	memfree(ptr);
+
 	return new;
 }
 
