@@ -3,7 +3,6 @@
 #include "const.h"
 #include "type.h"
 #include "align.h"
-#include "mem.h"
 
 PRIVATE char NOMEMEORY[] = "Cannot allocate sufficient memory";
 
@@ -35,7 +34,7 @@ init_heap()
 #ifdef SOS_EDOS
     heapend = stackreg() - STAKSIZ;
 #else
-    heapptr = xalloc(USERMEM);
+    heapptr = malloc(USERMEM);
     heapend = heapptr + USERMEM;
     if (heapptr == 0)
 	as_abort(NOMEMEORY);
@@ -68,7 +67,7 @@ unsigned int size;
     else
        rv = 0;
 #else
-    rv = xalloc(size);
+    rv = malloc(size);
 #endif
     if (rv == 0 && size) as_abort(NOMEMEORY);
     return rv;
@@ -92,7 +91,7 @@ unsigned int size;
     else
         rv = 0;
 #else
-    rv = xrealloc(oldptr, size);
+    rv = realloc(oldptr, size);
 #endif
 
     if (rv == 0) as_abort(NOMEMEORY);

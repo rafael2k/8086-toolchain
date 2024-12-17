@@ -1,78 +1,64 @@
-#include "mem.h"
-
-
-#include <stdio.h>
-#include <unistd.h>
+#ifdef __ELKS__
+/* malloc/free wholesale replacement for 8086 toolchain */
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#include <errno.h>
 
-#define MAX_NEAR_ALLOC  64U   /* max size to allocate from near heap */
+#define MALLOC_ARENA_SIZE   65520U  /* size of initial arena fmemalloc (max 65520)*/
+#define MALLOC_ARENA_THRESH 1024U   /* max size to allocate from arena-managed heap */
 
-#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
-#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
+unsigned int malloc_arena_size = MALLOC_ARENA_SIZE;
+unsigned int malloc_arena_thresh = MALLOC_ARENA_THRESH;
 
+#define FP_SEG(fp)          ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
+#define FP_OFF(fp)          ((unsigned)(unsigned long)(void __far *)(fp))
 
-#ifdef __ELKS__
-void __far *xalloc(unsigned long size)
+static void __far *heap;
+
+void *malloc(size_t size)
 {
-	char *p;
-	char __far *fp;
-	if (size <= MAX_NEAR_ALLOC)
-	{
-		p = malloc((unsigned int)size);
-		if (NULLPTR(p))
-			return NULL;
-		fp = (void __far *)p;
-	}
-	else
-	{
-		fp = fmemalloc(size);
-	}
-	return fp;
+    char *p;
+
+    if (heap == NULL) {
+        heap = fmemalloc(malloc_arena_size);
+        __amalloc_add_heap(heap, malloc_arena_size);
+    }
+
+    if (size <= malloc_arena_thresh)
+        p = __amalloc(size);
+    else p = fmemalloc(size);
+    return p;
 }
-#else
-void *xalloc(unsigned long size)
-{
-	return malloc(size);
-}
-#endif
 
-#ifdef __ELKS__
-void xfree(void __far *ptr)
+void free(void *ptr)
 {
+    if (ptr == NULL)
+        return;
+    if (FP_OFF(ptr) == 0)       /* non-arena pointer */
+        fmemfree(ptr);
+    else
+        __afree(ptr);
+}
+
+void *realloc(void *ptr, size_t size)
+{
+	void *new;
+    size_t osize = size;
+
 	if (ptr == 0)
-		return;
-	if (SEGMENT(ptr) == SEGMENT(&ptr)) /* near pointer */
-		free((char *)ptr);
-	else
-		fmemfree(ptr);
-}
-#else
-void xfree(void *ptr)
-{
-	free(ptr);
-}
+		return malloc(size);
+
+#if LATER
+    /* we can't yet get size from fmemalloc'd block */
+	osize = malloc_usable_size(ptr);
+    if (size <= osize)
+        osize = size;           /* copy less bytes in memcpy below */
 #endif
 
-#ifdef __ELKS__
-void __far *xrealloc(void __far *ptr, unsigned long size)
-{
-	void __far *new;
-	if (!ptr)
-		return xalloc(size);
-	new = xalloc(size);
-	if (!new)
-		return NULL;            /* previous memory not freed */
-	memcpy(new, ptr, size);    /* FIXME copies too much!! */
-	xfree(ptr);
-
+	new = malloc(size);
+	if (new == 0)
+		return 0;
+	memcpy(new, ptr, osize);    /* FIXME copies too much but can't get real osize */
+	free(ptr);
 	return new;
-}
-#else
-void *xrealloc(void *ptr, unsigned long size)
-{
-	return realloc(ptr, size);
 }
 #endif
