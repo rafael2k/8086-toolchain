@@ -299,6 +299,7 @@ OBJ386 =$(OBJDIR)gen386$(S)$(O)
 
 #	Object files specific to INTEL 86 variants
 OBJ86  =$(OBJDIR)gen86$(S)$(O)
+OBJ86  +=$(OBJDIR)mem$(S)$(O)
 
 #	Object files specific to ARM variants
 OBJARM =$(OBJDIR)genarm$(S)$(O) \
@@ -462,6 +463,8 @@ $(OBJDIR)gen386$(S)$(O) : $(SRCDIR)gen386$(S)c
 #	Object files specific to INTEL 86 variants
 $(OBJDIR)gen86$(S)$(O) : $(SRCDIR)gen86$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)gen86$(S)$(O) $(SRCDIR)gen86$(S)c
+$(OBJDIR)mem$(S)$(O) : $(SRCDIR)mem$(S)c
+	$(CC) $(CFLAGS) $(OF)$(OBJDIR)mem$(S)$(O) $(SRCDIR)mem$(S)c
 #	Object files specific to ARM variants
 $(OBJDIR)genarm$(S)$(O) : $(SRCDIR)genarm$(S)c
 	$(CC) $(CFLAGS) $(OF)$(OBJDIR)genarm$(S)$(O) $(SRCDIR)genarm$(S)c

@@ -29,7 +29,9 @@ host:
 	make -C libc
 
 copy:
-	cp libc/*.a elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
+	cp elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
+	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/ndisasm
+	cp libc/*.a $(TOPDIR)/elkscmd/rootfs_template/root
 
 .PHONY: clean cleanobjs
 

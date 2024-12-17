@@ -52,58 +52,6 @@
 #include "cglbdec.h"
 #include "proto.h"
 
-#ifdef __ELKS__
-
-#define MAX_NEAR_ALLOC  64U   /* max size to allocate from near heap */
-
-#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
-#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
-
-void __far *memalloc(unsigned long size)
-{
-	char *p;
-	char __far *fp;
-	if (size <= MAX_NEAR_ALLOC)
-	{
-		p = malloc((unsigned int)size);
-		if (NULLPTR(p))
-			return NULL;
-		fp = (void __far *)p;
-	}
-	else
-	{
-		fp = fmemalloc(size);
-	}
-	return fp;
-}
-
-void memfree(void __far *ptr)
-{
-	if (ptr == 0)
-		return;
-	if (SEGMENT(ptr) == SEGMENT(&ptr)) /* near pointer */
-		free((char *)ptr);
-	else
-		fmemfree(ptr);
-}
-
-void __far *memrealloc(void __far *ptr, unsigned long size)
-{
-	void __far *new;
-	if (!ptr)
-		return memalloc(size);
-	new = memalloc(size);
-	if (!new)
-		return NULL;            /* previous memory not freed */
-	memcpy(new, ptr, size);    /* FIXME copies too much!! */
-	memfree(ptr);
-
-	return new;
-}
-
-#endif
-
-
 #ifndef EPOC
 
 /*

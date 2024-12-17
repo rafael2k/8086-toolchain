@@ -8,8 +8,6 @@
 #endif
 #include "cc.h"
 
-#include "mem.h"
-
 /*
  * Two functions:
  * char * set_entry(int namespace, char * name, void * value);
@@ -78,7 +76,7 @@ void * value;
          {
             if( prev == 0 ) hashtable[hash_val] = hashline->next;
             else            prev->next = hashline->next;
-            xfree(hashline);
+            free(hashline);
             return 0;
          }
          return hashline->word;
@@ -87,12 +85,12 @@ void * value;
    if( value == 0 ) return 0;
    if( hashtable == 0 )
    {
-      hashtable = xalloc((hashsize+1)*sizeof(char*));
+      hashtable = malloc((hashsize+1)*sizeof(char*));
       if( hashtable == 0 ) cfatal("Out of memory for hashtable");
       for(i=0; i<=hashsize; i++) hashtable[i] = 0;
    }
    /* Add record */
-   hashline = xalloc(sizeof(struct hashentry)+strlen(word));
+   hashline = malloc(sizeof(struct hashentry)+strlen(word));
    if( hashline == 0 ) cfatal("Out of memory for hashline");
    else
    {
