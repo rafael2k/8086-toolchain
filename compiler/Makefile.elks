@@ -16,7 +16,7 @@ CFLGS=  -DNDEBUG -O
 #CFLGS= -g
 
 SRCDIR=
-OBJDIR=unixobj/
+OBJDIR=elksobj/
 BINDIR=../elks-bin
 MKDIR_P=mkdir -p
 
