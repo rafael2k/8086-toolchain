@@ -45,7 +45,7 @@ OBJS	= as.o assemble.o errors.o express.o \
 		 keywords.o macro.o mops.o pops.o readsrc.o \
 		 scan.o table.o typeconv.o alloc.o mem.o
 
-all: $(PROG) as86_encap
+#all: $(PROG) as86_encap
 
 all: $(PROG)
 
@@ -73,7 +73,6 @@ clean realclean clobber:
 
 $(OBJS): const.h errors.h
 
-mem.o: mem.h
 as.o: const.h type.h byteord.h macro.h file.h flag.h globvar.h
 assemble.o: const.h type.h address.h globvar.h opcode.h scan.h
 error.o: const.h type.h

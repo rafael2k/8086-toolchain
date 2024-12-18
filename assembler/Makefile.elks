@@ -57,13 +57,13 @@ NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: $(BINDIR)/nasm
+all: $(BINDIR)/nasm86
 
-$(BINDIR)/nasm: $(NASM)
-	$(LINK) -o $(BINDIR)/nasm $(NASM)
+$(BINDIR)/nasm86: $(NASM)
+	$(LINK) -o $(BINDIR)/nasm86 $(NASM)
 
-$(BINDIR)/ndisasm: $(NDISASM)
-	$(LINK) -o $(BINDIR)/ndisasm $(NDISASM)
+$(BINDIR)/ndisasm16: $(NDISASM)
+	$(LINK) -o $(BINDIR)/ndisasm16 $(NDISASM)
 
 directory:
 	$(MKDIR_P) $(BINDIR)

@@ -24,12 +24,14 @@ host:
 	make -C make
 	make -C disasm
 	make -C nasm32
-	make -C emulator
 	make -C as86
+	make -C emulator
 	make -C libc
 
 copy:
-	cp libc/*.a elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
+	cp elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
+	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/ndisasm86
+	cp libc/*.a $(TOPDIR)/elkscmd/rootfs_template/root
 
 .PHONY: clean cleanobjs
 

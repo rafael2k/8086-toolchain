@@ -39,13 +39,13 @@ NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o parser.o \
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
-all: $(BINDIR)/nasm
+all: $(BINDIR)/nasm86
 
-$(BINDIR)/nasm: $(NASM)
-	$(CC) -o $(BINDIR)/nasm $(NASM)
+$(BINDIR)/nasm86: $(NASM)
+	$(CC) -o $(BINDIR)/nasm86 $(NASM)
 
-$(BINDIR)/ndisasm: $(NDISASM)
-	$(CC) -o $(BINDIR)/ndisasm $(NDISASM)
+$(BINDIR)/ndisasm86: $(NDISASM)
+	$(CC) -o $(BINDIR)/ndisasm86 $(NDISASM)
 
 directory:
 	$(MKDIR_P) $(BINDIR)
@@ -104,7 +104,7 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
 clean: directory
-	rm -f *.o $(BINDIR)/nasm $(BINDIR)/ndisasm
+	rm -f *.o $(BINDIR)/nasm86 $(BINDIR)/ndisasm86
 	$(MAKE) -C rdoff clean
 
 rdf:

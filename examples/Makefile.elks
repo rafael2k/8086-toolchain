@@ -6,7 +6,7 @@ C86LIB=/root/libc
 
 CPP=cpp86
 CC=c86
-AS=nasm
+AS=nasm86
 LD=ld86
 
 INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
