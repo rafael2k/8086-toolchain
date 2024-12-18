@@ -15,11 +15,6 @@
 #include "nasmlib.h"
 #include "insns.h"		/* For MAX_KEYWORD */
 
-#define MAX_NEAR_ALLOC  16U   /* max size to allocate from near heap */
-
-#define SEGMENT(ptr)    ((unsigned long)(char __far *)(ptr) >> 16)
-#define NULLPTR(ptr)  (((unsigned long)(char __far *)(ptr) & 0xFFFF) == 0)
-
 /* Return the `ldiv_t' representation of NUMER over DENOM.  */
 ldiv_t
 ldiv (long int numer, long int denom)
@@ -55,27 +50,8 @@ void *nasm_malloc (size_t size)
 	if (size == 0)
 		return NULL;
 
-#ifdef __ELKS__
-	void *p;
-	void __far *fp;
-
-	if (size <= MAX_NEAR_ALLOC)
-	{
-		p = malloc((unsigned int)size);
-		if (NULLPTR(p))
-		{
-			nasm_malloc_error (ERR_WARNING, "Error allocating memory in the HEAP %d.\n", size);
-			p = NULL;
-		}
-		fp = (void __far *)p;
-	}
-	else
-	{
-		fp = fmemalloc(size);
-	}
-#else
 	void *fp = malloc(size);
-#endif
+
 	if (!fp)
 		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
@@ -94,19 +70,7 @@ void *nasm_realloc (void *q, size_t size)
 {
 	void *p;
 
-#ifdef __ELKS__
-	if (!q)
-		return nasm_malloc(size);
-
-	p = nasm_malloc(size);
-	if (p)
-	{                    /* on fail, previous memory not freed */
-		memcpy(p, q, size);     /* FIXME copies too much!! */
-		nasm_free(q);
-	}
-#else
 	p = q ? realloc(q, size) : malloc(size);
-#endif
 
 	if (!p)
 		nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "Out of memory");
@@ -130,17 +94,7 @@ void nasm_free (void *q)
 {
     if (q)
 	{
-#ifdef __ELKS__
-		if (SEGMENT(q) == SEGMENT(&q)) /* near pointer */
-		{
-			free((char *)q);
-		} else
-		{
-			fmemfree(q);
-		}
-#else
         free(q);
-#endif
 
 #ifdef LOGALLOC
         fprintf(logfp, "%s %d free(%p)\n", file, line, q);
@@ -157,11 +111,8 @@ char *nasm_strdup (const char *s)
     char *p;
     int size = strlen(s)+1;
 
-#ifdef __ELKS__
-    p = fmemalloc(size);
-#else
     p = malloc(size);
-#endif
+
     if (!p)
         nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
@@ -182,11 +133,8 @@ char *nasm_strndup (char *s, size_t len)
     char *p;
     int size = len+1;
 
-#ifdef __ELKS__
-    p = fmemalloc(size);
-#else
     p = malloc(size);
-#endif
+
     if (!p)
         nasm_malloc_error (ERR_FATAL | ERR_NOFILE, "out of memory");
 #ifdef LOGALLOC
