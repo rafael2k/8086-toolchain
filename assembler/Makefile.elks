@@ -27,7 +27,7 @@ endif
 
 CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__UNIX__ -D__ELKS__ -DOF_ONLY -DOF_BIN -DOF_AS86 -DOF_DEFAULT=of_as86
 #CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x3800 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x100 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 CFLAGS = -I.
 PERL = perl
@@ -53,7 +53,7 @@ NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o \
 	parser.o outform.o outbin.o outaout.o \
 	outcoff.o outelf.o \
 	outobj.o outas86.o outdbg.o preproc.o listing.o \
-	eval.o outrdf2.o outieee.o
+	eval.o outrdf2.o outieee.o mem.o
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
@@ -178,3 +178,4 @@ regflags.o: regflags.c
 regs.o: regs.c
 regvals.o: regvals.c
 sync.o: sync.c sync.h
+mem.o: mem.c

@@ -35,7 +35,7 @@ mandir = $(prefix)/man
 NASM = nasm.o nasmlib.o float.o insnsa.o assemble.o labels.o parser.o \
        	outform.o outbin.o outaout.o outcoff.o outelf.o \
        	outobj.o outas86.o outdbg.o preproc.o listing.o \
-       	eval.o outrdf2.o outieee.o
+       	eval.o outrdf2.o outieee.o mem.o
 
 NDISASM = ndisasm.o disasm.o sync.o nasmlib.o insnsd.o
 
@@ -160,3 +160,4 @@ regflags.o: regflags.c
 regs.o: regs.c
 regvals.o: regvals.c
 sync.o: sync.c sync.h
+mem.o: mem.c
