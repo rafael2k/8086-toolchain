@@ -2,6 +2,7 @@
 /* malloc/free wholesale replacement for 8086 toolchain */
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define MALLOC_ARENA_SIZE   65520U  /* size of initial arena fmemalloc (max 65520)*/
 #define MALLOC_ARENA_THRESH 1024U   /* max size to allocate from arena-managed heap */
@@ -20,6 +21,11 @@ void *malloc(size_t size)
 
     if (heap == NULL) {
         heap = fmemalloc(malloc_arena_size);
+        if (!heap) {
+            __dprintf("FATAL: Can't fmemalloc %u\n", malloc_arena_size);
+            system("meminfo > /dev/console");
+            exit(1);
+        }
         __amalloc_add_heap(heap, malloc_arena_size);
     }
 
