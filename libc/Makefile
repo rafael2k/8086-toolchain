@@ -2,7 +2,7 @@
 
 CPP=../host-bin/cpp86
 CC=../host-bin/c86 
-AS=../host-bin/nasm
+AS=../host-bin/nasm86
 LD=../host-bin/ld86
 AR=../host-bin/ar86
 

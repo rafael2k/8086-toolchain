@@ -45,7 +45,7 @@ OBJS	= as.o assemble.o errors.o express.o \
 		 keywords.o macro.o mops.o pops.o readsrc.o \
 		 scan.o table.o typeconv.o alloc.o mem.o
 
-all: $(PROG) as86_encap
+#all: $(PROG) as86_encap
 
 all: $(PROG)
 

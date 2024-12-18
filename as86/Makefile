@@ -26,7 +26,7 @@ OBJS	= as.o assemble.o errors.o express.o \
 		 keywords.o macro.o mops.o pops.o readsrc.o \
 		 scan.o table.o typeconv.o alloc.o mem.o
 
-all: $(PROG) as86_encap
+#all: $(PROG) as86_encap
 
 all: $(PROG)
 
@@ -47,7 +47,7 @@ install: all
 	-@rm -f tmp
 
 clean realclean clobber:
-	rm -f *.o as86 as86_encap
+	rm -f *.o $(PROG) as86_encap
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
