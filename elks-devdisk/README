@@ -7,7 +7,7 @@ And after, source the "setenv.sh"
 # . setenv.sh
 
 To test the toolchain, go to "examples" directory and type:
-# make -f Makefile.elks all
+# make
 
 After some time, three binaries should be produced: test, chess and show_fonts. Try them!
 : )
