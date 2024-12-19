@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define MALLOC_ARENA_SIZE   24576U  /* size of initial arena fmemalloc (max 65520)*/
+#define MALLOC_ARENA_SIZE   32768U  /* size of initial arena fmemalloc (max 65520)*/
 #define MALLOC_ARENA_THRESH 24U   /* max size to allocate from arena-managed heap */
 
 unsigned int malloc_arena_size = MALLOC_ARENA_SIZE;
