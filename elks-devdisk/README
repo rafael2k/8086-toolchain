@@ -12,4 +12,4 @@ To test the toolchain, go to "examples" directory and type:
 After some time, three binaries should be produced: test, chess and show_fonts. Try them!
 : )
 
-11/12/2024 - Rafael Diniz
+19/12/2024 - Rafael Diniz
