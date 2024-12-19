@@ -26,6 +26,20 @@ ELKS top-dir, after adjusting the path to OpenWatcom directory).
 
 There is a also a binary distribution available in https://github.com/rafael2k/8086-toolchain/tree/dev/elks-devdisk
 
+## Build and Install ##
+
+To clone this repo, do something like this (adapt to ELKS - build elks first, including the watcom libc - and Watcom paths):
+
+```bash
+$ cd ~/elks
+$ . env.sh
+$ . /usr/bin/watcom/owsetenv.sh
+$ cd ~/8086-toolchain
+$ make clean
+$ make
+```
+
+
 # Original 8086 Toolchain README
 
 This is the C-based 8086 toolchain for BYU ECEn 425 (Real Time Operating
@@ -37,14 +51,6 @@ computers.
 
 **Disclaimer:** For ECEn 425 projects, this may or may not compile exactly the same as the CAEDM machines
 
-## Build and Install ##
-
-To clone this repo, do:
-
-```bash
-$ cd ~
-$ git clone https://github.com/hintron/8086-toolchain.git
-```
 
 **Prerequisites to build toolchain:**
 
