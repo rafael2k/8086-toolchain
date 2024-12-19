@@ -1,7 +1,7 @@
 Decompress "elks.tar" in /root. Eg:
 # cd /root
 # mount /dev/fd1 /mnt
-# tar xvf /mnt/elks.tar
+# tar xvf /mnt/elks-0.2.tar
 
 And after, source the "setenv.sh"
 # . setenv.sh
@@ -9,7 +9,7 @@ And after, source the "setenv.sh"
 To test the toolchain, go to "examples" directory and type:
 # make
 
-After some time, two binaries should be produced: test and chess. Try them!
+After some time, three binaries should be produced: test, chess and show_fonts. Try them!
 : )
 
 11/12/2024 - Rafael Diniz
