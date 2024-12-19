@@ -117,7 +117,7 @@ endif
 
 CC=owcc
 CCFLAGS= -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -IH -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
+LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=512 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
 
 #------------------------------------------------------------------------------
 CFLAGS=-c $(CCFLAGS) $(CFLGS)
