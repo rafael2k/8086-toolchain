@@ -22,7 +22,13 @@ AS=../host-bin/nasm86
 LD=../host-bin/ld86
 
 
-all: test chess
+all: test chess show_fonts
+
+show_fonts: show_fonts.o
+	$(LD) $(LDFLAGS) show_fonts.o -o show_fonts
+
+show_fonts.o: show_fonts.asm
+	$(AS) $(ASFLAGS) show_fonts.asm -o show_fonts.o
 
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
@@ -59,6 +65,6 @@ cprintf.i: cprintf.c cprintf.h
 
 
 clean:
-	rm -f *.o *.a *.i *.asm test chess
+	rm -f *.o *.a *.i chess.asm cprintf.asm test.asm test chess show_fonts
 
 # end
