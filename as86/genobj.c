@@ -212,9 +212,7 @@ PUBLIC void genobj()
 
 /* generate object code for current address */
 
-PRIVATE void genobjadr(adrptr, size)
-struct address_s *adrptr;
-smallcount_t size;
+PRIVATE void genobjadr(struct address_s *adrptr, smallcount_t size)
 {
     unsigned char byte;
     unsigned symnum;

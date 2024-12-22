@@ -426,8 +426,7 @@ unsigned nspaces;
 
 /* write 1 character */
 
-PUBLIC void writec(ch)
-char ch;
+PUBLIC void writec(char ch)
 {
     write(outfd, &ch, 1);
 }
