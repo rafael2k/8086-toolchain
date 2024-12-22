@@ -480,6 +480,7 @@ static int pgetc(void)
       if( ch1 == '/' ) /* Double slash style comments */
       {
 	 do { ch = chget(); } while(ch != '\n' && ch != EOF);
+ 	 if (ch == '\n') last_char = '\n';      /* ghaerr fix // before #directive */
 	 return ch;	/* Keep the return. */
       }
 
