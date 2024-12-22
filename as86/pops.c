@@ -186,8 +186,7 @@ pfv func;
 
 /* common routine for EQU/SET */
 
-PRIVATE void doequset(labits)
-unsigned char labits;
+PRIVATE void doequset(unsigned char labits)
 {
     register struct sym_s *labptr;
     unsigned char olddata;
@@ -230,9 +229,7 @@ unsigned char labits;
 
 /* common routine for ENTRY/EXPORT */
 
-PRIVATE void doentexp(entbits, impbits)
-unsigned char entbits;
-unsigned char impbits;
+PRIVATE void doentexp(unsigned char entbits, unsigned char impbits)
 {
     struct sym_s *symptr;
 

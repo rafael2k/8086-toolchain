@@ -48,9 +48,7 @@ PUBLIC void inst_keywords()
 #endif
 }
 
-PRIVATE void install(keyptr, data)
-register char *keyptr;
-unsigned char data;
+PRIVATE void install(char *keyptr, unsigned char data)
 {
     char lowcasebuf[20];
     unsigned namelength;
