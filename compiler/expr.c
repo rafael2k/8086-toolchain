@@ -3346,10 +3346,17 @@ static EXPR *asnop P0 (void)
 	    if (is_pointer_type (tp) && is_integral_type (ep2->etp)) {
 		check_object (ep1);
 		check_complete (ep1->etp);
+#if 1   /* ghaerr: must cast to int not long when target sizeof(void *) == 2 (8086) */
+		ep2 = explicit_castop (ep2, tp_int);
+		ep3 = mk_icon ((IVAL) referenced_type (tp)->size, tp_int);
+                ep2 = mk_node (en_mul, ep2, ep3, tp_int);
+		ep2 = explicit_castop (ep2, tp);
+#else
 		ep2 = explicit_castop (ep2, tp_long);
 		ep3 = mk_icon ((IVAL) referenced_type (tp)->size, tp_long);
 		ep2 = mk_node (en_mul, ep2, ep3, tp_long);
 		ep2 = explicit_castop (ep2, tp);
+#endif
 	    }
 	    break;
 
