@@ -550,7 +550,7 @@ void endblock P0 (void)
 #endif /* SYNTAX_CORRECT */
 #ifdef CPU_DEFINED
 #ifdef TARGET_NASM
-                    if (Funcs == &nasmx86_func) { /* FIXME kludge fix for NASM: */
+                    if (Funcs == &nasmx86_func) { /* ghaerr: FIXME kludge fix for NASM: */
 		        put_reference (sp);     /* requires global before definition */
 		        put_storage (sp);	/* tentative definition */
                     } else

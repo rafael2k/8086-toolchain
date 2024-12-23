@@ -298,7 +298,7 @@ static void nextline P0 (void)
 		*p1++ = *p2++;
 	    }
 	    symstart = bufstart;
-	    act_linetxt = bufstart;	/* ghaerr fix -g source line display */
+	    act_linetxt = bufstart;	/* ghaerr: fix -g source line display */
 	    bufcur = p1 - 1;
 	}
 	/*
@@ -314,7 +314,7 @@ static void nextline P0 (void)
 	    bufstart =
 		(CHAR *) realloc (bufstart, (size_t) (buflen + (SIZE) 1));
 	    bufcur = bufstart + len;
-	    act_linetxt = bufcur;	/* ghaerr fix -g source line display */
+	    act_linetxt = bufcur;	/* ghaerr: fix -g source line display */
 	    symstart = bufstart + len2;
 	}
 	len =
@@ -469,7 +469,7 @@ void initsym P0 (void)
      *      Special names recognised by lower parts of the compiler in
      *      order to do special actions.
      */
-    alloca_name = quick_insert ((const CHAR *) "alloca", (SIZE) 6, tk_id);
+    alloca_name = quick_insert ((const CHAR *) "__alloca", (SIZE) 8, tk_id);
     printf_name = quick_insert ((const CHAR *) "printf", (SIZE) 6, tk_id);
     fprintf_name = quick_insert ((const CHAR *) "fprintf", (SIZE) 7, tk_id);
     sprintf_name = quick_insert ((const CHAR *) "sprintf", (SIZE) 7, tk_id);

@@ -128,24 +128,18 @@ void addoptinfo P2 (SYM *, sp, STORAGE, sc)
 	    case sc_register:
 		if (regptr < REG_LIST) {
 		    reglst[regptr++] = sp;
-#ifdef VERBOSE
-		    if (verbose_option)
 			DPRINTF (
 			     (DEBUG_GLOBAL, "adding '%s' to reglst\n",
 			      nameof (sp)));
-#endif
 		}
 		break;
 	    case sc_parms:
 	    case sc_auto:
 		if (autoptr < AUTO_LIST) {
 		    autolst[autoptr++] = sp;
-#ifdef VERBOSE
-		    if (verbose_option)
 			DPRINTF (
 			     (DEBUG_GLOBAL, "adding '%s' to autolst\n",
 			      nameof (sp)));
-#endif
 		}
 		break;
 	    default:

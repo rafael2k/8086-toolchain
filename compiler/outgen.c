@@ -64,15 +64,13 @@ const CHAR *outlate P1 (const CHAR *, string)
     const CHAR *sp;
     CHAR   *dp;
 
-#ifdef TRANSLATE
-    int     k;
-
-#endif /* TRANSLATE */
-
     dp = (CHAR *) &symname[0];
+    if (string == alloca_name)
+        return string;          /* ghaerr: don't prefix alloca */
+
     if (*string == (CHAR) '.') {
 #ifdef TRANSLATE
-	//if (!trans_option) {
+	//if (!trans_option) {  /* ghaerr: always remove leading . for SUP_ routines */
 	    //return string;
 	//}
 	/* delete the leading '.' which mucks things up here!! */
@@ -91,6 +89,7 @@ const CHAR *outlate P1 (const CHAR *, string)
 	continue;
 
 #ifdef TRANSLATE
+    int     k;
     if (trans_option && ((k = (int) strlen ((char *) symname)) > 8)) {
 	/*
 	 * translate long symbol name to 8 chars 140603: big prime number

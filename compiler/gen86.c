@@ -2585,8 +2585,12 @@ static ADDRESS *g_fcall P2 (const EXPR *, ep, FLAGS, flags)
 	}
     }
     ap = func_result (flags, size, ep->etp);
-    g_stack(stack_offset);	// Added by WSF; Makes sure stack is restored after function call
-							// This prevents problems when using the stack with inline assemby
+#if 0
+    /* ghaerr: removed, alloca works by not restoring SP after calling it */
+    /* stack restoration is controlled through -stackopt= compiler option */
+    g_stack(stack_offset);  // Added by WSF; Makes sure stack is restored after function call
+                            // This prevents problems when using the stack with inline assemby
+#endif
     return mk_legal (ap, flags, ep->etp);
 }
 

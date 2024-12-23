@@ -122,7 +122,7 @@ int     internal_option = 0;	/* controls internal debugging options */
 
 #endif /* DEBUG */
 BOOL    lattice_option = FALSE;	/* allow Lattice stype stdarg definitions */
-BOOL    IandD_option = TRUE;	/* separate Instruction and Data segments (ghaerr def ON)*/
+BOOL    IandD_option = TRUE;	/* separate Instruction and Data segments (ghaerr: def ON)*/
 int     lang_option = LANG_C90;	/* C language syntax */
 
 #ifdef LIST
@@ -427,7 +427,7 @@ struct funcs *Funcs = &rosc30_funcs;
 #endif /* MULTIPLE_ASSEMBLERS */
 
 SWITCH *swtables;		/* switch jump tables to be output to the assembler file */
-const CHAR *external_prefix = (const CHAR *) "_"; // -WSF, was: "_";	/* prefix for external/global symbols */
+const CHAR *external_prefix = (const CHAR *) "_"; /* prefix for external/global symbols */
 SIZE    stack_offset = 0L;	/* the number of bytes to remove from the stack */
 SIZE    max_scratch;		/* the maximum number of bytes allocated to temporary variables */
 SIZE    act_scratch;		/* the current number of bytes allocated to temporary variables */
