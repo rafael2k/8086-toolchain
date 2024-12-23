@@ -31,6 +31,7 @@ host:
 copy:
 	cp elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
 	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/ndisasm86
+	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/nasm86
 	cp libc/*.a $(TOPDIR)/elkscmd/rootfs_template/root
 
 .PHONY: clean cleanobjs

@@ -122,7 +122,7 @@ int     internal_option = 0;	/* controls internal debugging options */
 
 #endif /* DEBUG */
 BOOL    lattice_option = FALSE;	/* allow Lattice stype stdarg definitions */
-BOOL    IandD_option = FALSE;	/* separate Instruction and Data segments */
+BOOL    IandD_option = TRUE;	/* separate Instruction and Data segments (ghaerr def ON)*/
 int     lang_option = LANG_C90;	/* C language syntax */
 
 #ifdef LIST

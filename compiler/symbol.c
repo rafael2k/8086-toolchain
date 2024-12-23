@@ -549,8 +549,17 @@ void endblock P0 (void)
 		    check_complete (tp);
 #endif /* SYNTAX_CORRECT */
 #ifdef CPU_DEFINED
-		    put_reference (sp);
-		    put_storage (sp);	/* tentative definition */
+#ifdef TARGET_NASM
+                    if (Funcs == &nasmx86_func) { /* FIXME kludge fix for NASM */
+		        put_reference (sp);
+		        put_storage (sp);	/* tentative definition */
+                    } else
+#endif
+
+                    {
+		        put_storage (sp);	/* tentative definition */
+		        put_reference (sp);
+                    }
 #endif /* CPU_DEFINED */
 		}
 	    }

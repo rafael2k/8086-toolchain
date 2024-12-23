@@ -800,7 +800,7 @@ PRIVATE void put_code P1 (const CODE *, ip)
 				string = ip->oper2->u.offset->v.str; 
 				while(*string != 0 && (*string == ' ' || *string == '\t')) string++;
 				// Print the comment
-				oprintf("%ld >>>>> %s", (long)ip->oper1->u.offset->v.i, string); // Add space after to prevent NASM EOL character problems
+				oprintf("%ld       %s", (long)ip->oper1->u.offset->v.i, string); // Add space after to prevent NASM EOL character problems
 			}
 		}
 		else {

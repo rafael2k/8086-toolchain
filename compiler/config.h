@@ -27,7 +27,7 @@
 
 #define	ASM			/* ASM statement support                     */
 #define	ASMCALL			/* User specified ASM call sequence	     */
-#define	DEBUG			/* Include internal debug code               */
+#undef 	DEBUG			/* Include internal debug code               */
 #define	DEBUGOPT		/* Include -g command line option            */
 #undef	DOINLINE		/* Inline functions                          */
 #undef	ENVVAR			/* Compiler options in environment variable  */
@@ -133,9 +133,9 @@
 #undef	TARGET_QMAC		/* Assembler is QMAC    Motorola */
 #undef	TARGET_GAS		/* Assembler is GAS     Motorola/Intel */
 #undef	TARGET_SUN		/* Assembler is Sun     Intel */
-#undef	TARGET_BAS		/* Assembler is BCC     Intel */
+#define	TARGET_BAS		/* Assembler is BCC     Intel */
 #undef	TARGET_SYSV		/* Assembler is SVR4.0  Intel */
-#define	TARGET_MASM		/* Assembler is Microsoft Intel */
+#undef	TARGET_MASM		/* Assembler is Microsoft Intel */
 #undef	TARGET_ARM		/* Assembler is Arm     ARM */
 #undef	TARGET_OBJ		/* Assembler is ObjAsm  ARM */
 #undef	TARGET_ROSSIN		/* Assembler is Rossin? */
@@ -149,14 +149,14 @@
 #undef	TARGET_QMAC_DEFAULT	/* Default Assembler is QMAC    Motorola */
 #undef	TARGET_GAS_DEFAULT	/* Default Assembler is GAS     Motorola/Intel */
 #undef	TARGET_SUN_DEFAULT	/* Default Assembler is Sun     Intel */
-#undef  TARGET_BAS_DEFAULT	/* Default Assembler is BCC     Intel */
+#define TARGET_BAS_DEFAULT	/* Default Assembler is BCC     Intel */
 #undef	TARGET_SYSV_DEFAULT	/* Default Assembler is SVR4.0  Intel */
 #undef	TARGET_MASM_DEFAULT	/* Default Assembler is Microsoft Intel */
 #undef	TARGET_ARM_DEFAULT	/* Default Assembler is Arm     ARM */
 #undef	TARGET_OBJ_DEFAULT	/* Default Assembler is ObjAsm  ARM */
 #undef	TARGET_ROSSIN_DEFAULT	/* Default Assembler is Rossin */
 /* See comment above for TARGET_NASM */
-#define TARGET_NASM_DEFAULT		// Added. -WSF
+#undef TARGET_NASM_DEFAULT		// Added. -WSF
 
 /*
  *	DEBUG INFORMATION
