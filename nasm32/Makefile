@@ -105,7 +105,7 @@ perlreq: $(PERLREQ)
 #	$(INSTALL_DATA) ndisasm.1 $(mandir)/man1/ndisasm.1
 
 clean: directory
-	rm -f *.o $(BINDIR)/nasm $(BINDIR)/ndisasm
+	rm -f *.o $(BINDIR)/nasm32 $(BINDIR)/ndisasm32
 	$(MAKE) -C rdoff clean
 
 rdf:

@@ -25,7 +25,7 @@
 
 #ifndef __AS386_16__
 #ifndef BIGBUFFER
-#define BIGBUFFER	1	/* For most machines we have the memory */
+//#define BIGBUFFER	1	/* For most machines we have the memory (ghaerr def OFF)*/
 #endif
 #endif
 

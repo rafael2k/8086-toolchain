@@ -10,15 +10,20 @@ C86LIB=../libc
 
 INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
 DEFINES=-D__C86__ -D__STDC__
+#DEFINES+=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
 
 CPPFLAGS=$(INCLUDES) $(DEFINES)
-CFLAGS=-O -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
-ASFLAGS=-f as86
+#CFLAGS=-O -bnasm86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+CFLAGS=-O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+#CFLAGS+=-g
+NASMFLAGS=-f as86
+ASFLAGS=-0 -O -j -w-
 LDFLAGS=-0 -i -L$(C86LIB)
 
 CPP=../host-bin/cpp86
 CC=../host-bin/c86
-AS=../host-bin/nasm86
+NASM=../host-bin/nasm86
+AS=../host-bin/as86
 LD=../host-bin/ld86
 
 
@@ -28,7 +33,7 @@ show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) show_fonts.o -o show_fonts
 
 show_fonts.o: show_fonts.asm
-	$(AS) $(ASFLAGS) show_fonts.asm -o show_fonts.o
+	$(NASM) $(NASMFLAGS) show_fonts.asm -o show_fonts.o
 
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test

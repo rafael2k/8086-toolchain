@@ -4170,6 +4170,13 @@ static OPTION opts[] = {
      },
 #endif /* TARGET_SYSV */
 #else
+#ifdef TARGET_NASM
+    {
+     (const CHAR *) "nasm86", chip_option,
+     {&nasmx86_func},
+     {MC86_FUNCS}
+     },
+#endif /* TARGET_MASM */
 #ifdef TARGET_MASM
     {
      (const CHAR *) "masm86", chip_option,
