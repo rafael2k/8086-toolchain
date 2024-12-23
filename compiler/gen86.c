@@ -86,7 +86,8 @@ static ADDRESS ah_reg = {
 };
 
 static REGTYPE reg_type[] = {
-    (REGTYPE) (D_REG | T_REG | X_REG | N_REG),	/* EAX */
+    /* ghaerr: add Z_REG, required for ax_register; fixes ptr += and imul/idiv hangs */
+    (REGTYPE) (D_REG | T_REG | X_REG | N_REG | Z_REG),	/* EAX */
     (REGTYPE) (D_REG | T_REG | X_REG | N_REG),	/* EDX */
     (REGTYPE) (D_REG | T_REG | Y_REG | C_REG),	/* ECX */
     (REGTYPE) (D_REG | T_REG),	/* EBX */
@@ -2833,7 +2834,7 @@ static ADDRESS *g_cast P4 (ADDRESS *, ap, TYP *, tp1, TYP *, tp2, FLAGS,
 	    ap1 = mk_legal (ap, flags, tp2);
 	    freeop (ap1);
 	    if ((ap1->mode == am_mreg) && (ap1->preg == EAX)) {
-		ap = ax_register ();
+		ap = ax_register ();    /* ghaerr: fix ptr += requires Z_REG or hangs */
 	    } else {
 		ap = data_register ();
 	        g_code (op_mov, IL2, mk_low (ap1), ap);

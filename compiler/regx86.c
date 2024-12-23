@@ -351,9 +351,12 @@ void validate P1 (const ADDRESS *, ap)
  */
 static REG next_reg P2 (REG, reg, REGTYPE, regtype)
 {
+    int loopcnt = 0;
     for (;;) {
 	if (reg > ST7) {
 	    reg = EAX;
+	    if (++loopcnt > 1)      /* ghaerr: will otherwise hang if no Z_REG in EAX */
+	        FATAL ((__FILE__, "next_reg", "INFINITE LOOP"));
 	}
 	if ((regtypes[reg] & regtype) == regtype) {
 	    return reg;
@@ -524,7 +527,7 @@ ADDRESS *data_register_no_cx P0 (void)
 
 ADDRESS *ax_register P0 (void)
 {
-    return temp_register (Z_REG | T_REG);
+    return temp_register (Z_REG | T_REG);   /* ghaerr: requires Z_REG in reg_type[] */
 }
 
 ADDRESS *axdx_register P0 (void)
