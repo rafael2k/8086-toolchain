@@ -15,7 +15,6 @@ DEFINES=-D__C86__ -D__STDC__
 CPPFLAGS=$(INCLUDES) $(DEFINES)
 #CFLAGS=-O -bnasm86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
 CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
-#CFLAGS+=-g
 NASMFLAGS=-f as86
 ASFLAGS=-0 -O -j -w-
 LDFLAGS=-0 -i -L$(C86LIB)
