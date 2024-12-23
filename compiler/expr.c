@@ -570,7 +570,7 @@ static EXPR *mk_stringlit P2 (const CHAR *, s, size_t, len)
 		    }
 		    return ep;
 		}
-		result = memcmp(s, p->sptr, len);     /* ghaerr fix tree search */
+		result = memcmp(s, p->sptr, len);     /* ghaerr: fix tree search */
 	    }
 	    q = p;
 	}

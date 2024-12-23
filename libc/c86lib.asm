@@ -12,8 +12,8 @@
 ;
 ; C86 helper functions
 ;
-        global  alloca
-alloca:
+        global  __alloca
+__alloca:
         pop     bx              ; ret address
         pop     ax              ; alloca size
         sub     sp,ax

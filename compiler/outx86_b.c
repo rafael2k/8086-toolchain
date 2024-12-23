@@ -870,6 +870,9 @@ PRIVATE void put_reference P1 (SYM *, sp)
 	    break;
 	case sc_external:
 	    nl ();
+            if (typeof(sp)->type == bt_func)
+                put_cseg(0);
+            else put_dseg(0);
 	    oprintf ("\t.extern\t%s%s", outlate (nameof (sp)), newline);
 	    break;
 	default:
