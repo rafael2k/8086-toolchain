@@ -529,22 +529,6 @@ static const CHAR *get_stringlit P1 (LABEL, lab)
 }
 #endif /* FORMAT_CHECK */
 
-/* FIXME literal string re-use requires this version on host */
-/* ELKS version happens to work because char is default unsigned on OWC */
-int XXmemcmp(const void *s1, const void *s2, size_t n);
-int XXmemcmp(const void *s1, const void *s2, size_t n)
-{
-    const unsigned char *su1 = s1;
-    const unsigned char *su2 = s2;
-    unsigned char res = 0;  /* FIXME differs between ELKS libc which uses 'char' */
-
-    for (; n > 0; n--)
-        if ((res = *su1++ - *su2++))
-            break;
-
-    return res;
-}
-
 /*
  * mk_ s a string literal and return it's label number.
  *
@@ -573,11 +557,8 @@ static EXPR *mk_stringlit P2 (const CHAR *, s, size_t, len)
 
 	    if (diff >= 0) {
 		result =
-		    XXmemcmp ((const void *) s, (const void *) (p->sptr + diff),
+		    memcmp ((const void *) s, (const void *) (p->sptr + diff),
 			    (size_t) len);
-                /* FIXME above result always >= 0, uses tons of tree->more space */
-                //printf("memcmp %d\n", result);
-                //if (result) result = 1;
 		if (result == 0) {
 		    EXPR   *ep = mk_lcon (p->label);
 
@@ -589,6 +570,7 @@ static EXPR *mk_stringlit P2 (const CHAR *, s, size_t, len)
 		    }
 		    return ep;
 		}
+		result = memcmp(s, p->sptr, len);     /* ghaerr fix tree search */
 	    }
 	    q = p;
 	}
