@@ -14,7 +14,7 @@ DEFINES=-D__C86__ -D__STDC__
 
 CPPFLAGS=$(INCLUDES) $(DEFINES)
 #CFLAGS=-O -bnasm86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
-CFLAGS=-O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
 #CFLAGS+=-g
 NASMFLAGS=-f as86
 ASFLAGS=-0 -O -j -w-
@@ -39,7 +39,7 @@ test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
 
 test.o: test.asm
-	$(AS) $(ASFLAGS) test.asm -o test.o
+	$(AS) $(ASFLAGS) -l test.lst test.asm -o test.o
 
 test.asm: test.i
 	$(CC) $(CFLAGS) test.i test.asm
@@ -51,7 +51,7 @@ chess: chess.o cprintf.o
 	$(LD) $(LDFLAGS) chess.o cprintf.o -lc86 -o chess
 
 chess.o: chess.asm
-	$(AS) $(ASFLAGS)  chess.asm -o chess.o
+	$(AS) $(ASFLAGS) -l chess.lst chess.asm -o chess.o
 
 chess.asm: chess.i
 	$(CC) $(CFLAGS) chess.i chess.asm
@@ -60,7 +60,7 @@ chess.i: chess.c cprintf.h
 	$(CPP) $(CPPFLAGS) chess.c -o chess.i
 
 cprintf.o: cprintf.asm
-	$(AS) $(ASFLAGS) cprintf.asm -o cprintf.o
+	$(AS) $(ASFLAGS) -l cprintf.lst cprintf.asm -o cprintf.o
 
 cprintf.asm: cprintf.i
 	$(CC) $(CFLAGS) cprintf.i cprintf.asm
@@ -70,6 +70,6 @@ cprintf.i: cprintf.c cprintf.h
 
 
 clean:
-	rm -f *.o *.a *.i chess.asm cprintf.asm test.asm test chess show_fonts
+	rm -f *.o *.a *.i *.lst chess.asm cprintf.asm test.asm test chess show_fonts
 
 # end
