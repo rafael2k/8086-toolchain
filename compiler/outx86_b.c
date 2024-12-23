@@ -388,7 +388,7 @@ static struct oplst
     ,				/* op_asm */
 #endif /* ASM */
     {
-    ";.line", 0}
+    "; Line", 0}
     ,				/* op_line */
     {
     (char *) NULL, 0}		/* op_label */
@@ -978,6 +978,7 @@ PRIVATE void put_start P0 (void)
 		 comment, ctime (&time_of_day), newline);
     }
 #endif /* VERBOSE */
+	oprintf("\tUSE16\t86%s", newline);
 }
 
 

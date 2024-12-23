@@ -2573,7 +2573,7 @@ static ADDRESS *g_fcall P2 (const EXPR *, ep, FLAGS, flags)
 	ap = g_expr (ep0, F_AREG);
 	freeop (ap);
 	ap = copy_addr (ap, ap->mode);
-	ap->preg = REG16 (ap->preg);
+	//ap->preg = REG16 (ap->preg);  /* ghaerr: fix call ah bug */
 	break;
     }
     g_code (op_call, IL0, ap, NIL_ADDRESS);
