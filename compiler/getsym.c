@@ -298,6 +298,7 @@ static void nextline P0 (void)
 		*p1++ = *p2++;
 	    }
 	    symstart = bufstart;
+	    act_linetxt = bufstart;	/* ghaerr fix -g source line display */
 	    bufcur = p1 - 1;
 	}
 	/*
@@ -313,6 +314,7 @@ static void nextline P0 (void)
 	    bufstart =
 		(CHAR *) realloc (bufstart, (size_t) (buflen + (SIZE) 1));
 	    bufcur = bufstart + len;
+	    act_linetxt = bufcur;	/* ghaerr fix -g source line display */
 	    symstart = bufstart + len2;
 	}
 	len =
