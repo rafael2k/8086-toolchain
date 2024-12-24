@@ -1,9 +1,8 @@
 
 /* Speed and space hacks for BCC */
-#ifdef __AS386_16__
+#if defined(__AS386_16__) || defined(__ELKS__)
 #define LOW_BYTE	0	/* must be changed for big-endian */
 #else
-
 #define S_ALIGNMENT	sizeof(long)
 #endif
 
@@ -12,9 +11,8 @@
 /* major switches */
 
 /* #define MC6809 */		/* generate 6809 code */
-#ifndef MC6809
 #define I80386			/* generate 80386 code */
-#endif
+
 #define MNSIZE			/* allow byte size in mnemonic, e.g. "movb" */
 #undef SOS_EDOS			/* source OS is EDOS */
 
