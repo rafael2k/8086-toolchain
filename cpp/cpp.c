@@ -46,13 +46,13 @@
 
 char curword[WORDSIZE];
 int  alltok = 0;
-int  dialect = 0;
+int  dialect = DI_ANSI;		/* ghaerr: default ANSI */
 
 FILE * curfile;
 char * c_fname;
 int    c_lineno = 0;
 
-#ifdef __BCC__
+#if defined(__BCC__) || defined(__ELKS__)
 typedef long int_type;		/* Used for preprocessor expressions */
 #else
 typedef int int_type;		/* Used for preprocessor expressions */

@@ -62,6 +62,12 @@ static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
    case 'K': dialect = DI_KNR; break;
 
 	     /* Some options for describing the code generator. */
+#if 1
+   case '0': define_macro("__C86__");
+	     define_macro("__STDC__");
+	     define_macro("_M_I86");
+	     break;
+#else
    case '0': define_macro("__BCC__");
 	     define_macro("__AS386_16__");
 	     define_macro("__8086__");
@@ -76,7 +82,7 @@ static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
 	     break;
    case 'O': define_macro("__OPTIMISED__");
 	     break;
-
+#endif
    case 'C': /* Keep comments. */
 	     cwarn("-C not implemented");
 	     break;
