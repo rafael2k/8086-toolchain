@@ -867,6 +867,7 @@ static void do_proc_define(void)
 
       /* Clip to correct size and save */
       ptr = (struct define_item *) realloc(ptr, sizeof(struct define_item) + cc);
+      if(ptr==0) cfatal("Preprocessor out of memory");
       ptr->name = set_entry(0, name, ptr);
       ptr->in_use = 0;
       ptr->next = 0;
