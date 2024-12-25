@@ -64,8 +64,10 @@ PUBLIC void gensym()
 	writesn("Symbols:");
 	for (copyptr = symlptr, column = 0; copyptr < copytop;)
 	    column = printsym(*copyptr++, column);
+#ifdef USECOLS
 	if (column != 0)
 	    writenl();
+#endif
     }
     if ((outfd = symfil) != 0)
     {
@@ -177,11 +179,15 @@ unsigned column;
     build_2hex_number((unsigned) symptr->value_reg_or_op.value,
 		      listptr->value);
     writes((char *) listptr);
+#ifdef USECOLS
     if ((column += SYMLIS_LEN) > (80 - SYMLIS_LEN))
     {
 	writenl();
 	column = 0;
     }
+#else
+    writenl();
+#endif
     return column;
 }
 

@@ -100,6 +100,7 @@ extern bool     rules;
 extern bool     dotouch;
 extern bool     quest;
 extern bool     domake;
+extern bool     print;
 extern char     str1[];
 extern char     str2[];
 extern int      lineno;

@@ -250,8 +250,8 @@ extern char *longlongStr P_ ((UVAL));
 
 #endif	/* LONGLONG_SUPPORT */
 #ifdef CPU_DEFINED
-#if defined(DEBUG) && !defined(MACOSX)
-extern void dprintf P_ ((int, const char *, ...));
+#if defined(DEBUG)
+extern void debugprintf P_ ((int, const char *, ...));
 
 #endif /* DEBUG */
 extern void oprintf P_ ((const char *, ...));

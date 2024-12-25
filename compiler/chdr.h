@@ -785,7 +785,7 @@ struct options
 #define	DEBUG_FLOW	6	/* debugging the data flow analysis */
 #define	DEBUG_LONGLONG	7	/* debugging the long long support */
 #define	is_debugging(x)	((unsigned)internal_option & (1U<<x))
-#define	DPRINTF(x)	dprintf x
+#define	DPRINTF(x)	debugprintf x
 #else /* DEBUG */
 #define	DPRINTF(x)
 #endif /* DEBUG */

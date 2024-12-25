@@ -156,14 +156,14 @@ void lprintf P1V (const char *, formatstr)
 
 #endif /* LIST */
 
-#if defined(DEBUG) && !defined(MACOSX)
+#if defined(DEBUG)
 /*
  *  dprintf  functional equivalent to printf that writes
  *           to debug instead of stdout.  The flag argument
  *           determines whether to output the message.
  */
 /*PRINTFLIKE2 */
-void dprintf P2V (int, flag, const char *, formatstr)
+void debugprintf P2V (int, flag, const char *, formatstr)
 {
     if (is_debugging (flag)) {
 	va_list ap;
