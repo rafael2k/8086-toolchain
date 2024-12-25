@@ -138,7 +138,7 @@ static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
    } else if (!curfile) {
       /* Input file */
       curfile = fopen(argv[ar], "r");
-      c_fname = argv[ar]; c_lineno = 1;
+      c_fname = strdup(argv[ar]); c_lineno = 1;
       if (!curfile)
 	 cfatal("Cannot open input file");
    } else

@@ -42,6 +42,9 @@ struct macro * setmacro(char* name, char* val, int prio)
     char *     cp;
 
 
+    if (print)
+        fprintf(stderr, "%s=%s\n", name, val);
+
             /*  Replace macro definition if it exists  */
     for (rp = macrohead; rp; rp = rp->m_next)
         if (strcmp(name, rp->m_name) == 0)

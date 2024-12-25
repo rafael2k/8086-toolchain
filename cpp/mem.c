@@ -60,13 +60,13 @@ void *realloc(void *ptr, size_t size)
     if (osize == 0) {
         __dprintf("size 0\n");
     } else
-    if (size <= osize)
+    if (size < osize)
         osize = size;           /* copy less bytes in memcpy below */
 #endif
 
     new = malloc(size);
     if (new == 0) {
-                __dprintf("realloc: Out of memory\n");
+        __dprintf("realloc: Out of memory\n");
         return 0;
     }
     memcpy(new, ptr, osize);    /* FIXME copies too much but can't get real osize */
