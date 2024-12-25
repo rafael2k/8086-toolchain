@@ -57,10 +57,7 @@ void *realloc(void *ptr, size_t size)
     /* we can't yet get size from fmemalloc'd block */
     osize = __amalloc_usable_size(ptr);
     __dprintf("old %u new %u\n", osize, size);
-    if (osize == 0) {
-        __dprintf("size 0\n");
-    } else
-    if (size < osize)
+    if (size < osize || osize == 0)
         osize = size;           /* copy less bytes in memcpy below */
 #endif
 
