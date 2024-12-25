@@ -66,7 +66,7 @@ install: all
 	-@rm -f tmp
 
 clean realclean clobber:
-	rm -f *.o as86 as86_encap
+	rm -f *.o $(PROG) as86_encap
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
