@@ -55,7 +55,7 @@ install: ld86
 	install -m 755 ld86 $(LIBDIR)
 
 clean realclean clobber:
-	rm -f *.o $(BINDIR)/ld86 ld86r objchop catimage objdump86
+	rm -f *.o $(BINDIR)/ld86 ld86r objchop catimage $(BINDIR)/objdump86
 
 $(OBJS): align.h ar.h bindef.h byteord.h config.h const.h globvar.h obj.h \
 	 syshead.h type.h x86_aout.h
