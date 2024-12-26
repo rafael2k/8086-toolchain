@@ -17,7 +17,7 @@ LDFLAGS = $(CLBASE)
 LDLIBS =
 
 OBJS = $(SRCS:.c=.o)
-%.obj: %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $*.o $<
 
 ############# End of Standard Section ##############
