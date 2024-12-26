@@ -1,4 +1,4 @@
-# make ELKS IA16 compilation
+# MAKE86 Makefile for ELKS using IA16
 
 ############# Standard Section for IA16 C ##############
 ifndef TOPDIR
@@ -32,8 +32,6 @@ all: $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-
-$(OBJS): h.h
 
 clean:
 	rm -f $(PROG) *.o

@@ -1,4 +1,4 @@
-# Sample Makefile for host compilation
+# CPP86 Makefile for host compilation
 
 ############# Standard Section for Host C ##############
 CC = cc
@@ -18,21 +18,13 @@ OBJS = $(SRCS:.c=.o)
 
 BINDIR=../host-bin
 LOCALFLAGS = -Wno-missing-field-initializers -Wno-sign-compare
-SRCS = main.c cpp.c hash.c token1.c token2.c mem.c
 PROG = $(BINDIR)/cpp86
+SRCS = main.c cpp.c hash.c token1.c token2.c mem.c
 
 all: $(PROG)
 
 $(PROG): $(OBJS)
 	$(LD) $(LDFLAGS) -o $(PROG) $(OBJS)
-
-main.o: cc.h
-cpp.o: cc.h
-hash.o: cc.h
-tree.o: cc.h
-
-token1.o: token1.h
-token2.o: token2.h
 
 token1.h: token1.tok
 	gperf -aptTc -N is_ctok -H hash1 --output-file $@ $<
@@ -42,6 +34,3 @@ token2.h: token2.tok
 
 clean:
 	rm -f $(PROG) $(OBJS)
-
-maintclean: clean
-	rm -f token1.h token2.h
