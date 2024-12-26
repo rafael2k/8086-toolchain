@@ -37,7 +37,7 @@ OBJS = $(SRCS:.c=.obj)
 
 BINDIR = ../elks-bin
 LOCALFLAGS = -DNDEBUG
-PROG = $(BINDIR)/cpp86
+PROG = $(BINDIR)/c86
 SRCS = \
     analyze.c \
     cglbdef.c \
