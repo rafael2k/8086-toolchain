@@ -6,9 +6,12 @@ ifndef TOPDIR
 $(error ELKS TOPDIR is not defined)
 endif
 
-C86LIB=../libc
+#C86LIB=../libc
+#INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
 
-INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
+C86LIB=$(TOPDIR)/libc
+INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include/c86
+
 DEFINES=
 #DEFINES+=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
 
@@ -36,6 +39,7 @@ show_fonts.o: show_fonts.asm
 
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
+	cp test $(TOPDIR)/elkscmd/rootfs_template/root
 
 test.o: test.asm
 	$(AS) $(ASFLAGS) -l test.lst test.asm -o test.o
@@ -46,8 +50,9 @@ test.asm: test.i
 test.i: test.c cprintf.h
 	$(CPP) $(CPPFLAGS) test.c -o test.i
 
-chess: chess.o cprintf.o
-	$(LD) $(LDFLAGS) chess.o cprintf.o -lc86 -o chess
+chess: chess.o
+	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
+	cp chess $(TOPDIR)/elkscmd/rootfs_template/root
 
 chess.o: chess.asm
 	$(AS) $(ASFLAGS) -l chess.lst chess.asm -o chess.o
@@ -55,7 +60,7 @@ chess.o: chess.asm
 chess.asm: chess.i
 	$(CC) $(CFLAGS) chess.i chess.asm
 
-chess.i: chess.c cprintf.h
+chess.i: chess.c
 	$(CPP) $(CPPFLAGS) chess.c -o chess.i
 
 cprintf.o: cprintf.asm

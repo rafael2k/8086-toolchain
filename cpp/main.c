@@ -206,10 +206,11 @@ char * name;
 
    undefine_macro(name);
 
-   ptr = malloc(sizeof(struct define_item) + strlen(value));
+   ptr = malloc(sizeof(struct define_item) + strlen(value)+1);
    if(!ptr) cfatal("Out of memory for macro");
    ptr->name = set_entry(0, name, ptr);
    strcpy(ptr->value, value);
+   strcat(ptr->value, " ");     /* ghaerr: match #define definitions */
    ptr->arg_count = -1;
    ptr->in_use = 0;
    ptr->next = 0;
