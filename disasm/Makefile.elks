@@ -1,4 +1,4 @@
-# disasm86 ELKS IA16 compilation
+# disasm86 Makefile for ELKS using IA16
 
 ############# Standard Section for IA16 C ##############
 ifndef TOPDIR

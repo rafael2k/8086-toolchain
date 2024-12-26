@@ -1,69 +1,64 @@
+# LD86 Makefile for ELKS using OpenWatcom C
 
-LIBDIR	=/usr/bin
-CFLAGS	=-Os
-LDFLAGS	=
+############# Standard Section for Open Watcom C ##############
+ifndef TOPDIR
+$(error ELKS TOPDIR is not defined)
+endif
+
+ifndef WATCOM
+$(error OpenWatcom WATCOM is not defined)
+endif
+
+CC = owcc
+LD = owcc
+CLBASE = -mcmodel=l
+CLBASE += -bnone -march=i86 -std=c99
+CLBASE += -fno-stack-check -fnostdlib
+CLBASE += -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
+WARNINGS = -Wall -Wextra
+INCLUDES = -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
+INCLUDES += -I$(WATCOM)/h
+DEFINES = -D__ELKS__
+CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
+LDBASE = -bos2 -s
+LDBASE += -Wl,option -Wl,dosseg
+LDBASE += -Wl,option -Wl,start=_start
+LDBASE += -Wl,option -Wl,nodefaultlibs
+LDBASE += -Wl,option -Wl,stack=0x1000
+LDBASE += -Wl,option -Wl,heapsize=0x4000
+LDFLAGS = $(LDBASE)
+LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libc.lib
+
+OBJS = $(SRCS:.c=.obj)
+%.obj: %.c
+	$(CC) -c $(CFLAGS) -o $*.obj $<
+
+############# End of Standard Section ##############
 
 # Will need some of these if you want native executables on non-Linux/i386
 # -DDETECTAOUT			# Turn on detection.
 # -DV7_A_OUT			# a.out.h is like V7
 # -DBSD_A_OUT			# a.out.h is like BSD
 # -DSTANDARD_GNU_A_OUT		# a.out.h is like GNU normal.
-#
 # -DREL_OUTPUT -DBUGCOMPAT	# -r Produces weird *.o files.
 #
-DEFS	=-DREL_OUTPUT
-
 # An alternative file for a non-standard a.out.h (eg i386 linux on an Alpha)
-#
 # NATIVE=-DA_OUT_INCL='"a_out_local.h"' 
+DEFINES += -DREL_OUTPUT
 
-ifeq ($(strip ${TOPDIR}),)
-	TOPDIRE=/home/rafael2k/programs/devel/elks
-else
-	TOPDIRE=${TOPDIR}
-endif
+BINDIR = ../elks-bin
+LOCALFLAGS =
+PROG = $(BINDIR)/ld86 $(BINDIR)/objdump86
+SRCS = dumps.c io.c ld.c readobj.c table.c typeconv.c linksyms.c mkar.c \
+      writex86.c writebin.c writeemu.c
 
-ifeq ($(strip ${WATCOM}),)
-	WATCOMC=/usr/bin/watcom
-else
-	WATCOMC=${WATCOM}
-endif
-
-BINDIR=../elks-bin
-
-CC =  owcc -c -bnone -mcmodel=l -march=i86 -Os -std=c99 -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -fno-stack-check -fnostdlib -Wall -Wextra -Wc,-wcd=303 -I$(TOPDIRE)/libc/include -I$(TOPDIRE)/include -I$(TOPDIRE)/elks/include -I$(WATCOMC)/h -D__ELKS__
-#CC = ia16-elf-gcc -mcmodel=small -std=c11 -melks-libc -mtune=i8086 -Wall -Os -mno-segment-relocation-stuff -fno-inline -fno-builtin-printf -Wno-implicit-int -Wno-parentheses  -I/home/rafael2k/programs/devel/elks/libc/include -I/home/rafael2k/programs/devel/elks/elks/include -D__ELKS__
-LINK = owcc -bos2 -s -Wl,option -Wl,start=_start -Wl,option -Wl,dosseg -Wl,option -Wl,nodefaultlibs -Wl,option -Wl,stack=0x1000 -Wl,option -Wl,heapsize=0x4000 -Wl,library -Wl,$(TOPDIRE)/libc/libc.lib
-
-
-OBJS= dumps.o io.o ld.o readobj.o table.o typeconv.o linksyms.o mkar.o \
-      writex86.o writebin.o writeemu.o
-
-all: $(BINDIR)/ld86 $(BINDIR)/objdump86
+all: $(PROG)
 
 $(BINDIR)/ld86: $(OBJS)
-	$(LINK) $(LDFLAGS) $(OBJS) -o $@
+	$(LD) $(LDFLAGS) -o $(BINDIR)/ld86 $(OBJS) $(LDLIBS)
 
-$(BINDIR)/objdump86: objdump86.o
-	$(LINK) $(LDFLAGS) objdump86.o -o $@
+$(BINDIR)/objdump86: objdump86.obj
+	$(LD) $(LDFLAGS) -o $(BINDIR)/objdump86 objdump86.obj $(LDLIBS)
 
-objdump86.o: objdump86.c
-	$(CC) $(CFLAGS) -c objdump86.c -o objdump86.o
-
-install: ld86
-	install -d $(LIBDIR)
-	install -m 755 ld86 $(LIBDIR)
-
-clean realclean clobber:
-	rm -f *.o $(BINDIR)/ld86 ld86r objchop catimage $(BINDIR)/objdump86
-
-$(OBJS): align.h ar.h bindef.h byteord.h config.h const.h globvar.h obj.h \
-	 syshead.h type.h x86_aout.h
-
-writebin.o: writebin.c
-	$(CC) $(CFLAGS) $(DEFS) $(NATIVE) -c $<
-
-writerel.o: writebin.c
-
-.c.o:
-	$(CC) $(CFLAGS) $(DEFS) -c $< -o $@
+clean:
+	rm -f $(PROG) *.obj
