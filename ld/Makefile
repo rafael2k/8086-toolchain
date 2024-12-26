@@ -1,6 +1,6 @@
 
 LIBDIR	=/usr/bin
-CFLAGS	=-O3
+CFLAGS	=-O3 -Wall -Wextra -Wno-sign-compare
 LDFLAGS	=
 BINDIR=../host-bin
 

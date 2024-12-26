@@ -1,4 +1,4 @@
-# Sample ELKS Makefile for OpenWatcom C
+# AS86 Makefile for ELKS using OpenWatcom C
 
 ############# Standard Section for Open Watcom C ##############
 ifndef TOPDIR
@@ -12,7 +12,7 @@ endif
 CC = owcc
 LD = owcc
 CLBASE = -mcmodel=l
-CLBASE += -bnone -march=i86 -stdc=c99
+CLBASE += -bnone -march=i86 -std=c99
 CLBASE += -fno-stack-check -fnostdlib
 CLBASE += -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
 WARNINGS = -Wall -Wextra
