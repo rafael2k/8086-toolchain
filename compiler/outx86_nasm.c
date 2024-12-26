@@ -1296,7 +1296,7 @@ PRIVATE void put_start P0 (void)
 	prefix = (const char *)&in_file[start+1];
 
 	// Find index of '.' in file name, if it has one
-	for(end = 0; (prefix[end] != '.') && (prefix[end+1] != '\0') && (end < MAX_LABEL - (strlen(prefix_buffer)+2)); end++);
+	for(end = 0; (prefix[end] != '.') && (prefix[end+1] != '\0') && (end < MAX_LABEL - ((int)strlen(prefix_buffer)+2)); end++);
 
 	strncat(prefix_buffer, prefix, end);
 	strcat(prefix_buffer, "_");

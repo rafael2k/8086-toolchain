@@ -61,17 +61,16 @@ SRCS = \
     symbol.c \
     system.c \
     types.c \
-    outdbg_d.c \
     gendbg.c \
     inline.c \
     gen86.c \
     peepx86.c \
     regx86.c \
-    outx86_a.c \
-    outx86_b.c \
-    outx86_g.c \
-    outx86_n.c \
-    outx86_s.c \
+    outx86_as86.c \
+    outx86_gas.c \
+    outx86_masm.c \
+    outx86_nasm.c \
+    outx86_sysv.c \
     mem.c \
 
 all: $(PROG)
