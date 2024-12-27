@@ -1,8 +1,4 @@
-all:
-	make cleaneobjs
-	make elks
-	make cleanhobjs
-	make host
+all: host elks
 
 elks:
 	make -C compiler -f Makefile.elks
@@ -27,28 +23,16 @@ host:
 	make -C nasm32
 	make -C emulator
 	make -C libc
+	make -C examples
 
 copy:
 	cp elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
 	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/ndisasm86
 	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/nasm86
 
-.PHONY: clean cleanobjs
+.PHONY: clean copy
 
-clean: cleaneobjs cleanhobjs
-
-cleaneobjs:
-	make -C compiler -f Makefile.elks clean
-	make -C cpp -f Makefile.elks clean
-	make -C as -f Makefile.elks clean
-	make -C ld -f Makefile.elks clean
-	make -C ar -f Makefile.elks clean
-	make -C make -f Makefile.elks clean
-	make -C disasm -f Makefile.elks clean
-	make -C nasm -f Makefile.elks clean
-	make -C nasm32 -f Makefile.elks clean
-
-cleanhobjs:
+clean:
 	make -C compiler clean
 	make -C cpp clean
 	make -C as clean
@@ -60,3 +44,13 @@ cleanhobjs:
 	make -C nasm32 clean
 	make -C emulator clean
 	make -C libc clean
+	make -C examples clean
+	make -C compiler -f Makefile.elks clean
+	make -C cpp -f Makefile.elks clean
+	make -C as -f Makefile.elks clean
+	make -C ld -f Makefile.elks clean
+	make -C ar -f Makefile.elks clean
+	make -C make -f Makefile.elks clean
+	make -C disasm -f Makefile.elks clean
+	make -C nasm -f Makefile.elks clean
+	make -C nasm32 -f Makefile.elks clean
