@@ -803,6 +803,12 @@ static void do_proc_define(void)
 	 {
 	    ch=gettok_nosub();
 	    if( ptr->arg_count==0 && ch == ')' ) break;
+	    if( ch == TK_ELLIPSIS ) {     /* ghaerr: fix varargs handling */
+		 ptr->varargs = 1;
+		 ch=gettok_nosub();
+		 if (ch == ')') break;
+		 if (ch == ',') ch = '*'; /* Force error if not ')' */
+	    }
 	    if( ch == TK_WORD ) 
 	    {
 	       if( cc+strlen(curword)+4 >= len)
@@ -819,11 +825,6 @@ static void do_proc_define(void)
 		  cc++;
 		  ptr->arg_count++;
 		  ch=gettok_nosub();
-		  if( ch == TK_ELLIPSIS ) {
-		     ptr->varargs = 1;
-		     ch=gettok_nosub();
-		     if (ch == ',') ch = '*'; /* Force error if not ')' */
-		  }
 		  if( ch == ')' ) break;
 		  if( ch == ',' ) continue;
 	       }
@@ -856,12 +857,12 @@ static void do_proc_define(void)
 
 #if CPP_DEBUG
       if (cc == 1)
-	 fprintf(stderr, "\n### Define '%s' as null\n", name);
+	 fprintf(stderr, "### Define '%s' as null\n", name);
       else if (ptr->arg_count<0)
-	 fprintf(stderr, "\n### Define '%s' as '%s'\n", 
+	 fprintf(stderr, "### Define '%s' as '%s'\n",
 		 name, ptr->value);
       else
-	 fprintf(stderr, "\n### Define '%s' as %d args '%s'\n", 
+	 fprintf(stderr, "### Define '%s' as %d args '%s'\n",
 		 name, ptr->arg_count, ptr->value);
 #endif
 
@@ -1319,7 +1320,7 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
 
    if (commas_found || args_found) args_found = commas_found+1;
 
-   if( arg_count == 0 && args_found != 0 )
+   if( !is_vararg && arg_count == 0 && args_found != 0 )    /* ghaerr: fix varargs */
       cerror("Arguments given to macro without them.");
    else if( !is_vararg && arg_count != args_found )
       cwarn("Incorrect number of macro arguments");

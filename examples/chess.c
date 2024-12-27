@@ -1,8 +1,8 @@
 /* From https://github.com/shreejilucifer/Chess-In-C
  * ELKS port by Rafael Diniz */
 
-#include <stdarg.h>
-#include "cprintf.h"
+#include <stdio.h>
+#define cprintf printf
 
 extern int write(int, char *, int);
 extern int read(int, void *, int count);
@@ -413,13 +413,13 @@ void pawnb( int r1 , int c1 ) // paido black
 void player1()
 {
     int p1 , p2 , c1 , r1 , c2 , r2;
-	int tmp;
+	unsigned char tmp;
 
     cprintf( "\nPLAYER 1 - Big Case\n" );
 again1:
     cprintf( "\nEnter Position of Element to change ( RC ): " );
 	/* our scanf wrapper... scanf("%d", &p1) */
-    read(0, &tmp, 1);
+	read(0, &tmp, 1);
 	p1 = (tmp - 48) * 10;
 	read(0, &tmp, 1);
 	p1 += (tmp - 48);

@@ -29,19 +29,14 @@ _unlink:
         mov     ax,#10
         jmp     near callsys
 
-        .global _execve
-_execve:
+        .global __execve
+__execve:
         mov     ax,#11
         jmp     near callsys
 
         .global _chdir
 _chdir:
         mov     ax,#12
-        jmp     near callsys
-
-        .global _time
-_time:
-        mov     ax,#13
         jmp     near callsys
 
         .global _mknod
@@ -59,8 +54,8 @@ _chown:
         mov     ax,#16
         jmp     near callsys
 
-        .global _brk
-_brk:
+        .global __brk
+__brk:
         mov     ax,#17
         jmp     near callsys
 
@@ -69,13 +64,13 @@ _stat:
         mov     ax,#18
         jmp     near callsys
 
-        .global _lseek
-_lseek:
+        .global __lseek
+__lseek:
         mov     ax,#19
         jmp     near callsys
 
-        .global _getpid
-_getpid:
+        .global __getpid
+__getpid:
         mov     ax,#20
         jmp     near callsys
 
@@ -94,8 +89,8 @@ _setuid:
         mov     ax,#23
         jmp     near callsys
 
-        .global _getuid
-_getuid:
+        .global __getuid
+__getuid:
         mov     ax,#24
         jmp     near callsys
 
@@ -159,13 +154,13 @@ _setgid:
         mov     ax,#46
         jmp     near callsys
 
-        .global _getgid
-_getgid:
+        .global __getgid
+__getgid:
         mov     ax,#47
         jmp     near callsys
 
-        .global _signal
-_signal:
+        .global __signal
+__signal:
         mov     ax,#48
         jmp     near callsys
 
@@ -219,8 +214,8 @@ _select:
         mov     ax,#63
         jmp     near callsys
 
-        .global _readdir
-_readdir:
+        .global __readdir
+__readdir:
         mov     ax,#64
         jmp     near callsys
 
@@ -234,8 +229,8 @@ _setsid:
         mov     ax,#68
         jmp     near callsys
 
-        .global _sbrk
-_sbrk:
+        .global __sbrk
+__sbrk:
         mov     ax,#69
         jmp     near callsys
 
@@ -294,12 +289,12 @@ _getsocknam:
         mov     ax,#205
         jmp     near callsys
 
-        .global _fmemalloc
-_fmemalloc:
+        .global __fmemalloc
+__fmemalloc:
         mov     ax,#206
         jmp     near callsys
 
-        .global _fmemfree
-_fmemfree:
+        .global __fmemfree
+__fmemfree:
         mov     ax,#207
         jmp     near callsys
