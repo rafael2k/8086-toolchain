@@ -16,9 +16,9 @@ CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
 LDFLAGS = $(CLBASE)
 LDLIBS =
 
-OBJS = $(SRCS:.c=.o)
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $*.o $<
+OBJS = $(SRCS:.c=.oaj)
+%.oaj: %.c
+	$(CC) $(CFLAGS) -c -o $*.oaj $<
 
 ############# End of Standard Section ##############
 
@@ -35,4 +35,4 @@ $(PROG): $(OBJS)
 $(OBJS): dis.h a.out.h
 
 clean:	
-	rm -f $(PROG) *.o
+	rm -f $(PROG) *.oaj
