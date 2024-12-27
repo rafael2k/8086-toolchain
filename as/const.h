@@ -284,7 +284,7 @@ oops - ENTBIT misplaced
 #define SYMLIS_LEN	(sizeof (struct sym_listing_s))
 
 #define FILNAMLEN	64	/* max length of a file name */
-#define LINLEN		512	/* max length of input line */
+#define LINLEN		512	/* max length of input line ghaerr: was 256 */
 #define LINUM_LEN	5	/* length of formatted line number */
 
 #define SPTSIZ		1024	/* number of symbol ptrs */

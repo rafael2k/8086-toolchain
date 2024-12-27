@@ -39,7 +39,7 @@ show_fonts.o: show_fonts.asm
 
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
-	cp test $(TOPDIR)/elkscmd/rootfs_template/root
+#	cp test $(TOPDIR)/elkscmd/rootfs_template/root
 
 test.o: test.asm
 	$(AS) $(ASFLAGS) -l test.lst test.asm -o test.o
@@ -52,7 +52,7 @@ test.i: test.c cprintf.h
 
 chess: chess.o
 	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
-	cp chess $(TOPDIR)/elkscmd/rootfs_template/root
+#	cp chess $(TOPDIR)/elkscmd/rootfs_template/root
 
 chess.o: chess.asm
 	$(AS) $(ASFLAGS) -l chess.lst chess.asm -o chess.o
