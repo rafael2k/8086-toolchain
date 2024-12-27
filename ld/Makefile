@@ -42,4 +42,4 @@ $(BINDIR)/objdump86: objdump86.o
 	$(LD) $(LDFLAGS) -o $(BINDIR)/objdump86 objdump86.o
 
 clean:
-	rm -f $(PROG) $(OBJS)
+	rm -f $(PROG) $(OBJS) *.o
