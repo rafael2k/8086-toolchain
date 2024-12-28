@@ -65,8 +65,6 @@ const CHAR *outlate P1 (const CHAR *, string)
     CHAR   *dp;
 
     dp = (CHAR *) &symname[0];
-    if (string == alloca_name)
-        return string;          /* ghaerr: don't prefix alloca */
 
     if (*string == (CHAR) '.') {
 #ifdef TRANSLATE
