@@ -1,0 +1,72 @@
+.TH objdump86 1 "May, 2006"
+.BY Shyamal Prasad <shyamal@member.fsf.org>
+.nh
+.SH NAME
+objdump86, size86, nm86 \- Examine object, archive or executable files
+.SH SYNOPSIS
+.BI objdump86 
+.RI [ file ...]
+.PP
+.B size86 
+.RI [ file ...]
+.PP
+.BI nm86 
+.RI [ file ...]
+
+.SH DESCRIPTION
+These commands are used to examine the contents of object files. They
+may also be used to examine archive or executable files. When archive
+files are examined each module in the archive will be processed in
+sequence.
+.PP
+.B nm86 
+prints the symbol table in each of the specified files.
+.PP
+.B size86
+displays a summary of the sizes of the segments in each of the files.
+.PP
+.B objdump86
+decodes and displays the contents of the object files specified. This
+includes the section headers, symbols tables, segment sizes, and
+segment contents.
+.SH OPTIONS
+The programs are not designed to accept any options.
+.PP
+It should be noted that all three of
+.BR objdump86 ,
+.BR size86 ,
+and 
+.B nm86
+are implemented as links to the same executable file (called
+.BR objdump86
+in the source distribution). The result of running this executable is
+determined by the file name actually used to execute it.
+.PP
+It is possible to force a specific behavior irrespective of the
+invocation file name using one of the options below
+.TP
+.B -s
+Behave like
+.BR size86 .
+.TP
+.B -n
+Behave like
+.BR nm86 .
+.SH RESTRICTIONS
+These commands are intended for use only with the Dev86/ELKS
+toolchain.
+.SH "SEE ALSO"
+.BR as86 (1),
+.BR bcc (1),
+.BR ld86 (1)
+.SH AUTHORS
+.BR objdump86 ,
+.BR size86 ,
+and
+.B nm86
+\(co 1999 Greg Haerr <greg@censoft.com>.
+.SH COPYRIGHT
+The manual page was written for Debian GNU/Linux, \(co 2006 Shyamal
+Prasad <shyamal@member.fsf.org>. It is distributed under the terms of
+the GNU General Public License version 2 (or any later version
+released by the Free Software Foundation).

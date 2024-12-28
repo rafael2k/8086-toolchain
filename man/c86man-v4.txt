@@ -1,0 +1,312 @@
+         NAME
+              c68/c386 - Compile pre-processed C source to assembler.
+
+        SYNOPSIS
+              c68  [options] [input_file [output_file]]
+              c386 [options] [input_file [output_file]]
+
+         DESCRIPTION
+              The c68 and c386 programs are freely available C compilers.
+              These compilers are  based upon the original Kernighan and
+              Richie  definition  and  support all  facilities that  are
+              defined in 'K&R' C.
+
+              A large  number of  ANSI style  extensions to  the original
+              K&R specification  are also  supported.  The details of the
+              extensions to  the K&R  definition are  detailed  later  in
+              this document.
+
+              The compiler  currently exists  in two major variants - one
+              known as  c68 which produces 68000 code and the other known
+              as c386  which produces 386 code (as used on top-end PC's).
+              They share  a common  front-end. but  have  different  code
+              generation modules.
+
+              The c386  variant requires  an  Intel  387  floating  point
+              co-processor (or  equivalent) if  floating point  is to  be
+              used.    The   c68  variant   has  libraries  that  provide
+              software support  for either  Motorola Fast  Floating Point
+              (MFFP) format or for IEEE format.
+
+              The compilers  take the  output of  a C  pre-processor, and
+              compiles it  to give  assembler source.   If no output file
+              is  specified  on  the  command  line  then  the  generated
+              assembler code  is  written  to  standard  output.   If  in
+              addition there  is no input file specifed then the C source
+              is read from standard input.
+
+              The options  available to  control  the  behaviour  of  the
+              compilers are  listed below.  The options also be passed as
+              -Qoption.  This  is to  make it easier for the cc front-end
+              programs to decide which options belong to the compiler.
+
+              -list     Control the listing of  the source file that is
+              -nolist   being compiled (the  pre-processor output!).  Any
+                        listing will  be put  into  file  "c68_list"  (or
+                        "c386_list")  in   the   current   default   Data
+                        Directory.  Any  errors or  warnings are included
+                        in the  listing under  the source  line to  which
+                        they relate.
+                        Default: -nolist
+
+              -short    Control the length of int declarations as either
+              -noshort  16 or 32 bit.  As  issued, the compiler is set up
+                        so that  by default  they  would  be  treated  as
+                        short (16  bit).  There  is a  lot of code around
+                        that assumes  sizeof(int)==sizeof(char *), so use
+                        16 bit ints with care.
+                        Default: -short (c68), -noshort (c386)
+                        NOTE. The C libraries supplied with Minix assume
+                              16 bit ints (i.e. -short).
+
+              -reg      Control whether the compiler is to allowed to do
+               -noreg   automatic allocation  of variables  to registers.
+                        Normally  the   compilers   will   do   automatic
+                        allocation of  variables to  registers  according
+                        to  their  run-time  usage.   The  -noreg  option
+                        forces the  use of  register variables  only when
+                        explicitly requested by the programmer.
+                        Default: -reg
+
+              -warn[=n] Control the level of warning messages. If set on
+              -nowarn   then additional diagnostic  warning messages will
+                        be output  during the  compilation.  The  warning
+                        level  can   be  specified   more  accurately  by
+                        specifying  the  exact  warning  level  required.
+                        See later for details of possible values.
+                        Default: -warn=3
+
+              -opt      Control the operation of the peephole optimiser.
+              -noopt    Normally  the   peephole  optimiser  is  used  to
+                        produce more  efficient code.   If  you  wish  to
+                        supress it  you can  specify the  -noopt  option.
+                        An example  of  when  this  might  be  desireable
+                        would be  if you  are looking  at  the  assembler
+                        output and  trying  to  relate  it  back  to  the
+                        original C statements.
+
+              -icode    Output  run-time  debugging  information  to  the
+                        file "c68_icode"  (or "c386_icode").  This option
+                        is only  available if  the compiler  was compiled
+                        with  the   -DICODE  option.   As  supplied,  the
+                        compiler  is   NOT  compiled   with  this  option
+                        available.
+
+              -v        Output progress  information during  the  compile
+                        process.  This  option is only operational if the
+                        compiler was  compiled with -DVERBOSE option.  As
+                        supplied, the  compiler is NOT compiled with this
+                        option available.
+
+              -trans    Make certain all  names in  the assembler  output
+                        are  only  8  characters  in  length  (a  special
+                        algorithm is  used for names that are longer than
+                        this).  This  is  used  if  the  assembler  phase
+                        cannot handle  long C  names.   As  supplied, the
+                        compiler does NOT need to use this option.
+
+              -fpu      Generate floating  point code  in a form suitable
+                        for  a   maths  co-processor.    This  option  is
+                        currently only  relevant to  the c386  variant of
+                        the compiler.
+
+              -trad     Restrict   certain    of   the    extensions   to
+                        traditional  K&R   C  from  being  accepted,  and
+                        generate warning  messages for others.   For more
+                        details on  which options  are affected  see  the
+                        section on  "Extensions to  K&R C".  Also diables
+                        some peep-hole optimisations (see volatile).
+
+
+         EXIT CODES
+
+              The compiler returns the following error codes:
+
+              0    The compilation was  successful. That  is  the  source
+                   file was compiled, and there were no fatal errors.
+              1    One or more fatal compilation errors were reported.
+              2    The source file was not found.
+
+
+         WARNING LEVELS
+
+              The compiler  has a  large number  of warning messages that
+              can be  output.  These warnings are classified into various
+              levels.   The  higher the  level,  the  more  pedantic  the
+              level of warning messages that are output.
+
+              The levels currently supported are as follows:
+
+              0    This means that  all warning  messages  are  disabled.
+                   This is  equivalent  to  the  -nowarn  option  to  the
+                   compiler.
+
+              1    These are severe  warnings that should not normally be
+                   suppressed.   They  typically relate  to  problems  at
+                   the code generation stage of the compiler.
+
+              2    These relate to  problems with  the code that normally
+                   indicate problems  or potential  problems.   They  are
+                   typically easy  to fix  - normally by adding a cast or
+                   something similar.
+
+              3    This level  relates  to  warnings  that  are  commonly
+                   encountered when  porting code.   The warnings at this
+                   level may  not indicate  an  error,  but  they  should
+                   certainly be checked out.
+
+                   The compiler is  supplied with this set as the default
+                   warning level  to be  used  if  not  changed  via  the
+                   command line or in an environment variable.
+
+                   This is also the  level of  warning that  will be used
+                   if the  -warn option  is specified  without specifying
+                   the specific level wanted.
+
+              4    This level of  warning  indicates  problems  that  are
+                   often encountered  in porting,  but that  are probably
+                   not an  error.   It  is still  a good idea to get your
+                   own code  to compile  cleanly at this level of warning
+                   as it will minimise problems later.
+
+              5.   This level of  warning indicates code that is commonly
+                   encountered in  C programs  and is  rarely  an  error.
+                   Examples of  this might be the warning for "Assignment
+                   in conditional  context".  Such  code is often used by
+                   experienced C  programmers,  but  occasionally  it  is
+                   used when an equality test was meant.
+
+              6    This is the most  pedantic level.   It  will  only  be
+                   useful to  those who  are  looking  for  very  awkward
+                   porting problems.
+
+
+         ENVIRONMENT VARIABLES
+
+              The Environment  Variable "C68" for c68 and "C386" for c386
+              (if it  is present) is assumed to contain parameters in the
+              same format  as the  command line  options.   This  is done
+              before processing  the command  line.  Command line options
+              will therefore  over-ride the Environment variable settings
+              in the event of conflict.
+
+
+         EXTENSIONS TO K&R
+
+              The  compiler  supports  the following  extensions  to  the
+              traditional K&R  C (as  specified  in  "The  C  Programming
+              Language" Edition  1  by  Kernighan  and  Richie).    These
+              extensions are some of those mandated by ANSI.
+
+              Identifiers
+
+              -    Minimum  significance   of  internal   identifiers  is
+                   increased to 31 characters.
+
+              Keywords
+
+              -    The void keyword is supported
+
+              -    The enum keyword is supported
+
+              -    The const keyword  is  accepted  but  ignored.    This
+                   facility can  be  disabled  by  specifying  the  -trad
+                   option to the compiler.
+
+              -    The volatile keyword  is accepted.   This facility can
+                   be disabled  by specifying  the -trad  option  to  the
+                   compiler.  The  volatile keyword  is largely  ignored,
+                   but it  is does  disable  some  optimisations  in  the
+                   peep-hole  optimiser   that  can   be   dangerous   if
+                   accessing  memory   mapped   I/O   registers.    These
+                   optimisations are also disabled if -trad is used.
+
+              -    The signed keyword  is supported.    This facility can
+                   be disabled  by specifying  the -trad  option  to  the
+                   compiler.
+
+              -    The "long double"  keyword   sequence   is   accepted,
+                   although it  is merely  ttreated the  same as  double.
+                   This facility  can be disabled by specifying the -trad
+                   option to the compiler.
+
+              -    The "long float" keyord sequence (an  alternative  way
+                   under K&R  of specifying  double)  is  treated  as  an
+                   error unless  the -trad  option  is  specifed  to  the
+                   compiler.
+
+              Operators
+
+              -    The assignment  operators   -=,  +=,  and  so  on  are
+                   treated as  single tokens.   No whitespace  is allowed
+                   between the tokens.
+
+              -    Unary + is supported.
+
+              Strings
+
+              -    The \a, \? and  \x escape sequences are supported.
+
+              -    Adjacent  string   literals  are  concatenated.   This
+                   option can  be disabled  by using  the  -trad  command
+                   line option.
+
+              -    A single  copy  of  identical  strings  is  generated.
+                   This can  be disabled  by using the -trad command line
+                   option which  will force  all strings  to be allocated
+                   separate storage.
+
+              Constants
+
+              -    The U and L suffixes can be used with integers.
+
+              -    The F and L  suffixes can  be used with floating point
+                   constants.
+
+              Structures, Unions, and Arrays
+
+              -    Unions may be initialised
+
+              Functions
+
+              -    Structures may  be passed to functions and returned by
+                   functions.
+
+              -    ANSI style  function   prototypes  are   accepted   in
+                   addition to  the  traditional  K&R  syntax.   If  such
+                   prototypes  are  present  then  types  and  number  of
+                   parameters  to  function  calls  are  checked.    This
+                   option is  disabled if  the -trad  option is specified
+                   to the  compiler.  Note  that this  is not a full ANSI
+                   implementation as  no parameter  type conversion  will
+                   be done  - you  will get  a warning  about  "parameter
+                   mismatch" instead.
+
+                   As a convenience to  LATTICE users,  the compiler will
+                   accept two  methods of specifying a variable number of
+                   parameters in function prototypes:
+
+                   a)   The ANSI style of using the ", ..." sequence.
+                   b)   The LATTICE  style  of  finishing  the  parameter
+                        list with a comma.
+
+              -    ANSI style  function   declarations  are  accepted  in
+                   addition to  the traditional K&R syntax.   This option
+                   is disabled  if the  -trad option  is specified to the
+                   compiler.
+
+
+         AUTHOR(s)
+
+              Christoph van Wuellen for Releases 2 and 3.
+			email: HBO043%DJUKFA11.BITNET@cunym.cuny.edu
+
+              The upgrades to produce Release 4 were done mainly by:
+
+                   Keith Walker:       email: kdw@oasis.icl.co.uk
+                        (bug fixes, IEEE support, ANSI prototypes)
+
+                   Dave Walker:        email: d.j.walker@oasis.icl.co.uk
+                        (bug fixes, IEEE support, Errors/Warnings)
+
+

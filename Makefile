@@ -1,6 +1,7 @@
 all: host elks
 
 elks:
+	mkdir -p elks-bin
 	make -C compiler -f Makefile.elks
 	make -C cpp -f Makefile.elks
 	make -C as -f Makefile.elks
@@ -12,6 +13,7 @@ elks:
 	make -C nasm32 -f Makefile.elks
 
 host:
+	mkdir -p host-bin
 	make -C compiler
 	make -C cpp
 	make -C as
