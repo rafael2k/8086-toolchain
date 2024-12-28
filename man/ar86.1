@@ -1,0 +1,153 @@
+.TH ar86 1 "May, 2006"
+.BY Shyamal Prasad <shyamal@member.fsf.org>
+.nh
+.SH NAME
+ar86 \- Create, modify, and extract from archive file
+.SH SYNOPSIS
+.B ar86
+.I operation
+.B archive 
+.RI [ file... ]
+.PP
+.BR ar86
+.I positional\-op
+.B  member
+.B archive 
+.RI [ file ...]
+
+.SH DESCRIPTION
+The 
+.B ar86 
+program is used to create, examine and modify archive files produced
+by the Dev86/ELKS toolchain.
+.SH OPTIONS
+The 
+.B ar86
+command requires that the operation to be performed on the archive be
+specified as the first option. If the operation is positional then the
+next option is the archive member marking the position. This is
+followed by the archive file name and any list of file names.
+.PP
+.SS Operations
+One of the following operations can be specified
+.TP
+.B d
+\fIdelete\fR the listed files from the archive.
+.TP
+.B m
+\fImove\fR the named files. By default files are moved to the end of
+the archive unless a positional modifier is present.
+.TP
+.B p
+\fIprint\fP the contents of archive members to standard out. If a file
+list is included only those members are printed. If the \fBv\fR
+modifier is present each file's contents are preceded by a new line,
+a line with the string \fBmember\fR, a space character, the member
+name, and two following newlines.
+.TP
+.B q
+.I quickly
+add the files to the end of the archive without checking
+to see if they already exist in the archive. This operation will
+ignore any positional modifiers. Creates the archive file if it does
+not exist.
+.TP
+.B r
+\fIreplace\fR archive members with the files listed. If the file name
+is not present in the archive it is added to the end of the archive
+(or to any explicitly specified position). Creates the archive file if
+it does not exist.
+.TP
+.B t
+\fItable\fR; list the file names of archive members. If a file list is
+present only those files that are present in the archive are listed.
+The \fBv\fR modifier prints member attributes.
+.TP
+.B x
+\fIextract\fR the named files from the archive into the current
+directory. If no files are specified all the archive members will be
+extracted.
+.P
+.SS Modifiers
+The following modifiers may be used with the operations
+.TP
+.B o
+\fIoriginal\fR time stamps from the archive are preserved for
+extracted files when possible.
+.TP
+.B s
+\fIsymbol\fR update; this option may be used by itself to force an
+update to the symbol definition section of the archive (the
+.B __.SYMDEF
+member). If any files are specified they will be replaced as if the 
+.B r
+operation had been specified. If no symbol definition section exists
+one is created. This option will also creates the archive file if it
+does not exist.
+.TP
+.B u 
+\fIupdate\fR files in the archive during a
+.B r
+.RI ( replace )
+operation. The files are added to the archive in exactly the same
+manner as
+.I replace
+except that an existing archive member will be retained (in its
+original position) if it has a modified more recently than the file
+being added. Note that this modifier acts as if a
+.B r
+operation has been specified (even it has not), and will actually
+override any other previously specified operation.
+.TP
+.B v
+\fIverbose\fR; print additional diagnostic messages while processing
+the archive.
+.SS Positional Modifiers
+The following modifiers specify where in the archive files are moved
+to or added. If any of these modifiers are specified then the second
+option to 
+.B ar86
+must be the name of an archive member.
+.TP
+.B a
+\fIafter\fR; files are placed after the specified archive member.
+.TP
+.B b
+\fIbefore\fR; files are placed before the specified archive member.
+.TP
+.B i
+same as
+.BR b .
+.SH EXAMPLES
+To see the contents of an archive
+.IP
+ar86 tv libfile.a
+.PP
+To add some files to an archive
+.IP
+ar86 r libfile.a file1.o file2.o
+.PP
+to add some files after a member named mem.o and to update the symbol
+table 
+.IP
+ar86 rsa mem.o libfile.a file1.o file2.o
+.SH BUGS
+A 
+.B l
+modifier will be accepted but ignored.
+.SH RESTRICTIONS
+This command is intended for use only with object files created using
+the Dev86/ELKS toolchain.
+.SH "SEE ALSO"
+.BR as86 (1), 
+.BR bcc (1),
+.BR ld86 (1)
+.SH AUTHORS
+\(co 1988, 1990 Free Software Foundation Inc. Changes for 
+.B ar86 
+by Greg Haerr <greg@censoft.com>.
+.SH COPYRIGHT
+The manual page was written for Debian GNU/Linux, \(co 2006 Shyamal
+Prasad <shyamal@member.fsf.org>. It is distributed under the terms of
+the GNU General Public License version 2 (or any later version
+released by the Free Software Foundation).

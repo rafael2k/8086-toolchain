@@ -1,0 +1,113 @@
+68000 and i386 C Compiler     ---  Version 4
+=========================          .........
+
+This compiler consists of various modules that build up a
+front end -- these modules are common to all versions of
+this compiler -- consisting of parser, analyzer and optimizer,
+of modules that are specific for the target processor,
+namely *68k.c (for the 68000) and *386.c (for the i386),
+and of assembly language output modules that are further
+dependent on the (syntax of the) target assembler.
+
+The specific modules are:
+
+gen386.c, reg386.c, peep386.c
+=============================
+
+Code generator modules for the i386 processor, namely
+code generator (gen386.c), register allocator (reg386.c),
+and peephole optimizer (peep386.c)
+
+out386_gas.c
+============
+
+The output module for the GAS and the Sun assembler.
+
+out386_bas.c
+
+The output module for the bas assembler in Bruce Evans' bcc package.
+
+gen68k.c, reg68k.c, peep68k.c
+=============================
+
+Code generator (gen68k.c), register allocator (reg68k.c), and
+peephole optimizer (peep68k.c) for the 68000 compiler.
+
+out68k_ack.c
+============
+
+Output module for the ACK assembler as supplied with the MINIX
+operating system.
+
+out68k_gas.c
+============
+
+Output module for the GAS assembler.
+
+out68k_cpm.c
+============
+
+Output module for the CP/M-68K assembler. This is the same assembler
+as supplied with the developement package for the ATARI and thus,
+this module is also compatible with the ALCYON and SOZOBON assembler.
+
+The module contains some other dirty tricks such as a very special
+translation of external symbols (which helped me to install some
+software in spite of the fact that external names are truncated to
+eight characters) etc.
+It has not been maintained since very long, since I stopped working
+with CP/M-68K.
+
+genffp.c
+========
+
+This module calculates floating point constants in MOTOROLA FFP format.
+
+genieee.c
+=========
+
+This module calculates IEEE single and double floating point constants.
+This is only necessary for target assembler which have no .float and .double
+pseudo-op.
+
+Compile-time options (config.h)
+====================
+
+The config.h file should be set up to control exactly which options you
+want to be included in the compiler.  The following #defines control
+which version of c68/c386 you want. If you have chose the right
+#defines, you can compile ALL source modules with these options and
+link them together. If you look closely, you will find that some of the
+modules are just empty if your options are in effect, but you need not
+find it out if producing an 'empty' object file from a huge source file
+does not bother you.....  For example, it is save just to omit gen386.c
+if you want a compiler for the 68000, but now it is also safe just to
+compile everything.  It is still important that you delete all object
+modules if you switch from one set of #defines to another, say,
+switching from 68000 to i386.
+
+INTEL_386	generate code for the i386 Processor
+
+MC68000		generate code for the 68000 Processor
+
+MC69010		}  generate code for the specific processor
+MC68020		 } at the moment these do not have much effect
+MC68030		}  but are included for forward compatibility
+
+NOFLOAT		compiler does not use (and support!) floating point
+
+ICODE		enable the -icode option. This dumps the parse tree before
+		generating code. Useful for debugging only
+
+VERBOSE		ship out some extra diagnostics, e.g. CPUtime statistics
+
+#defines that make only sense together with INTEL_386:
+
+SEPARATE_I_D	some readonly stuff (strings, floating point constants) is
+		put into the data segment. This is necessary for separate text
+		and data address spaces
+
+FUNCS_USE_387	Function results are returned via the 80387 hardware stack
+		even if the 80387 is not used otherwise. Useful only when
+		code generated with the -nofpu option is to be linked with
+		FPU code. Ie

@@ -1,0 +1,49 @@
+
+c68/c386 Version 4.0
+~~~~~~~~~~~~~~~~~~~~
+
+The following problems are known to be outstanding in c68/c386 at this
+release:
+
+c68 and c386
+~~~~~~~~~~~~
+
+1.	If a parameter and a local variable have the same name in a function,
+	then no error or warning will be flagged, and the local variable will
+	hide the parameter.
+
+2.	If a variable is defined twice, then no error message will be
+	generated, but the assembler will complain as two variables with
+	the same label are generated.
+
+3.	If a 'enum' is declared inside a structure using code of the style:
+		struct {
+			.....
+			enum enumname {value1, value2} idname;
+			....
+		};
+	then you will not be able to use the enumerated constants.    An
+	avoidance action is to define the enum at the global level, and then
+	define an item in the structure.  .i.e. do something like:
+		enum enumname (value1, value);
+		struct {
+			....
+			enum enumname idname;
+			....
+		};
+
+
+c68 IEEE Version
+~~~~~~~~~~~~~~~~
+
+1.	The IEEE support routines are derived from the ACK versions of these
+	routines.   The ACK entry points are still present, but have not been
+	tested to see if they all still work correctly.
+
+
+c68 MFFP Version
+~~~~~~~~~~~~~~~~
+
+1.	The increment and decrement (++ and --) operators do not work with
+	floating point numbers.
+

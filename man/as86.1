@@ -1,0 +1,477 @@
+.TH as86 1 "Mar, 1999"
+.BY Bruce Evans, Robert de Bath
+.nh
+.SH NAME
+as86 \- Assembler for 8086..80386 processors
+.SH SYNOPSIS
+.B as86
+.RB [ -0123agjuw ]
+.RB [ -lm [ list ]]
+.RB [ -n\ name ]
+.RB [ -o\ obj ]
+.RB [ -b [ bin ]]
+.RB [ -s\ sym ]
+.RB [ -t\ textseg ]
+.B src
+
+.B as86_encap\ prog.s\ prog.v
+.RB [ prefix_ ]
+.RB [ as86_options ]
+
+.SH DESCRIPTION
+.B as86
+is an assembler for the 8086..80386 processors, it's syntax is closer
+to the intel/microsoft form rather than the more normal generic form of
+the unix system assembler.
+
+The
+.B src
+file can be '-' to assemble the standard input.
+
+This assembler can be compiled to support the 6809 cpu and may even work.
+
+.B as86_encap
+is a shell script to call as86 and convert the created binary into a C file
+.B prog.v
+to be included in or linked with programs like boot block installers.
+The
+.B prefix_
+argument is a prefix to be added to all variables defined by the source,
+it defaults to the name of the source file. The variables defined include
+.B prefix_start
+.B prefix_size
+and
+.B prefix_data
+to define and contain the code, plus integers containing the values of all
+exported labels.
+Either or both the
+.B prog.s
+and
+.B prog.v
+arguments can be '-' for standard in/out.
+
+.\" The 'src' file can be '-' for stdin but ONLY on 'big' machines.
+
+.SH OPTIONS
+
+.\"defaults (off or none except for these; no output is produced without a flag):
+.\"-03		native
+.\"list		stdout (beware of clobbering next arg)
+.\"name		basename of the source name
+
+.TP
+.B -0
+start with 16-bit code segment, warn for all instructions > 8086
+.TP
+.B -1
+start with 16-bit code segment, warn for all instructions > 80186
+.TP
+.B -2
+start with 16-bit code segment, warn for all instructions > 80286
+.TP
+.B -3
+start with 32-bit code segment, don't warn for any instructions. (not even
+486 or 586)
+.TP
+.B -a
+enable partial compatibility with Minix asld. This swaps the interpretation
+of round brackets and square brackets as well as making alterations to the
+code generation and syntax for 16bit jumps and calls. ("jmp @(bx)" is then
+a valid instruction)
+.TP
+.B -g
+only put global symbols in object or symbol file
+.TP
+.B -j
+replace all short jumps with similar 16 or 32 bit jumps, the 16 bit
+conditional branches are encoded as a short conditional and a long
+unconditional branch.
+.TP
+.B -O 
+this causes the assembler to add extra passes to try to use forward
+references to reduce the bytes needed for some instructions. 
+If the labels move on the last pass the assembler will keep adding passes
+until the labels all stabilise (to a maximum of 30 passes)
+It's probably not a good idea to use this with hand written assembler 
+use the explicit
+.B br\ bmi\ bcc
+style opcodes for 8086 code or the
+.B jmp\ near
+style for conditional i386 instructions and make sure all variables are
+defined before they are used.
+.TP
+.B -l
+produce list file, filename may follow
+.TP
+.B -m
+print macro expansions in listing
+.TP
+.B -n
+name of module follows (goes in object instead of source name)
+.TP
+.B -o
+produce object file, filename follows
+.TP
+.B -b
+produce a raw binary file, filename may follow.
+This is a 'raw' binary file with no header, if there's no
+.B -s
+option the file starts at location 0.
+.TP
+.B -s
+produce an ASCII symbol file, filename follows.
+The format of this table is designed to be easy to parse for encapsulation
+and related activities in relation to binary files created with the
+.B -b
+option.  If a binary file doesn't start at location zero the first two
+items in the table are the start and end addresses of the binary file.
+.TP
+.B -u
+assume undefined symbols are imported-with-unspecified segment.
+.TP
+.B -w-
+allow the assembler to print warning messages.
+.TP
+.B -t n
+move all text segment data in segment n+3.
+.P
+.SH AS86 SOURCE
+Special characters
+.TP
+.B *
+Address of the start of the current line.
+.TP
+.B ; !
+Either of these marks the start of a comment. In addition any 'unexpected'
+character at the start of a line is assumed to be a comment (but it's also
+displayed to the terminal).
+.TP
+.B $
+Prefix for hexadecimal numbers, the 'C' syntax, eg\ 0x1234, is also accepted.
+.TP
+.B %
+Prefix for binary numbers.
+.TP
+.B #
+Prefix for immediate operands.
+.TP
+.B [ ]
+Specifies an indirect operand.
+.br
+Unlike MASM the assembler has no type information on labels just a
+segment and offset. This means that the way this operator and the
+immediate prefix work are like traditional assemblers.
+.sp
+Examples:
+.br
+	mov     ax,bx
+.br
+	jmp     bx
+.br
+Direct register addressing, the jump copies BX into PC.
+.sp
+.nf
+	mov ax,[bx]
+	jmp [bx]
+.fi
+Simple indirect register addressing, the jump moves the contents of the location specified by BX into the PC.
+.sp
+	mov ax,#1234
+.br
+Immediate value, ax becomes 1234.
+.sp
+.nf
+	mov ax,1234
+	mov ax,_hello
+	mov ax,[_hello]
+.fi
+Absolute addressing, ax is set to contents of location 1234. Note the
+third option is not strictly consistant but is in place mainly for asld
+compatibility.
+
+.sp
+.nf
+	mov ax,_table[bx]
+	mov ax,_table[bx+si]
+	mov eax,_table[ebx*4]
+
+	mov ax,[bx+_table]
+	mov ax,[bx+si+_table]
+	mov eax,[ebx*4+_table]
+.fi
+Indexed addressing, both formats are ok, I think the first is more correct
+but I tend to used the second. :-)
+.br
+.P
+Conditionals
+.TP
+.B IF, ELSE, ELSEIF, ENDIF
+Numeric condition
+.TP
+.B IFC, ELSEIFC
+String compare (str1,str2)
+.TP
+.B FAIL .FAIL
+Generate user error.
+.P
+Segment related
+.TP
+.B .TEXT .ROM .DATA .BSS
+Set current segment. These can be preceded by the keyword
+.B .SECT
+.TP
+.B LOC
+Set numeric segment 0=TEXT, 3=DATA,ROM,BSS, 14=MAX. 
+The segment order set by the linker is now 0,4,5,6,7,8,9,A,B,C,D,E,1,2,3.
+Segment 0 and all segments above 3 are assumed to be text segment.
+Note the 64k size restrictions are not imposed for segments 3-14.
+.P
+Label type definition
+.TP
+.B EXPORT PUBLIC .DEFINE
+Export label defined in this object
+.TP
+.B ENTRY
+Force linker to include the specified label in a.out
+.TP
+.B .GLOBL .GLOBAL
+Define label as external and force import even if it isn't used.
+.TP
+.B EXTRN EXTERN IMPORT .EXTERN
+Import list of externally defined labels
+.br
+NB: It doesn't make sense to use imports for raw binary files.
+.TP
+.B .ENTER
+Mark entry for old binary file (obs)
+.P
+Data definition
+.TP
+.B DB .DATA1 .BYTE  FCB
+List of 1 byte objects.
+.TP
+.B DW .DATA2 .SHORT FDB .WORD
+List of 2 byte objects.
+.TP
+.B DD .DATA4 .LONG
+List of 4 byte objects.
+.TP
+.B .ASCII FCC
+Ascii string copied to output.
+.TP
+.B .ASCIZ
+Ascii string copied to output with trailing
+.B nul
+byte.
+.P
+Space definition
+.TP
+.B .BLKB RMB .SPACE
+Space is counted in bytes.
+.TP
+.B .BLKW .ZEROW
+Space is counted in words. (2 bytes each)
+.TP
+.B COMM .COMM LCOMM .LCOMM
+Common area data definition
+.P
+Other useful pseudo operations.
+.TP
+.B .ALIGN .EVEN
+Alignment
+.TP
+.B EQU
+Define label
+.TP
+.B SET
+Define re-definable label
+.TP
+.B ORG .ORG
+Set assemble location
+.TP
+.B BLOCK
+Set assemble location and stack old one
+.TP
+.B ENDB
+Return to stacked assemble location
+.TP
+.B GET INCLUDE
+Insert new file (no quotes on name)
+.TP
+.BR USE16\  [ cpu ]
+Define default operand size as 16 bit, argument is cpu type the code is
+expected to run on (86, 186, 286, 386, 486, 586) instructions for cpus
+later than specified give a warning.
+.TP
+.BR USE32\  [ cpu ]
+Define default operand size as 32 bit, argument is cpu type the code is
+expected to run on (86, 186, 286, 386, 486, 586) instructions for cpus
+later than specified give a warning. If the cpu is not mentioned the
+assembler ensures it is >= 80386.
+.TP
+.B END
+End of compilation for this file.
+.TP
+.B .WARN
+Switch warnings
+.TP
+.B .LIST
+Listings on/off (1,-1)
+.TP
+.B .MACLIST
+Macro listings on/off (1,-1)
+.P
+Macros, now working, the general form is like this.
+
+    MACRO sax
+       mov ax,#?1
+    MEND
+    sax(1)
+
+.TP
+Unimplemented/unused.
+.TP
+IDENT
+Define object identity string.
+.TP
+SETDP
+Set DP value on 6809
+.TP
+MAP
+Set binary symbol table map number.
+.TP
+Registers
+.br
+BP BX DI SI
+.br
+EAX EBP EBX ECX EDI EDX ESI ESP
+.br
+AX CX DX SP
+.br
+AH AL BH BL CH CL DH DL
+.br
+CS DS ES FS GS SS 
+.br
+CR0 CR2 CR3 DR0 DR1 DR2 DR3 DR6 DR7
+.br
+TR3 TR4 TR5 TR6 TR7 ST
+.TP
+Operand type specifiers
+BYTE DWORD FWORD FAR PTR PWORD QWORD TBYTE WORD NEAR
+.sp
+The 'near and 'far' do not allow multi-segment programming, all 'far'
+operations are specified explicitly through the use of the instructions:
+jmpi, jmpf, callf, retf, etc. The 'Near' operator can be used to force
+the use of 80386 16bit conditional branches. The 'Dword' and 'word' 
+operators can control the size of operands on far jumps and calls.  
+.TP
+General instructions.
+These are in general the same as the instructions found in any 8086 assembler,
+the main exceptions being a few 'Bcc' (BCC, BNE, BGE, etc) instructions
+which are shorthands for a short branch plus a long jump and 'BR' which
+is the longest unconditional jump (16 or 32 bit).
+.TP
+Long branches
+BCC BCS BEQ BGE BGT BHI BHIS BLE BLO BLOS BLT BMI BNE BPC BPL BPS BVC BVS
+BR
+.TP
+Intersegment
+CALLI CALLF JMPI JMPF 
+.TP
+Segment modifier instructions
+ESEG FSEG GSEG SSEG
+.TP
+Byte operation instructions
+ADCB ADDB ANDB CMPB DECB DIVB IDIVB IMULB INB INCB MOVB MULB NEGB NOTB ORB
+OUTB RCLB RCRB ROLB RORB SALB SARB SHLB SHRB SBBB SUBB TESTB XCHGB XORB
+.TP
+Standard instructions
+AAA AAD AAM AAS ADC ADD AND ARPL BOUND BSF BSR BSWAP BT BTC BTR BTS CALL
+CBW CDQ CLC CLD CLI CLTS CMC CMP CMPS CMPSB CMPSD CMPSW CMPW CMPXCHG
+CSEG CWD CWDE DAA DAS DEC DIV DSEG ENTER HLT IDIV IMUL IN INC INS INSB
+INSD INSW INT INTO INVD INVLPG INW IRET IRETD J JA JAE JB JBE JC JCXE
+JCXZ JE JECXE JECXZ JG JGE JL JLE JMP JNA JNAE JNB JNBE JNC JNE JNG JNGE
+JNL JNLE JNO JNP JNS JNZ JO JP JPE JPO JS JZ LAHF LAR LDS LEA LEAVE LES
+LFS LGDT LGS LIDT LLDT LMSW LOCK LODB LODS LODSB LODSD LODSW LODW LOOP
+LOOPE LOOPNE LOOPNZ LOOPZ LSL LSS LTR MOV MOVS MOVSB MOVSD MOVSW MOVSX
+MOVW MOVZX MUL NEG NOP NOT OR OUT OUTS OUTSB OUTSD OUTSW OUTW POP POPA
+POPAD POPF POPFD PUSH PUSHA PUSHAD PUSHF PUSHFD RCL RCR RDMSR REP REPE REPNE
+REPNZ REPZ RET RETF RETI ROL ROR SAHF SAL SAR SBB SCAB SCAS SCASB SCASD
+SCASW SCAW SEG SETA SETAE SETB SETBE SETC SETE SETG SETGE SETL SETLE
+SETNA SETNAE SETNB SETNBE SETNC SETNE SETNG SETNGE SETNL SETNLE SETNO
+SETNP SETNS SETNZ SETO SETP SETPE SETPO SETS SETZ SGDT SHL SHLD SHR SHRD
+SIDT SLDT SMSW STC STD STI STOB STOS STOSB STOSD STOSW STOW STR SUB TEST
+VERR VERW WAIT WBINVD WRMSR XADD XCHG XLAT XLATB XOR 
+.TP
+Floating point
+F2XM1 FABS FADD FADDP FBLD FBSTP FCHS FCLEX FCOM FCOMP FCOMPP FCOS
+FDECSTP FDISI FDIV FDIVP FDIVR FDIVRP FENI FFREE FIADD FICOM FICOMP
+FIDIV FIDIVR FILD FIMUL FINCSTP FINIT FIST FISTP FISUB FISUBR FLD FLD1
+FLDL2E FLDL2T FLDCW FLDENV FLDLG2 FLDLN2 FLDPI FLDZ FMUL FMULP FNCLEX
+FNDISI FNENI FNINIT FNOP FNSAVE FNSTCW FNSTENV FNSTSW FPATAN FPREM
+FPREM1 FPTAN FRNDINT FRSTOR FSAVE FSCALE FSETPM FSIN FSINCOS FSQRT FST
+FSTCW FSTENV FSTP FSTSW FSUB FSUBP FSUBR FSUBRP FTST FUCOM FUCOMP
+FUCOMPP FWAIT FXAM FXCH FXTRACT FYL2X FYL2XP1
+.P
+.SH Using GASP
+
+The Gnu assembler preprocessor provides some reasonable implementations
+of user biased pseudo opcodes.
+
+It can be invoked in a form similar to:
+.TP
+.B gasp
+.RB [ -a... ]
+.B file.s
+.RB [ file2.s ]
+.B |
+.br
+.B as86
+.RB [ ... ]
+.B -
+.RB [ -o\ obj ]\ [ -b\ bin ]
+.P
+Be aware though that Gasp generates an error for 
+.B .org
+commands, if you're not using alternate syntax you can use 
+.B org
+instead, otherwise use 
+.BR block
+and
+.BR endb .
+The directive
+.B export
+is translated into
+.BR .global ,
+which forces an import, if you are making a file using
+.B -b
+use
+.B public
+or 
+.B .define
+instead.
+
+The GASP list options have no support in as86.
+.SH SEE ALSO
+as(1), ld86(1), bcc(1)
+.SH BUGS
+The 6809 version does not support -0, -3, -a or -j.
+
+If this assembler is compiled with BCC this is classed as a 'small'
+compiler, so there is a maximum input line length of 256 characters
+and the instruction to cpu checking is not included.
+
+The checking for instructions that work on specific cpus is probably
+not complete, the distinction between 80186 and 80286 is especially
+problematic.
+
+The
+.B .text
+and
+.B .data
+pseudo operators are not useful for raw binary files.
+
+When using the
+.B org
+directive the assembler can generate object files that may break ld86(1).
+

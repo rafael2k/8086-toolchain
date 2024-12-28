@@ -1,0 +1,8 @@
+
+c68/c386 version 4.0
+~~~~~~~~~~~~~~~~~~~~
+
+1.	Accept & operator on arrays (possibly with warning)
+
+2.	Issue warnings for auto variables used before they are initialised.
+
