@@ -22,8 +22,8 @@ host:
 	make -C nasm
 	make -C nasm32
 	make -C emulator
-	make -C libc
-	make -C examples
+#	make -C libc-unused
+#	make -C examples
 
 copy:
 	cp elks-bin/* $(TOPDIR)/elkscmd/rootfs_template/root
@@ -43,7 +43,7 @@ clean:
 	make -C nasm clean
 	make -C nasm32 clean
 	make -C emulator clean
-	make -C libc clean
+#	make -C libc-unused clean
 	make -C examples clean
 	make -C compiler -f Makefile.elks clean
 	make -C cpp -f Makefile.elks clean
