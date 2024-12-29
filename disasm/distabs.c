@@ -519,7 +519,7 @@ lookup(addr,type,kind,ext)
       return (getnam(best.i));
 
    if (kind == LOOK_ABS)
-      sprintf(b,"$%04lx",addr);
+      sprintf(b,"[0x%04lx]",addr);
    else
       {
       long x = addr - (PC - kind);
@@ -630,7 +630,7 @@ mtrans(c,m,type)
          case 1 :
          case 2 :
             if (mod == 1)
-               strcat(a," WORD ");
+               strcat(a,"");            // NOTE was "*" for byte
             else
                strcat(a,"#");
             sprintf(b,"%d[", (short)offset);
@@ -666,7 +666,7 @@ mtrans(c,m,type)
          case 1 :
          case 2 :
             if (mod == 1)
-               strcpy(a,"word ");
+               strcpy(a,"");            // NOTE was "*" for byte
             else
                strcpy(a,"#");
             sprintf(b,"%d[", (short)offset);

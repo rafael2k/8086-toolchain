@@ -82,8 +82,8 @@ badseq(j,k)                   /* Invalid-sequence routine   */
    register int j, k;
 
 {
-   printf("\t.byte\t$%02.2x\t\t| invalid code sequence\n",j);
-   printf("\t.byte\t$%02.2x\n",k);
+   printf("\t.byte\t0x%02.2x\t\t| invalid code sequence\n",j);
+   printf("\t.byte\t0x%02.2x\n",k);
 }
 
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -107,7 +107,7 @@ dfhand(j)
 
    segflg = 0;
 
-   printf("\t.byte\t$%02.2x",j);
+   printf("\t.byte\t0x%02.2x",j);
 
    if (optab[j].min || optab[j].max)
       putchar('\n');
@@ -181,7 +181,7 @@ aohand(j)
 	 if( k < 16 )
             printf("%s\tal,*%d\n",optab[j].text,k);
 	 else
-            printf("%s\tal,*$%02.2x\n",optab[j].text,k);
+            printf("%s\tal,*0x%02.2x\n",optab[j].text,k);
          break;
       case 5 :
          FETCH(m);
@@ -192,9 +192,9 @@ aohand(j)
          else
 	    {
 	    if( k < 100 || k > 65436U )
-	       printf("%s\tax, %d\n",optab[j].text, (short)k);
+	       printf("%s\tax,#%d\n",optab[j].text, (short)k);
 	    else
-	       printf("%s\tax,#$%04x\n",optab[j].text,k);
+	       printf("%s\tax,#0x%04x\n",optab[j].text,k);
 	    }
          break;
       default :
@@ -362,7 +362,7 @@ imhand(j)
       case 2 :
          if (mod == 1)
 	 {
-            strcat(a,"word ");
+            strcat(a,"");               // NOTE was "*" for byte
             sprintf(b,"%d(", (short)offset);
 	 }
          else
@@ -371,7 +371,7 @@ imhand(j)
 	    if( offset < 100 || offset > 65436U )
                sprintf(b,"%d(", (short)offset);
 	    else
-               sprintf(b,"$%04x(",offset);
+               sprintf(b,"0x%04x(",offset);
 	 }
          strcat(a,b);
          strcat(a,REGS1[rm]);
@@ -389,11 +389,11 @@ imhand(j)
       if( immed < 100 || immed > 65436U )
          sprintf(b,"%d", (short)immed);
       else
-         sprintf(b,"$%04x",immed);
+         sprintf(b,"0x%04x",immed);
    }
    else
    {
-      strcat(a,"*");
+      strcat(a,"#");                    // NOTE was "*" for byte
       sprintf(b,"%d",immed);
    }
    strcat(a,b);
@@ -544,12 +544,12 @@ cihand(j)
    FETCH(m);
    FETCH(n);
 
-   printf("#$%04.4x,",((n << 8) | m));
+   printf("#0x%04.4x,",((n << 8) | m));
 
    FETCH(m);
    FETCH(n);
 
-   printf("#$%04.4x\n",((n << 8) | m));
+   printf("#0x%04.4x\n",((n << 8) | m));
 
    objout();
 
@@ -583,13 +583,13 @@ mihand(j)
       FETCH(n);
       k = ((n << 8) | m);
       if (lookext((long)(k),(PC - 1),b))
-         printf(" %s\n",b);
+         printf("#%s\n",b);
       else
          {
          if( k < 100 || k > 65436U )
-            printf(" %d\n",(short)k);
+            printf("#%d\n",(short)k);
 	 else
-            printf(" 0x%04X\n",k);
+            printf("#0x%04X\n",k);
          }
       }
    else
@@ -670,13 +670,13 @@ tqhand(j)
       FETCH(n);
       k = ((n << 8) | m);
       if (lookext((long)(k),(PC - 1),b))
-         printf(" %s\n",b);
+         printf("#%s\n",b);
       else
          {
          if( k < 100 || k > 65436U )
-            printf(" %d\n",(short)k);
+            printf("#%d\n",(short)k);
 	 else
-            printf(" 0x%04X\n",k);
+            printf("#0x%04X\n",k);
          }
       }
    else
@@ -771,19 +771,19 @@ mmhand(j)
       FETCH(k);
       k = (k << 8) | j;
       if (lookext((long)(k),(PC - 1),b))
-         printf(" %s\n",b);
+         printf("#%s\n",b);
       else
          {
          if( k < 100 || k > 65436U )
-            printf(" %d\n",(short)k);
+            printf("#%d\n",(short)k);
 	 else
-            printf(" 0x%04X\n",k);
+            printf("#0x%04X\n",k);
          }
       }
    else
       {
       FETCH(k);
-      printf(" %d\n",k);
+      printf("*%d\n",k);
       }
 
    objout();
@@ -997,9 +997,9 @@ mahand(j)
          FETCH(k);
          k = (k << 8) | j;
          if (lookext((long)(k),(PC - 1),b))
-            printf(", %s\n",b);
+            printf(",#%s\n",b);
          else
-            printf(", 0x%04X\n",k);
+            printf(",#0x%04X\n",k);
          }
       else
          {
