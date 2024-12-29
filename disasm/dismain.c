@@ -221,7 +221,8 @@ register int type;
    register int k;
    static char b[48], c[32];
 
-   if (symptr < 0) {
+   if (symptr < 0)
+      {
       if ((type == N_TEXT)
        || ((type == N_DATA) && ( ! objptr ) && ( ! zcount )))
          {
@@ -231,9 +232,9 @@ register int type;
             sprintf(b,"D%05.5lx:",PC);
          return (b);
          }
-   } else {
+      else
          return (NULL);
-   }
+      }
 
    for (k = 0; k <= symptr; ++k)
       if ((symtab[k].n_value == PC)
@@ -277,7 +278,7 @@ prolog()
           && ((symtab[j].n_sclass & N_SECT) < N_COMM))
             {
             char *c = getnam(j);
-            printf("\tglobal\t%s",c);
+            printf("\t.global\t%s",c);
             if (++flag == 1)
                {
                putchar('\t');
@@ -312,7 +313,7 @@ prolog()
          {
          char *c = getnam(relo[j].r_symndx);
          ++flag;
-         printf("\tglobal\t%s",c);
+         printf("\t.global\t%s",c);
          putchar('\t');
          if (strlen(c) < 8)
             putchar('\t');
