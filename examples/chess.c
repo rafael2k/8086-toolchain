@@ -1,8 +1,9 @@
 /* From https://github.com/shreejilucifer/Chess-In-C
  * ELKS port by Rafael Diniz */
 
-#include <stdio.h>
+//#include <stdio.h>
 #define cprintf printf
+int printf(const char *fmt, ...);
 
 extern int write(int, char *, int);
 extern int read(int, void *, int count);

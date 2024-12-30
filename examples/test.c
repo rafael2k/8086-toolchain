@@ -1,7 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <unistd.h>
 #include "cprintf.h"
+int printf(const char *fmt, ...);
+extern char **environ;
 
 int main(int ac, char **av)
 {
