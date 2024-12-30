@@ -1,4 +1,4 @@
-static char *sccsid =  "@(#) dismain.c, Ver. 2.1 created 00:00:00 87/09/01";
+//static char *sccsid =  "@(#) dismain.c, Ver. 2.1 created 00:00:00 87/09/01";
 
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
