@@ -88,7 +88,7 @@ zdump(beg)
    if (beg > 1L)
       printf("\t.zerow\t%ld\n",(beg >> 1));
    if (beg & 1L)
-      printf("\tdb\t0\n");
+      printf("\t.byte\t0\n");
 }
 
 static char *
@@ -161,7 +161,7 @@ objdump(c)
 
    if (objptr)
       {
-      printf("\tdb\t");
+      printf("\t.byte\t");
       ++retval;
       }
    else
@@ -275,27 +275,32 @@ prolog()
       if ((symtab[j].n_sclass & N_CLASS) == C_EXT)
          {
          if (((symtab[j].n_sclass & N_SECT) > N_UNDF)
-          && ((symtab[j].n_sclass & N_SECT) < N_COMM))
+          && ((symtab[j].n_sclass & N_SECT) < N_BSS))   /* ghaerr: was N_COMM */
             {
             char *c = getnam(j);
-            printf("\t.global\t%s",c);
+            char *s = ((symtab[j].n_sclass & N_SECT) == N_DATA)? "\t| .data": "";
+            printf("\t.global\t%s    %s",c,s);
             if (++flag == 1)
                {
                putchar('\t');
-               if (strlen(c) < 8)
+               if (strlen(c) + strlen(s) + 4 < 8)
                   putchar('\t');
                printf("| Public symbols\n");
                }
             else
                putchar('\n');
             }
-         else
+         }
+   for (j = 0; j <= symptr; ++j)
+      if ((symtab[j].n_sclass & N_CLASS) == C_EXT)
+         {
+         if ((symtab[j].n_sclass & N_SECT) >= N_BSS)
             {
             if (symtab[j].n_value)
                {
                char *c = getnam(j);
-               printf("\t.comm\t%s,0x%08.8lx",c,
-                (unsigned long)symtab[j].n_value);
+               /*printf("\t.comm\t%s,0x%08.8lx",c, (unsigned long)symtab[j].n_value);*/
+               printf("\t.comm\t%s",c);
                if (++flag == 1)
                   printf("\t| Public symbols\n");
                else

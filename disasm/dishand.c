@@ -353,7 +353,7 @@ imhand(j)
              lookup((long)(offset),N_DATA,LOOK_ABS,pc));
          else
             {
-            sprintf(b,"(%s)",REGS0[rm]);
+            sprintf(b,"[%s]",REGS0[rm]);
             strcat(a,b);
             }
          break;
