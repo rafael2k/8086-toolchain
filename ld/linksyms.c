@@ -23,6 +23,7 @@ bool_pt argreloc_output;
     struct modstruct *modptr;
     struct symstruct *symptr;
 
+    (void)argreloc_output;
 #ifdef REL_OUTPUT
     reloc_output = argreloc_output;
     if (argreloc_output)

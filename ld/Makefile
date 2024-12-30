@@ -25,13 +25,14 @@ OBJS = $(SRCS:.c=.o)
 #
 # An alternative file for a non-standard a.out.h (eg i386 linux on an Alpha)
 # NATIVE=-DA_OUT_INCL='"a_out_local.h"' 
-DEFINES += -DREL_OUTPUT
+#DEFINES += -DREL_OUTPUT -DREL_NATIVE
+#SRCS += writebin.c writeemu.c
 
 BINDIR=../host-bin
 LOCALFLAGS = -Wno-missing-field-initializers -Wno-sign-compare
 PROG = $(BINDIR)/ld86 $(BINDIR)/objdump86
 SRCS = dumps.c io.c ld.c readobj.c table.c typeconv.c linksyms.c mkar.c \
-      writex86.c writebin.c writeemu.c
+      writex86.c
 
 all: $(PROG)
 
