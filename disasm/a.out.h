@@ -70,7 +70,7 @@ struct	exec {			/* a.out header */
   			((X).a_trsize + (X).a_drsize) : 0))
 
 struct reloc {
-  uint32_t r_vaddr;        /* virtual address of reference */
+  uint32_t r_vaddr;		/* virtual address of reference */
   unsigned short r_symndx;	/* internal segnum or extern symbol num */
   unsigned short r_type;	/* relocation type */
 };
@@ -94,7 +94,7 @@ struct reloc {
 
 struct nlist {			/* symbol table entry */
   char n_name[8];		/* symbol name */
-  uint32_t n_value;        /* value */
+  uint32_t n_value;		/* value */
   unsigned char	n_sclass;	/* storage class */
   unsigned char	n_numaux;	/* number of auxiliary entries (not used) */
   unsigned short n_type;	/* language base and derived type (not used) */
