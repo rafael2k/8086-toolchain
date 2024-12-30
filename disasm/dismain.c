@@ -1,4 +1,4 @@
-static char *sccsid =  "@(#) dismain.c, Ver. 2.1 created 00:00:00 87/09/01";
+//static char *sccsid =  "@(#) dismain.c, Ver. 2.1 created 00:00:00 87/09/01";
 
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
@@ -240,9 +240,9 @@ register int type;
       if ((symtab[k].n_value == PC)
        && ((symtab[k].n_sclass & N_SECT) == type))
          {
-         sprintf(b,"%s:\n",getnam(k));
-         if (objflg && (type != N_TEXT))
-            sprintf(c,"| %05.5lx\n",PC);
+         sprintf(b,"%s:    ",getnam(k));
+         /*if (objflg && (type != N_TEXT))*/    /* ghaerr: always display loc */
+            sprintf(c,"\t\t\t| loc %05.5lx\n",PC);
          strcat(b,c);
          return (b);
          }

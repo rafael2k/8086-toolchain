@@ -1,5 +1,4 @@
-static char *sccsid =
-   "@(#) distabs.c, Ver. 2.1 created 00:00:00 87/09/01";
+//static char *sccsid = "@(#) distabs.c, Ver. 2.1 created 00:00:00 87/09/01";
 
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
@@ -436,6 +435,30 @@ lookext(off,loc,buf)
 
 }/* * * * * * * * * *  END OF  lookext()  * * * * * * * * * */
 
+
+/* find data symbol name from .data or .bss section */
+static char *
+getdatalab(addr)
+unsigned long addr;
+{
+
+   register int k;
+
+   if (symptr < 0)
+      return (NULL);
+
+   for (k = 0; k <= symptr; ++k)
+      if ((symtab[k].n_value == addr)
+       && (((symtab[k].n_sclass & N_SECT) == N_DATA)
+        || ((symtab[k].n_sclass & N_SECT) == N_BSS)))
+         {
+         return getnam(k);
+         }
+
+   return (NULL);
+
+}
+
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
   * This  function  finds an entry in the  symbol  table by *
@@ -479,6 +502,7 @@ lookup(addr,type,kind,ext)
 {/* * * * * * * * * *  START OF lookup()  * * * * * * * * * */
 
    register int j, k;
+   char *c;
    static char b[80];
 
    struct
@@ -519,7 +543,13 @@ lookup(addr,type,kind,ext)
       return (getnam(best.i));
 
    if (kind == LOOK_ABS)
-      sprintf(b,"[0x%04lx]",addr);
+      {
+      c = getdatalab(addr);     /* ghaerr: display data symbol when separate I&D */
+      if (c)
+         sprintf(b,"[%s]",c);
+      else
+         sprintf(b,"[0x%04lx]",addr);
+      }
    else
       {
       long x = addr - (PC - kind);

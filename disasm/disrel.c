@@ -1,15 +1,9 @@
-static char *copyright =
-   "@(#) Copyright (C) 1987 G. M. Harding, all rights reserved";
+static char *copyright = "@(#) Copyright (C) 1987 G. M. Harding, all rights reserved";
 
-#if 0
-char *release =
-   "released with Dev86 for Linux, based on minix 2.1";
-#else
-static char *sccsid =
-   "@(#) disrel.c, Ver. 2.1 created 00:00:00 87/09/01";
+//static char *sccsid = "@(#) disrel.c, Ver. 2.1 created 00:00:00 87/09/01";
 
+//char *release = "released with Dev86 for Linux, based on minix 2.1";
 char *release = "release 2.2pre (ELKS)";    /* was 2.1 (MINIX) */
-#endif
 
  /*
  **
