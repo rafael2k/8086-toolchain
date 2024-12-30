@@ -123,7 +123,9 @@ char **argv;
 	    case 'm':		/* print modules linked */
 	    case 's':		/* strip symbols */
 	    case 'z':		/* unmapped zero page */
+#ifdef REL_NATIVE
 	    case 'N':		/* Native format a.out */
+#endif
 	    case 'd':		/* Make a headerless outfile */
 #ifndef MSDOS
 	    case 'c':		/* Write header in CP/M-86 format */
@@ -270,15 +272,19 @@ char **argv;
     if (outfilename == NUL_PTR)
 	outfilename = "a.out";
 #ifndef MSDOS
+#ifdef REL_NATIVE
     if( flag['N'] )
        writebin(outfilename, flag['i'], flag['3'], flag['s'],
 	     flag['z'] & flag['3']);
     else
 #endif
+#endif
+#ifdef REL_NATIVE
     if( flag['B'] )
        write_dosemu(outfilename, flag['i'], flag['3'], flag['s'],
 	  flag['z'] & flag['3']);
     else
+#endif
        write_elks(outfilename, flag['i'], flag['3'], flag['s'],
 	     flag['z'], flag['y']);
     if (flag['m'])

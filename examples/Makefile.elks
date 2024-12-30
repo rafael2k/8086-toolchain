@@ -42,11 +42,11 @@ all: chess test
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
 
-test.o: test.asm
-	$(AS) $(ASFLAGS)  test.asm -o test.o
+test.o: test.as
+	$(AS) $(ASFLAGS)  test.as -o test.o
 
-test.asm: test.i
-	$(CC) $(CFLAGS) test.i test.asm
+test.as: test.i
+	$(CC) $(CFLAGS) test.i test.as
 
 test.i: test.c
 	$(CPP) $(CPPFLAGS) test.c -o test.i
@@ -54,26 +54,26 @@ test.i: test.c
 chess: chess.o
 	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
 
-chess.o: chess.asm
-	$(AS) $(ASFLAGS)  chess.asm -o chess.o
+chess.o: chess.as
+	$(AS) $(ASFLAGS)  chess.as -o chess.o
 
-chess.asm: chess.i
-	$(CC) $(CFLAGS) chess.i chess.asm
+chess.as: chess.i
+	$(CC) $(CFLAGS) chess.i chess.as
 
 chess.i: chess.c
 	$(CPP) $(CPPFLAGS) chess.c -o chess.i
 
-cprintf.o: cprintf.asm
-	$(AS) $(ASFLAGS)  cprintf.asm -o cprintf.o
+cprintf.o: cprintf.as
+	$(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
 
-cprintf.asm: cprintf.i
-	$(CC) $(CFLAGS) cprintf.i cprintf.asm
+cprintf.as: cprintf.i
+	$(CC) $(CFLAGS) cprintf.i cprintf.as
 
 cprintf.i: cprintf.c
 	$(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
 
 
 clean:
-	rm -f *.o *.i *.asm  test chess
+	rm -f *.o *.i *.as  test chess
 
 # end

@@ -998,7 +998,11 @@ PRIVATE void writeheader()
 	/* XXX - works for 386BSD which doesn't define its own machtype :-( */
 #endif
 #else
-    header.a_cpu = (bits32 || reloc_output) ? A_I80386 : A_I8086;
+    header.a_cpu = (bits32
+#ifdef REL_OUTPUT
+    || reloc_output
+#endif
+                    ) ? A_I80386 : A_I8086;
 #endif
 #else
     header.a_cpu = bits32 ? A_I80386 : A_I8086;
