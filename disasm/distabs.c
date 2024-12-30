@@ -436,6 +436,29 @@ lookext(off,loc,buf)
 
 }/* * * * * * * * * *  END OF  lookext()  * * * * * * * * * */
 
+
+static char *
+getdatalab(addr)
+unsigned long addr;
+{/* * * * * * * * * *  START OF getdatalab()  * * * * * * * * * */
+
+   register int k;
+
+   if (symptr < 0)
+      return (NULL);
+
+   for (k = 0; k <= symptr; ++k)
+      if ((symtab[k].n_value == addr)
+       && (((symtab[k].n_sclass & N_SECT) == N_DATA)
+        || ((symtab[k].n_sclass & N_SECT) == N_BSS)))
+         {
+         return getnam(k);
+         }
+
+   return (NULL);
+
+}/* * * * * * * * * * * END OF getdatalab() * * * * * * * * * * */
+
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
   * This  function  finds an entry in the  symbol  table by *
@@ -519,7 +542,12 @@ lookup(addr,type,kind,ext)
       return (getnam(best.i));
 
    if (kind == LOOK_ABS)
-      sprintf(b,"[0x%04lx]",addr);
+      {
+      char *c = getdatalab(addr);
+      if (c)
+         sprintf(b,"[%s]",c);
+      else sprintf(b,"[0x%04lx]",addr);
+      }
    else
       {
       long x = addr - (PC - kind);
