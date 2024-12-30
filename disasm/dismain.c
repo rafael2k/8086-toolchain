@@ -240,9 +240,9 @@ register int type;
       if ((symtab[k].n_value == PC)
        && ((symtab[k].n_sclass & N_SECT) == type))
          {
-         sprintf(b,"%s:\n",getnam(k));
-         if (objflg && (type != N_TEXT))
-            sprintf(c,"| %05.5lx\n",PC);
+         sprintf(b,"%s:    ",getnam(k));
+         /*if (objflg && (type != N_TEXT))*/    /* ghaerr: always display loc */
+            sprintf(c,"\t\t\t| loc %05.5lx\n",PC);
          strcat(b,c);
          return (b);
          }
