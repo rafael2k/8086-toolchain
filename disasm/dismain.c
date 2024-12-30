@@ -86,7 +86,7 @@ zdump(beg)
 {
    beg = PC - beg;
    if (beg > 1L)
-      printf("\t.zerow\t%ld\n",(beg >> 1));
+      printf("\t.blkb\t%ld\n",beg);
    if (beg & 1L)
       printf("\t.byte\t0\n");
 }
@@ -154,7 +154,7 @@ objdump(c)
 
    if (zcount)
       {
-      printf("\t.zerow\t%ld\n",(zcount >> 1));
+      printf("\t.blkb\t%ld\n",zcount);
       ++retval;
       zcount = 0L;
       }
