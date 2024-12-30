@@ -1,7 +1,8 @@
 # To use this Makefile on ELKS, copy the toolchain and basic headers to ELKS /root
-# Also have example files on /root. Then type "./make"
+# Also have example files on /root, and ensure /etc/profile is PATH=.:/bin
+# Then type "make"
 #
-# To do this execute the following before creating the image:
+# To do this execute the following before creating the image on the host:
 #   cd ELKS/libc
 #   cp libc/include/c86/stdarg.h ELKS/elkscmd/rootfs_template/root
 #   cp libc/include/c86/stddef.h ELKS/elkscmd/rootfs_template/root
@@ -21,10 +22,10 @@
 C86LIB=.
 INCLUDES=-I.
 
-CPP=./cpp86
-CC=./c86
-AS=./as86
-LD=./ld86
+CPP=cpp86
+CC=c86
+AS=as86
+LD=ld86
 
 DEFINES=
 #DEFINES=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
@@ -47,7 +48,7 @@ test.o: test.asm
 test.asm: test.i
 	$(CC) $(CFLAGS) test.i test.asm
 
-test.i: test.c nanoprintf.h
+test.i: test.c
 	$(CPP) $(CPPFLAGS) test.c -o test.i
 
 chess: chess.o
