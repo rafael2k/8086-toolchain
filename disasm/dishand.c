@@ -588,14 +588,14 @@ mihand(j)
          {
          if( k < 100 || k > 65436U )
             printf("#%d\n",(short)k);
-	 else
+         else
             printf("#0x%04X\n",k);
          }
       }
    else
       {
       FETCH(m);
-      printf("*%d\n",m);
+      printf("#%d\n",m);        // NOTE: was "*"
       }
 
    objout();
@@ -675,7 +675,7 @@ tqhand(j)
          {
          if( k < 100 || k > 65436U )
             printf("#%d\n",(short)k);
-	 else
+         else
             printf("#0x%04X\n",k);
          }
       }
@@ -683,7 +683,7 @@ tqhand(j)
       {
       if (m & 80)
          m |= -0xFF;
-      printf("*%d\n",m);
+      printf("#%d\n",m);        // NOTE: was "*"
       }
 
    objout();
@@ -776,14 +776,14 @@ mmhand(j)
          {
          if( k < 100 || k > 65436U )
             printf("#%d\n",(short)k);
-	 else
+         else
             printf("#0x%04X\n",k);
          }
       }
    else
       {
       FETCH(k);
-      printf("*%d\n",k);
+      printf("#%d\n",k);        // NOTE: was "*"
       }
 
    objout();
@@ -831,7 +831,7 @@ srhand(j)
    if (j & 2)
       printf(",cl\n");
    else
-      printf(",*1\n");
+      printf(",#1\n");          // NOTE: was "*"
 
    objout();
 
