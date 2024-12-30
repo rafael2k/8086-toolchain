@@ -437,10 +437,11 @@ lookext(off,loc,buf)
 }/* * * * * * * * * *  END OF  lookext()  * * * * * * * * * */
 
 
+/* find data symbol name from .data or .bss section */
 static char *
 getdatalab(addr)
 unsigned long addr;
-{/* * * * * * * * * *  START OF getdatalab()  * * * * * * * * * */
+{
 
    register int k;
 
@@ -457,7 +458,7 @@ unsigned long addr;
 
    return (NULL);
 
-}/* * * * * * * * * * * END OF getdatalab() * * * * * * * * * * */
+}
 
  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   *                                                         *
@@ -502,6 +503,7 @@ lookup(addr,type,kind,ext)
 {/* * * * * * * * * *  START OF lookup()  * * * * * * * * * */
 
    register int j, k;
+   char *c;
    static char b[80];
 
    struct
@@ -543,10 +545,11 @@ lookup(addr,type,kind,ext)
 
    if (kind == LOOK_ABS)
       {
-      char *c = getdatalab(addr);
+      c = getdatalab(addr);     /* ghaerr: display data symbol when separate I&D */
       if (c)
          sprintf(b,"[%s]",c);
-      else sprintf(b,"[0x%04lx]",addr);
+      else
+         sprintf(b,"[0x%04lx]",addr);
       }
    else
       {
