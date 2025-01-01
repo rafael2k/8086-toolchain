@@ -211,16 +211,17 @@ Numeric condition
 .B IFC, ELSEIFC
 String compare (str1,str2)
 .TP
-.B FAIL .FAIL
+.B FAIL, .FAIL
 Generate user error.
 .P
 Segment related
 .TP
-.B .TEXT .ROM .DATA .BSS
+.B .TEXT, .ROM, .DATA, .BSS
 Set current segment. These can be preceded by the keyword
-.B .SECT
+.B SECT.
+ .DATA and .BSS are identical.
 .TP
-.B LOC
+.B .SECT, LOC
 Set numeric segment 0=TEXT, 3=DATA,ROM,BSS, 14=MAX. 
 The segment order set by the linker is now 0,4,5,6,7,8,9,A,B,C,D,E,1,2,3.
 Segment 0 and all segments above 3 are assumed to be text segment.
@@ -234,10 +235,10 @@ Export label defined in this object
 .B ENTRY
 Force linker to include the specified label in a.out
 .TP
-.B .GLOBL .GLOBAL
+.B .GLOBAL .GLOBL
 Define label as external and force import even if it isn't used.
 .TP
-.B EXTRN EXTERN IMPORT .EXTERN
+.B .EXTERN, EXTERN, EXTRN, IMPORT
 Import list of externally defined labels
 .br
 NB: It doesn't make sense to use imports for raw binary files.

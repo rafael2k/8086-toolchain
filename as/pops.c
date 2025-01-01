@@ -883,7 +883,7 @@ PUBLIC void pnolist()
     bumpsem(&list, -1);
 }
 
-/* LOC pseudo-op */
+/* .SECT, LOC pseudo-op */
 
 PUBLIC void ploc()
 {
@@ -943,7 +943,7 @@ PUBLIC void prmb()
     constdata(1);
 }
 
-/* .SECT pseudo-op */
+/* SECT pseudo-op */
 
 PUBLIC void psect()
 {
