@@ -598,7 +598,6 @@ static int realchget(void)
       if( def_ptr )
       {
 	 ch = *def_ptr++; if(ch) return (unsigned char)ch;
-	 if( def_start ) free(def_start);
 	 if( def_ref ) def_ref->in_use = 0;
 
 	 def_count--;
@@ -871,7 +870,6 @@ static void do_proc_define(void)
       if(ptr==0) cfatal("Preprocessor out of memory");
       ptr->name = set_entry(0, name, ptr);
       ptr->in_use = 0;
-      ptr->next = 0;
 
       if (old_value) {
 	 if (strcmp(old_value->value, ptr->value) != 0)

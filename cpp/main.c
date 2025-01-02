@@ -2,7 +2,9 @@
 #include <stdio.h>
 #if __STDC__
 #include <stdlib.h>
+#ifndef __ELKS__
 #include <locale.h>
+#endif
 #else
 #include <malloc.h>
 #endif
@@ -213,7 +215,6 @@ char * name;
    strcat(ptr->value, " ");     /* ghaerr: match #define definitions */
    ptr->arg_count = -1;
    ptr->in_use = 0;
-   ptr->next = 0;
 }
 
 FILE *

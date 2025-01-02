@@ -55,14 +55,17 @@ void *realloc(void *ptr, size_t size)
 
 #if LATER
     /* we can't yet get size from fmemalloc'd block */
-    osize = malloc_usable_size(ptr);
-    if (size <= osize)
+    osize = __amalloc_usable_size(ptr);
+    __dprintf("old %u new %u\n", osize, size);
+    if (size < osize || osize == 0)
         osize = size;           /* copy less bytes in memcpy below */
 #endif
 
     new = malloc(size);
-    if (new == 0)
+    if (new == 0) {
+        __dprintf("realloc: Out of memory\n");
         return 0;
+    }
     memcpy(new, ptr, osize);    /* FIXME copies too much but can't get real osize */
     free(ptr);
     return new;

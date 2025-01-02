@@ -1,5 +1,6 @@
 /* readsrc.c - read source files for assembler */
 
+#include <stdio.h>
 #include "syshead.h"
 #include "const.h"
 #include "type.h"
@@ -248,6 +249,7 @@ PUBLIC void pproceof()
     else if (pass!=last_pass)
     {
 	pass++;
+	printf("Pass %d\n", pass+1);
 	if( last_pass>1 && last_pass<30 && dirty_pass && pass==last_pass )
 	   last_pass++;
 

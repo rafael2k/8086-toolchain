@@ -32,7 +32,8 @@ DEFINES=
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
 CFLAGS=-g -v -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
-ASFLAGS=-0 -O -j -w-
+#ASFLAGS=-0 -j -O -w-
+ASFLAGS=-0 -j
 LDFLAGS=-0 -i -L$(C86LIB)
 
 ##### End of standardized section #####
@@ -74,6 +75,6 @@ cprintf.i: cprintf.c
 
 
 clean:
-	rm -f *.o *.i *.as  test chess
+	rm -f *.i *.o *.as test chess
 
 # end
