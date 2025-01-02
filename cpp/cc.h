@@ -28,7 +28,7 @@ struct token_trans { char * name; int token; };
 struct token_trans * is_ctok P((register const char *str, register size_t len));
 struct token_trans * is_ckey P((register const char *str, register size_t len));
 
-#define WORDSIZE	200         /* ghaerr: fixes crash, was 128 */
+#define WORDSIZE	128
 #define TK_WSPACE	256
 #define TK_WORD 	257
 #define TK_NUM  	258
@@ -106,7 +106,6 @@ extern void * read_entry P((int,char*));
 
 struct define_item
 {
-   struct define_arg * next;
    char * name;
    int arg_count;	/* -1 = none; >=0 = brackets with N args */
    int in_use;		/* Skip this one for looking up #defines */

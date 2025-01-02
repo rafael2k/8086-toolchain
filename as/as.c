@@ -5,6 +5,7 @@
   in any order (but no repeated file options)
 */
 
+#include <stdio.h>
 #include "syshead.h"
 #include "const.h"
 #include "type.h"
@@ -44,6 +45,7 @@ char **argv;
     init_heap();
     initp1();
     initp1p2();
+    printf("Init\n");
     inst_keywords();
     initbin();
     initobj();
@@ -55,6 +57,7 @@ char **argv;
     process_args(argc, argv);
     initscan();
     line_zero();
+    printf("Pass 1\n");
 
     assemble();			/* doesn't return, maybe use setjmp */
 

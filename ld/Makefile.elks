@@ -17,7 +17,7 @@ CLBASE += -fno-stack-check -fnostdlib
 CLBASE += -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
 WARNINGS = -Wall -Wextra
 INCLUDES = -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
-INCLUDES += -I$(WATCOM)/h
+INCLUDES += -I$(TOPDIR)/libc/include/watcom
 DEFINES = -D__ELKS__
 CFLAGS = -Os $(CLBASE) $(WARNINGS) $(INCLUDES) $(DEFINES) $(LOCALFLAGS)
 LDBASE = -bos2 -s
