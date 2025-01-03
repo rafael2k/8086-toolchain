@@ -489,7 +489,7 @@ PUBLIC void pasciz()
     popflags = POPLO | POPLC;
 }
 
-/* .BLKW pseudo-op */
+/* .BLKW, .ZEROW pseudo-ops */
 
 PUBLIC void pblkw()
 {
@@ -564,7 +564,7 @@ PUBLIC void pcomm1()
     setloc(oldseg);
 }
 
-/* .DATA pseudo-op */
+/* .DATA, .ROM pseudo-ops */
 
 PUBLIC void pdata()
 {
@@ -686,21 +686,21 @@ PUBLIC void peven()
     accumulate_rmb(lcjump = lastexp.data = lc & 1);
 }
 
-/* EXPORT pseudo-op */
+/* EXPORT, PUBLIC, .DEFINE pseudo-ops */
 
 PUBLIC void pexport()
 {
     doentexp(0, 0);
 }
 
-/* FAIL pseudo-op */
+/* .FAIL, FAIL pseudo-ops */
 
 PUBLIC void pfail()
 {
     if(pass==last_pass) error(FAILERR);
 }
 
-/* FCB pseudo-op */
+/* .BYTE, .DATA1, DB, FCB pseudo-ops */
 
 PUBLIC void pfcb()
 {
@@ -736,7 +736,7 @@ PUBLIC void pfcc()
     }
 }
 
-/* FDB pseudo-op */
+/* .WORD, .SHORT, .DATA2, DW, FDB pseudo-ops */
 
 PUBLIC void pfdb()
 {
@@ -764,7 +764,7 @@ PUBLIC void pfdb()
 
 #if SIZEOF_OFFSET_T > 2
 
-/* FQB pseudo-op */
+/* .LONG, DD, FQB pseudo-ops */
 
 PUBLIC void pfqb()
 {
@@ -792,7 +792,7 @@ PUBLIC void pfqb()
 
 #endif /* SIZEOF_OFFSET_T > 2 */
 
-/* .GLOBL pseudo-op */
+/* .GLOBAL, .GLOBL pseudo-ops */
 
 PUBLIC void pglobl()
 {
@@ -825,7 +825,7 @@ PUBLIC void pifc()
     doif(scompare);
 }
 
-/* IMPORT pseudo-op */
+/* .EXTERN, EXTERN, EXTRN, IMPORT pseudo-ops */
 
 PUBLIC void pimport()
 {
@@ -883,7 +883,7 @@ PUBLIC void pnolist()
     bumpsem(&list, -1);
 }
 
-/* .SECT, LOC pseudo-op */
+/* .SECT, LOC pseudo-ops */
 
 PUBLIC void ploc()
 {
@@ -920,7 +920,7 @@ PUBLIC void pmap()
     }
 }
 
-/* ORG pseudo-op */
+/* .ORG, ORG pseudo-ops */
 
 PUBLIC void porg()
 {
@@ -936,7 +936,7 @@ PUBLIC void porg()
     }
 }
 
-/* RMB pseudo-op */
+/* .BLKB, .SPACE, RMB pseudo-ops */
 
 PUBLIC void prmb()
 {
@@ -1042,7 +1042,7 @@ PUBLIC void puse16()
 #endif
 }
 
-/* USE16 pseudo-op */
+/* USE32 pseudo-op */
 
 PUBLIC void puse32()
 {
