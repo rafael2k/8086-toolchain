@@ -9,8 +9,8 @@ elks:
 	make -C ar -f Makefile.elks
 	make -C make -f Makefile.elks
 	make -C disasm -f Makefile.elks
-	make -C nasm -f Makefile.elks
-	make -C nasm32 -f Makefile.elks
+#	make -C nasm -f Makefile.elks
+#	make -C nasm32 -f Makefile.elks
 
 host:
 	mkdir -p host-bin
@@ -21,9 +21,9 @@ host:
 	make -C ar
 	make -C make
 	make -C disasm
-	make -C nasm
-	make -C nasm32
-	make -C emulator
+#	make -C nasm
+#	make -C nasm32
+#	make -C emulator
 #	make -C libc-unused
 #	make -C examples
 

@@ -20,6 +20,7 @@ PUBLIC char regs[] =
     2, 'D', 'I', DIREG, 0,
     2, 'S', 'I', SIREG, 0,
 
+#ifndef I8086
     3, 'E', 'A', 'X', EAXREG, 0,
     3, 'E', 'B', 'P', EBPREG, 0,
     3, 'E', 'B', 'X', EBXREG, 0,
@@ -28,6 +29,7 @@ PUBLIC char regs[] =
     3, 'E', 'D', 'X', EDXREG, 0,
     3, 'E', 'S', 'I', ESIREG, 0,
     3, 'E', 'S', 'P', ESPREG, 0,
+#endif
 
     2, 'A', 'X', AXREG, 0,
     2, 'C', 'X', CXREG, 0,
@@ -46,10 +48,11 @@ PUBLIC char regs[] =
     2, 'C', 'S', CSREG, 0,
     2, 'D', 'S', DSREG, 0,
     2, 'E', 'S', ESREG, 0,
-    2, 'F', 'S', FSREG, 0,
-    2, 'G', 'S', GSREG, 0,
     2, 'S', 'S', SSREG, 0,
 
+#ifndef I8086
+    2, 'F', 'S', FSREG, 0,
+    2, 'G', 'S', GSREG, 0,
     3, 'C', 'R', '0', CR0REG, 0,
     3, 'C', 'R', '2', CR2REG, 0,
     3, 'C', 'R', '3', CR3REG, 0,
@@ -64,8 +67,8 @@ PUBLIC char regs[] =
     3, 'T', 'R', '5', TR5REG, 0,
     3, 'T', 'R', '6', TR6REG, 0,
     3, 'T', 'R', '7', TR7REG, 0,
-
     2, 'S', 'T', ST0REG, 0,
+#endif /* I8086 */
 #endif /* I80386 */
 
 #ifdef MC6809
@@ -93,13 +96,17 @@ PUBLIC char typesizes[] =
 {
     4, 'B', 'Y', 'T', 'E', BYTEOP, 1,
     5, 'D', 'W', 'O', 'R', 'D', DWORDOP, 4,
+#ifndef I8086
     5, 'F', 'W', 'O', 'R', 'D', FWORDOP, 6,
+#endif
     3, 'F', 'A', 'R', FAROP, 0,
     4, 'N', 'E', 'A', 'R', WORDOP, 2,
     3, 'P', 'T', 'R', PTROP, 0,
+#ifndef I8086
     5, 'P', 'W', 'O', 'R', 'D', PWORDOP, 6,
     5, 'Q', 'W', 'O', 'R', 'D', QWORDOP, 8,
     5, 'T', 'B', 'Y', 'T', 'E', TBYTEOP, 10,
+#endif
     4, 'W', 'O', 'R', 'D', WORDOP, 2,
     0				/* end of typesize list */
 };
@@ -109,6 +116,7 @@ PUBLIC char typesizes[] =
 /* ops */
 /* the routine number is given in 1 byte */
 /* the opcode is given in 1 byte (it is not used for pseudo-ops) */
+/* NOTE: some pseudo-ops removed below with // for speed on ELKS as86 */
 
 PUBLIC char ops[] =
 {
@@ -127,16 +135,16 @@ PUBLIC char ops[] =
     6, '.', 'A', 'S', 'C', 'I', 'Z', ASCIZOP, 0,
     5, '.', 'B', 'L', 'K', 'B', RMBOP, 0,
     5, '.', 'B', 'L', 'K', 'W', BLKWOP, 0,
-    5, 'B', 'L', 'O', 'C', 'K', BLOCKOP, 0,
+    //5, 'B', 'L', 'O', 'C', 'K', BLOCKOP, 0,
     4, '.', 'B', 'S', 'S', BSSOP, 0,
     5, '.', 'B', 'Y', 'T', 'E', FCBOP, 0,
-    4, 'C', 'O', 'M', 'M', COMMOP, 0,
+    //4, 'C', 'O', 'M', 'M', COMMOP, 0,
     5, '.', 'C', 'O', 'M', 'M', COMMOP1, 0,
     5, '.', 'D', 'A', 'T', 'A', DATAOP, 0,
-    6, '.', 'D', 'A', 'T', 'A', '1', FCBOP, 0,
-    6, '.', 'D', 'A', 'T', 'A', '2', FDBOP, 0,
+    //6, '.', 'D', 'A', 'T', 'A', '1', FCBOP, 0,
+    //6, '.', 'D', 'A', 'T', 'A', '2', FDBOP, 0,
 #if SIZEOF_OFFSET_T > 2
-    6, '.', 'D', 'A', 'T', 'A', '4', FQBOP, 0,
+    //6, '.', 'D', 'A', 'T', 'A', '4', FQBOP, 0,
 #endif
     2, 'D', 'B', FCBOP, 0,
 #if SIZEOF_OFFSET_T > 2
@@ -145,8 +153,8 @@ PUBLIC char ops[] =
     7, '.', 'D', 'E', 'F', 'I', 'N', 'E', EXPORTOP, 0,
     2, 'D', 'W', FDBOP, 0,
     3, 'E', 'N', 'D', PROCEOFOP, 0,
-    4, 'E', 'N', 'D', 'B', ENDBOP, 0,
-    6, '.', 'E', 'N', 'T', 'E', 'R', ENTEROP, 0,
+    //4, 'E', 'N', 'D', 'B', ENDBOP, 0,
+    //6, '.', 'E', 'N', 'T', 'E', 'R', ENTEROP, 0,
     5, 'E', 'N', 'T', 'R', 'Y', ENTRYOP, 0,
     3, 'E', 'Q', 'U', EQUOP, 0,
     5, '.', 'E', 'V', 'E', 'N', EVENOP, 0,
@@ -154,18 +162,18 @@ PUBLIC char ops[] =
     6, 'E', 'X', 'T', 'E', 'R', 'N', IMPORTOP, 0,
     7, '.', 'E', 'X', 'T', 'E', 'R', 'N', IMPORTOP, 0,
     5, 'E', 'X', 'T', 'R', 'N', IMPORTOP, 0,
-    4, 'F', 'A', 'I', 'L', FAILOP, 0,
+    //4, 'F', 'A', 'I', 'L', FAILOP, 0,
     5, '.', 'F', 'A', 'I', 'L', FAILOP, 0,
-    3, 'F', 'C', 'B', FCBOP, 0,
-    3, 'F', 'C', 'C', FCCOP, 0,
-    3, 'F', 'D', 'B', FDBOP, 0,
-    3, 'G', 'E', 'T', GETOP, 0,
+    //3, 'F', 'C', 'B', FCBOP, 0,
+    //3, 'F', 'C', 'C', FCCOP, 0,
+    //3, 'F', 'D', 'B', FDBOP, 0,
+    //3, 'G', 'E', 'T', GETOP, 0,
     7, '.', 'G', 'L', 'O', 'B', 'A', 'L', GLOBLOP, 0,
     6, '.', 'G', 'L', 'O', 'B', 'L', GLOBLOP, 0,
-    5, 'I', 'D', 'E', 'N', 'T', IDENTOP, 0,
+    //5, 'I', 'D', 'E', 'N', 'T', IDENTOP, 0,
     6, 'I', 'M', 'P', 'O', 'R', 'T', IMPORTOP, 0,
     7, 'I', 'N', 'C', 'L', 'U', 'D', 'E', GETOP, 0,
-    5, 'L', 'C', 'O', 'M', 'M', LCOMMOP, 0,
+    //5, 'L', 'C', 'O', 'M', 'M', LCOMMOP, 0,
     6, '.', 'L', 'C', 'O', 'M', 'M', LCOMMOP1, 0,
     5, '.', 'L', 'I', 'S', 'T', LISTOP, 0,
     3, 'L', 'O', 'C', LOCOP, 0,
@@ -174,22 +182,24 @@ PUBLIC char ops[] =
 #endif
     8, '.', 'M', 'A', 'C', 'L', 'I', 'S', 'T', MACLISTOP, 0,
     5, 'M', 'A', 'C', 'R', 'O', MACROOP, 0,
-    4, '.', 'M', 'A', 'P', MAPOP, 0,
-    3, 'O', 'R', 'G', ORGOP, 0,
+    //4, '.', 'M', 'A', 'P', MAPOP, 0,
+    //3, 'O', 'R', 'G', ORGOP, 0,
     4, '.', 'O', 'R', 'G', ORGOP, 0,
     6, 'P', 'U', 'B', 'L', 'I', 'C', EXPORTOP, 0,
-    3, 'R', 'M', 'B', RMBOP, 0,
-    4, '.', 'R', 'O', 'M', DATAOP, 0,
+    //3, 'R', 'M', 'B', RMBOP, 0,
+    //4, '.', 'R', 'O', 'M', DATAOP, 0,
     4, 'S', 'E', 'C', 'T', SECTOP, 0,
     5, '.', 'S', 'E', 'C', 'T', LOCOP, 0,
     3, 'S', 'E', 'T', SETOP, 0,
-    5, 'S', 'E', 'T', 'D', 'P', SETDPOP, 0,
+    //5, 'S', 'E', 'T', 'D', 'P', SETDPOP, 0,
     6, '.', 'S', 'H', 'O', 'R', 'T', FDBOP, 0,
     6, '.', 'S', 'P', 'A', 'C', 'E', RMBOP, 0,
     5, '.', 'T', 'E', 'X', 'T', TEXTOP, 0,
 #ifndef MC6809
     5, 'U', 'S', 'E', '1', '6', USE16OP, 0,
+#ifndef I8086
     5, 'U', 'S', 'E', '3', '2', USE32OP, 0,
+#endif
 #endif
     5, '.', 'W', 'A', 'R', 'N', WARNOP, 0,
     5, '.', 'W', 'O', 'R', 'D', FDBOP, 0,
@@ -248,10 +258,12 @@ PUBLIC char ops[] =
     4, 'D', 'S', 'E', 'G', INHER, 0x3E,
     3, 'D', 'E', 'C', INCDEC, 0x08,
     3, 'D', 'I', 'V', DIVMUL, 0x30,
+#ifndef I8086
     5, 'E', 'N', 'T', 'E', 'R', ENTER, 0xC8,
     4, 'E', 'S', 'E', 'G', INHER, 0x26,
     4, 'F', 'S', 'E', 'G', INHER, 0x64,
     4, 'G', 'S', 'E', 'G', INHER, 0x65,
+#endif
     3, 'H', 'L', 'T', INHER, 0xF4,
     4, 'I', 'D', 'I', 'V', DIVMUL, 0x38,
     4, 'I', 'M', 'U', 'L', IMUL, 0x28,
@@ -391,6 +403,7 @@ PUBLIC char ops[] =
     5, 'X', 'L', 'A', 'T', 'B', INHER, 0xD7,
     3, 'X', 'O', 'R', GROUP1, 0x30,
 
+#ifndef I8086
     /* floating point */
     5, 'F', '2', 'X', 'M', '1', F_INHER, 0x70,
     4, 'F', 'A', 'B', 'S', F_INHER, 0x61,
@@ -477,6 +490,7 @@ PUBLIC char ops[] =
     7, 'F', 'X', 'T', 'R', 'A', 'C', 'T', F_INHER, 0x74,
     5, 'F', 'Y', 'L', '2', 'X', F_INHER, 0x71,
     7, 'F', 'Y', 'L', '2', 'X', 'P', '1', F_INHER, 0x79,
+#endif
 #endif /* I80386 */
 
 #ifdef MC6809
@@ -599,6 +613,7 @@ PUBLIC char ops[] =
 PUBLIC char page1ops[] =
 {
 #ifdef I80386
+#ifndef I8086
     3, 'B', 'S', 'F', GvEv, 0xBC,
     3, 'B', 'S', 'R', GvEv, 0xBD,
     5, 'B', 'S', 'W', 'A', 'P', BSWAP, 0xC8,
@@ -665,6 +680,7 @@ PUBLIC char page1ops[] =
     6, 'W', 'B', 'I', 'N', 'V', 'D', INHER, 0x09,
     5, 'W', 'R', 'M', 'S', 'R', INHER, 0x30,
     4, 'X', 'A', 'D', 'D', ExGx, 0xC0,
+#endif /* I8086 */
 #endif /* I80386 */
 
 #ifdef MC6809

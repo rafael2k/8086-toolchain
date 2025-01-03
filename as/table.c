@@ -9,6 +9,21 @@
 
 #define hconv(ch) ((unsigned char) (ch) - 0x41)	/* better form for hashing */
 
+#ifdef __WATCOMC__
+/* high speed inlined version of memcmp */
+#define memcmp fmemcmp
+extern int fmemcmp(void __far *s1, void __far *s2, size_t n);
+#pragma aux fmemcmp =           \
+    "cld            "           \
+    "repe cmpsb     "           \
+    "jz     L1      "           \
+    "mov    ah,1    "           \
+    "jmp    short L2"           \
+"L1: xor     ax,ax  "           \
+"L2:                "           \
+    __parm [ __ds __si ] [ __es __di ] [ __cx ];    /* is that sweet or what?! */
+#endif
+
 #ifdef I80386
 # ifdef MNSIZE
 EXTERN char bytesizeops[];
