@@ -56,12 +56,6 @@
 # endif
 #endif
 
-#ifdef	__ELKS__
-#define bcopy(s, d, n)			memcpy((d), (s), (n))
-#define	bcmp(a, b, size)		memcmp((a), (b), (size))
-#define	bzero(s, size)			memset((s), 0, (size))
-#endif
-
 /* Locking is normally disabled because fcntl hangs on the Sun
    and it isn't supported properly across NFS anyway.  */
 
@@ -527,7 +521,7 @@ void scan(
   {
     char buf[SARMAG];
     int nread = fread (buf, 1, SARMAG, arcstream);
-    if (nread != SARMAG || bcmp (buf, ARMAG, SARMAG))
+    if (nread != SARMAG || memcmp (buf, ARMAG, SARMAG))
       fatal ("file %s not a valid archive", archive);
   }
 
@@ -550,9 +544,9 @@ void scan(
 	  break;
 
 	if (nread != sizeof (member_header)
-	    || bcmp (member_header.ar_fmag, ARFMAG, 2))
+	    || memcmp (member_header.ar_fmag, ARFMAG, 2))
 	  fatal ("file %s not a valid archive", archive);
-	bcopy (member_header.ar_name, name, sizeof member_header.ar_name);
+	memcpy (name, member_header.ar_name, sizeof member_header.ar_name);
 	{
 	  char *p = name + sizeof member_header.ar_name;
 	  *p = '\0';
@@ -1159,7 +1153,7 @@ void touch_symdef_member(int outdesc, char *outname)
   fstat (outdesc, &statbuf);
 
   /* Advance member's time to that time.  */
-  bzero (symdef_header.ar_date, sizeof symdef_header.ar_date);
+  memset (symdef_header.ar_date, 0, sizeof symdef_header.ar_date);
   sprintf (symdef_header.ar_date, "%ld", statbuf.st_mtime);
   for (i = 0; i < sizeof symdef_header.ar_date; i++)
     if (symdef_header.ar_date[i] == 0)
@@ -1465,7 +1459,7 @@ void write_symdef_member(struct mapelt *mapelt, struct mapelt *map, int outdesc,
 
   header_from_map (&header, mapelt);
 
-  bcopy (&header, &symdef_header, sizeof header);
+  memcpy (&symdef_header, &header, sizeof header);
 
   mywrite (outdesc, &header, sizeof (header), outname);
 
