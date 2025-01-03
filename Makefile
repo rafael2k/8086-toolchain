@@ -32,9 +32,11 @@ copy:
 	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/ndisasm86
 	rm -f $(TOPDIR)/elkscmd/rootfs_template/root/nasm86
 
-.PHONY: clean copy
+.PHONY: clean cleanhost cleanelks copy
 
-clean:
+clean: cleanhost cleanelks
+
+cleanhost:
 	make -C compiler clean
 	make -C cpp clean
 	make -C as clean
@@ -47,6 +49,8 @@ clean:
 	make -C emulator clean
 #	make -C libc-unused clean
 	make -C examples clean
+
+cleanelks:
 	make -C compiler -f Makefile.elks clean
 	make -C cpp -f Makefile.elks clean
 	make -C as -f Makefile.elks clean
