@@ -12,7 +12,7 @@
 
 #define I80386			/* generate 80386 code */
 #define I8086			/* but only recognize 8086 instructions */
-#define MNSIZE			/* allow byte size in mnemonic, e.g. "movb" */
+#undef  MNSIZE			/* allow byte size in mnemonic, e.g. "movb" */
 
 #undef MC6809			/* generate 6809 code */
 #undef SOS_EDOS			/* source OS is EDOS */
