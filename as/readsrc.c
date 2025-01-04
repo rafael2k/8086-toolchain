@@ -1,6 +1,5 @@
 /* readsrc.c - read source files for assembler */
 
-#include <stdio.h>
 #include "syshead.h"
 #include "const.h"
 #include "type.h"
@@ -68,6 +67,7 @@ PRIVATE int inp_line P((int fd, char * buf, int size));
 
 FORWARD void clearsource P((void));
 FORWARD void line_too_long P((void));
+FORWARD char *xitoa P((int));
 
 PRIVATE void clearsource()
 {
@@ -249,7 +249,10 @@ PUBLIC void pproceof()
     else if (pass!=last_pass)
     {
 	pass++;
-	printf("Pass %d\n", pass+1);
+	if(verbose) {
+	    writes("Pass ");
+	    writesn(xitoa(pass+1));
+	}
 	if( last_pass>1 && last_pass<30 && dirty_pass && pass==last_pass )
 	   last_pass++;
 
@@ -503,3 +506,20 @@ long posn;
 }
 
 #endif
+
+/* no itoa in standard! */
+PRIVATE char *xitoa(val)
+int val;
+{
+   static char buf[34];
+   char *b = buf + sizeof(buf) - 1;
+   unsigned int u = (val < 0)? 0u - val: val;
+
+   *b = '\0';
+   do {
+      *--b = '0' + (u % 10);
+   } while ((u /= 10) != 0);
+   if (val < 0)
+      *--b = '-';
+   return b;
+}

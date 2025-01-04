@@ -5,7 +5,6 @@
   in any order (but no repeated file options)
 */
 
-#include <stdio.h>
 #include "syshead.h"
 #include "const.h"
 #include "type.h"
@@ -45,8 +44,6 @@ char **argv;
     init_heap();
     initp1();
     initp1p2();
-    printf("Init\n");
-    inst_keywords();
     initbin();
     initobj();
     initsource();
@@ -55,9 +52,11 @@ char **argv;
     as_warn.semaphore = -1;
     last_pass=1;
     process_args(argc, argv);
+    if (verbose) writesn("Init");
+    inst_keywords();
     initscan();
     line_zero();
-    printf("Pass 1\n");
+    if (verbose) writesn("Pass 1");
 
     assemble();			/* doesn't return, maybe use setjmp */
 
@@ -195,12 +194,8 @@ char **argv;
 	    {
 	    case 'v':
 	       outfd = STDOUT;
-	       writes("as86 version: ");
-#ifdef VERSION
+	       writes("as86 v");
 	       writesn(VERSION);
-#else
-	       writesn("Unknown!");
-#endif
 	       exit(1);
 #ifdef I80386
 	    case '0': case '1': case '2':
@@ -291,6 +286,9 @@ char **argv;
 	    case 'k':
 		keep_bad_output = 1;
 		break;
+	    case 'V':		/* display pass numbers for timing */
+		verbose = 1;
+		break;
 	    default:
 		usage();	/* bad option */
 	    }
@@ -342,7 +340,7 @@ PRIVATE void usage()
 {
     as_abort(
 #ifdef I80386
-"usage: as [-03agjuwO] [-b [bin]] [-lm [list]] [-n name] [-o obj] [-s sym] src");
+"usage: as [-03agjuvwOV] [-b [bin]] [-lm [list]] [-n name] [-o obj] [-s sym] src");
 #else
     "usage: as [-guw] [-b [bin]] [-lm [list]] [-n name] [-o obj] [-s sym] src");
 #endif

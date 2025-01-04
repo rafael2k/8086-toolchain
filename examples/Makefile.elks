@@ -33,7 +33,7 @@ DEFINES=
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
 CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
 #ASFLAGS=-0 -j -O -w-
-ASFLAGS=-0 -j
+ASFLAGS=-0 -j -V
 LDFLAGS=-0 -i -L$(C86LIB)
 
 ##### End of standardized section #####
