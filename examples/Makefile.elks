@@ -31,7 +31,7 @@ DEFINES=
 #DEFINES=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
-CFLAGS=-g -v -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
+CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
 #ASFLAGS=-0 -j -O -w-
 ASFLAGS=-0 -j
 LDFLAGS=-0 -i -L$(C86LIB)
@@ -41,38 +41,37 @@ LDFLAGS=-0 -i -L$(C86LIB)
 all: chess test
 
 test: test.o cprintf.o
-	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
+	time $(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
 
 test.o: test.as
-	$(AS) $(ASFLAGS)  test.as -o test.o
+	time $(AS) $(ASFLAGS)  test.as -o test.o
 
 test.as: test.i
-	$(CC) $(CFLAGS) test.i test.as
+	time $(CC) $(CFLAGS) test.i test.as
 
 test.i: test.c
-	$(CPP) $(CPPFLAGS) test.c -o test.i
+	time $(CPP) $(CPPFLAGS) test.c -o test.i
 
 chess: chess.o
-	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
+	time $(LD) $(LDFLAGS) chess.o -lc86 -o chess
 
 chess.o: chess.as
-	$(AS) $(ASFLAGS)  chess.as -o chess.o
+	time $(AS) $(ASFLAGS)  chess.as -o chess.o
 
 chess.as: chess.i
-	$(CC) $(CFLAGS) chess.i chess.as
+	time $(CC) $(CFLAGS) chess.i chess.as
 
 chess.i: chess.c
-	$(CPP) $(CPPFLAGS) chess.c -o chess.i
+	time $(CPP) $(CPPFLAGS) chess.c -o chess.i
 
 cprintf.o: cprintf.as
-	$(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
+	time $(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
 
 cprintf.as: cprintf.i
-	$(CC) $(CFLAGS) cprintf.i cprintf.as
+	time $(CC) $(CFLAGS) cprintf.i cprintf.as
 
 cprintf.i: cprintf.c
-	$(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
-
+	time $(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
 
 clean:
 	rm -f *.i *.o *.as test chess
