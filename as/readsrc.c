@@ -1,6 +1,5 @@
 /* readsrc.c - read source files for assembler */
 
-#include <stdlib.h>
 #include "syshead.h"
 #include "const.h"
 #include "type.h"
