@@ -29,6 +29,8 @@ EXTERN unsigned totwarn;	/* total warnings */
 
 EXTERN bool_t list_force;	/* Force line to be listed - no error */
 
+EXTERN bool_t verbose;		/* verbose output */
+
 /* bookeeping for current line */
 
 EXTERN char *linebuf;		/* buffer */
