@@ -26,11 +26,11 @@ void *malloc(size_t size)
             system("meminfo > /dev/console");
             exit(1);
         }
-        __amalloc_add_heap(heap, malloc_arena_size);
+        _fmalloc_add_heap(heap, malloc_arena_size);
     }
 
     if (size <= malloc_arena_thresh)
-        p = __amalloc(size);
+        p = _fmalloc(size);
     else p = fmemalloc(size);
     return p;
 }
@@ -42,7 +42,7 @@ void free(void *ptr)
     if (FP_OFF(ptr) == 0)       /* non-arena pointer */
         fmemfree(ptr);
     else
-        __afree(ptr);
+        _ffree(ptr);
 }
 
 void *realloc(void *ptr, size_t size)
@@ -55,7 +55,7 @@ void *realloc(void *ptr, size_t size)
 
 #if LATER
     /* we can't yet get size from fmemalloc'd block */
-    osize = __amalloc_usable_size(ptr);
+    osize = _fmalloc_usable_size(ptr);
     __dprintf("old %u new %u\n", osize, size);
     if (size < osize || osize == 0)
         osize = size;           /* copy less bytes in memcpy below */
