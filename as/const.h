@@ -12,6 +12,7 @@
 
 #define I80386			/* generate 80386 code */
 #define I8086			/* but only recognize 8086 instructions */
+#undef  I8087			/* assemble floating point instrutions */
 #undef  MNSIZE			/* allow byte size in mnemonic, e.g. "movb" */
 
 #undef MC6809			/* generate 6809 code */
