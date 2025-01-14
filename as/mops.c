@@ -393,7 +393,7 @@ FORWARD void Gw P((struct ea_s *eap));
 FORWARD void Gv P((struct ea_s *eap));
 FORWARD void Gx P((struct ea_s *eap));
 FORWARD void buildea P((struct ea_s *eap));
-#ifdef FLOAT
+#ifdef I8087
 FORWARD void buildfloat P((void));
 FORWARD void buildfreg P((void));
 FORWARD reg_pt fpregchk P((void));
@@ -569,7 +569,7 @@ register struct ea_s *eap;
     }
 }
 
-#ifdef FLOAT
+#ifdef I8087
 PRIVATE void buildfloat()
 {
     if (mcount != 0x0)
@@ -588,7 +588,7 @@ PRIVATE void buildfreg()
     postb = REG_MOD | ((opcode & 0x07) << REG_SHIFT) | (target.base - ST0REG);
     opcode = ESCAPE_OPCODE_BASE | ((opcode & 0x70) >> 0x4);
 }
-#endif /* FLOAT */
+#endif /* I8087 */
 
 PRIVATE void buildimm(eap, signflag)
 register struct ea_s *eap;
@@ -684,7 +684,7 @@ register struct ea_s *eap;
     return asize;
 }
 
-#ifdef FLOAT
+#ifdef I8087
 PRIVATE reg_pt fpregchk()
 {
     reg_pt fpreg;
@@ -712,7 +712,7 @@ PRIVATE reg_pt fpregchk()
     }
     return fpreg;
 }
-#endif /* FLOAT */
+#endif /* I8087 */
 
 PRIVATE bool_pt getaccumreg(eap)
 register struct ea_s *eap;
@@ -1342,7 +1342,7 @@ PUBLIC void mExGx()
     buildregular();
 }
 
-#ifdef FLOAT
+#ifdef I8087
 PUBLIC void mf_inher()
 {
     mcount += 0x2;
@@ -1618,7 +1618,7 @@ PUBLIC void mf_w_m2_ax()
     sprefix = WAIT_OPCODE;
     mf_m2_ax();
 }
-#endif /* FLOAT */
+#endif /* I8087 */
 
 /* ADC, ADD, AND, CMP, OR, SBB, SUB, XOR */
 
