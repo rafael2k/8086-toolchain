@@ -78,6 +78,7 @@ PRIVATE pfv rout_table[] =
     menter,
     mEwGw,
     mExGx,
+#ifdef FLOAT
     mf_inher,
     mf_m,
     mf_m2,
@@ -96,6 +97,7 @@ PRIVATE pfv rout_table[] =
     mf_w_m,
     mf_w_m2,
     mf_w_m2_ax,
+#endif /* FLOAT */
     mgroup1,
     mgroup2,
     mgroup6,

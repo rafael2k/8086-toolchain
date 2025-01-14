@@ -393,14 +393,16 @@ FORWARD void Gw P((struct ea_s *eap));
 FORWARD void Gv P((struct ea_s *eap));
 FORWARD void Gx P((struct ea_s *eap));
 FORWARD void buildea P((struct ea_s *eap));
+#ifdef FLOAT
 FORWARD void buildfloat P((void));
 FORWARD void buildfreg P((void));
+FORWARD reg_pt fpregchk P((void));
+#endif
 FORWARD void buildimm P((struct ea_s *eap, bool_pt signflag));
 FORWARD void buildregular P((void));
 FORWARD void buildsegword P((struct ea_s *eap));
 FORWARD void buildunary P((opcode_pt opc));
 FORWARD opsize_pt displsize P((struct ea_s *eap));
-FORWARD reg_pt fpregchk P((void));
 FORWARD bool_pt getaccumreg P((struct ea_s *eap));
 FORWARD void getbinary P((void));
 FORWARD bool_pt getdxreg P((struct ea_s *eap));
@@ -567,6 +569,7 @@ register struct ea_s *eap;
     }
 }
 
+#ifdef FLOAT
 PRIVATE void buildfloat()
 {
     if (mcount != 0x0)
@@ -585,6 +588,7 @@ PRIVATE void buildfreg()
     postb = REG_MOD | ((opcode & 0x07) << REG_SHIFT) | (target.base - ST0REG);
     opcode = ESCAPE_OPCODE_BASE | ((opcode & 0x70) >> 0x4);
 }
+#endif /* FLOAT */
 
 PRIVATE void buildimm(eap, signflag)
 register struct ea_s *eap;
@@ -680,6 +684,7 @@ register struct ea_s *eap;
     return asize;
 }
 
+#ifdef FLOAT
 PRIVATE reg_pt fpregchk()
 {
     reg_pt fpreg;
@@ -707,6 +712,7 @@ PRIVATE reg_pt fpregchk()
     }
     return fpreg;
 }
+#endif /* FLOAT */
 
 PRIVATE bool_pt getaccumreg(eap)
 register struct ea_s *eap;
@@ -1336,6 +1342,7 @@ PUBLIC void mExGx()
     buildregular();
 }
 
+#ifdef FLOAT
 PUBLIC void mf_inher()
 {
     mcount += 0x2;
@@ -1611,6 +1618,7 @@ PUBLIC void mf_w_m2_ax()
     sprefix = WAIT_OPCODE;
     mf_m2_ax();
 }
+#endif /* FLOAT */
 
 /* ADC, ADD, AND, CMP, OR, SBB, SUB, XOR */
 

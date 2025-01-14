@@ -68,6 +68,7 @@ enum
     ENTER,
     EwGw,
     ExGx,
+#ifdef FLOAT
     F_INHER,
     F_M,
     F_M2,
@@ -86,6 +87,7 @@ enum
     F_W_M,
     F_W_M2,
     F_W_M2_AX,
+#endif /* FLOAT */
     GROUP1,
     GROUP2,
     GROUP6,
