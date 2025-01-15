@@ -38,7 +38,13 @@ LDFLAGS=-0 -i -L$(C86LIB)
 
 ##### End of standardized section #####
 
-all: chess test
+all: chess test show_fonts
+
+show_fonts: show_fonts.o
+	time $(LD) $(LDFLAGS) show_fonts.o -o show_fonts
+
+show_fonts.o: show_fonts.s
+	time $(AS) $(ASFLAGS) show_fonts.s -o show_fonts.o
 
 test: test.o cprintf.o
 	time $(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
@@ -74,6 +80,6 @@ cprintf.i: cprintf.c
 	time $(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
 
 clean:
-	rm -f *.i *.o *.as test chess
+	rm -f *.i *.o *.as test chess show_fonts
 
 # end

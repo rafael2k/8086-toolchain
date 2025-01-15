@@ -38,13 +38,13 @@ NASMFLAGS=-f as86
 
 #DEFINES+=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
 
-all: test chess
+all: test chess show_fonts
 
 show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) show_fonts.o -o show_fonts
 
-show_fonts.o: show_fonts.asm
-	$(NASM) $(NASMFLAGS) show_fonts.asm -o show_fonts.o
+show_fonts.o: show_fonts.s
+	$(AS) $(ASFLAGS) show_fonts.s -o show_fonts.o
 
 .PRECIOUS: test.i test.as cprintf.i cprintf.as
 test: test.o cprintf.o
