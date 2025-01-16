@@ -1,10 +1,10 @@
     ;;  Prints ROM fonts address as returned by int 0x10
-use16    86
+    use16    86
 
 
-.text                   ; text section declaration
-
-.global _main
+    .text                   ; text section declaration
+    .align 2
+    .global _main
 
 strlen:
     push di
@@ -59,7 +59,7 @@ printhex:
 
     push ax
     mov al,ah
-    and al, *0x0F
+    and al, #0x0F
     call print_nibble
     pop ax
 
@@ -70,7 +70,7 @@ printhex:
     pop ax
 
     push ax
-    and al, *0x0F
+    and al, #0x0F
     call print_nibble
     pop ax
 
@@ -90,9 +90,9 @@ printhexb:
     call print_nibble
     ret
 print_nibble:
-    cmp al, *0x09
+    cmp al, #0x09
     jg .letter
-    add al, *0x30
+    add al, #0x30
     mov char_ptr, al
     mov cx,#char_ptr
     mov dx,#1
@@ -124,7 +124,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0200                 ; get addr of ROM 8x14 font
     push bp
     push es
@@ -135,7 +135,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0300                 ; get addr of ROM 8x8 font
     push bp
     push es
@@ -146,7 +146,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0400                 ; get addr of ROM 8x8 font (2nd half)
     push bp
     push es
@@ -157,7 +157,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0500                 ; get addr of ROM 9x14 alternate font
     push bp
     push es
@@ -168,7 +168,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0600                 ; get addr of ROM 8x16 font (VGA)
     push bp
     push es
@@ -179,7 +179,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0700                 ; get addr of ROM 8x16 alternate font (VGA)
     push bp
     push es
@@ -190,7 +190,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0800                 ; wrong function (to see what happens)
     push bp
     push es
