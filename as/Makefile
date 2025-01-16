@@ -18,7 +18,6 @@ OBJS = $(SRCS:.c=.o)
 
 BINDIR=../host-bin
 LOCALFLAGS = -Wno-missing-field-initializers -Wno-sign-compare
-SRCS = main.c cpp.c hash.c token1.c token2.c mem.c
 PROG = $(BINDIR)/as86
 SRCS = as.c assemble.c errors.c express.c \
      genbin.c genlist.c genobj.c gensym.c \
