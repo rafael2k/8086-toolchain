@@ -124,7 +124,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0200                 ; get addr of ROM 8x14 font
     push bp
     push es
@@ -135,7 +135,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0300                 ; get addr of ROM 8x8 font
     push bp
     push es
@@ -146,7 +146,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0400                 ; get addr of ROM 8x8 font (2nd half)
     push bp
     push es
@@ -157,7 +157,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0500                 ; get addr of ROM 9x14 alternate font
     push bp
     push es
@@ -168,7 +168,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0600                 ; get addr of ROM 8x16 font (VGA)
     push bp
     push es
@@ -179,7 +179,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0700                 ; get addr of ROM 8x16 alternate font (VGA)
     push bp
     push es
@@ -190,7 +190,7 @@ _main:
 
     mov     dx,#0
     mov     cx,#0
-    mov     ax,#0x1130                 ; function to address the charactor tables
+    mov     ax,#0x1130                 ; function to address the character tables
     mov     bx,#0x0800                 ; wrong function (to see what happens)
     push bp
     push es
