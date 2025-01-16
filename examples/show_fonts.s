@@ -1,10 +1,10 @@
     ;;  Prints ROM fonts address as returned by int 0x10
-use16    86
+    use16    86
 
 
-.text                   ; text section declaration
-
-.global _main
+    .text                   ; text section declaration
+    .align 2
+    .global _main
 
 strlen:
     push di
@@ -59,7 +59,7 @@ printhex:
 
     push ax
     mov al,ah
-    and al, *0x0F
+    and al, #0x0F
     call print_nibble
     pop ax
 
@@ -70,7 +70,7 @@ printhex:
     pop ax
 
     push ax
-    and al, *0x0F
+    and al, #0x0F
     call print_nibble
     pop ax
 
@@ -90,9 +90,9 @@ printhexb:
     call print_nibble
     ret
 print_nibble:
-    cmp al, *0x09
+    cmp al, #0x09
     jg .letter
-    add al, *0x30
+    add al, #0x30
     mov char_ptr, al
     mov cx,#char_ptr
     mov dx,#1
