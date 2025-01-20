@@ -28,7 +28,6 @@ AS=as86
 LD=ld86
 
 DEFINES=
-#DEFINES=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
 CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
@@ -38,7 +37,7 @@ LDFLAGS=-0 -i -L$(C86LIB)
 
 ##### End of standardized section #####
 
-all: chess test show_fonts
+all: chess test show_fonts vgatest
 
 show_fonts: show_fonts.o
 	time $(LD) $(LDFLAGS) show_fonts.o -o show_fonts
@@ -50,7 +49,7 @@ test: test.o cprintf.o
 	time $(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
 
 test.o: test.as
-	time $(AS) $(ASFLAGS)  test.as -o test.o
+	time $(AS) $(ASFLAGS) test.as -o test.o
 
 test.as: test.i
 	time $(CC) $(CFLAGS) test.i test.as
@@ -70,6 +69,18 @@ chess.as: chess.i
 chess.i: chess.c
 	time $(CPP) $(CPPFLAGS) chess.c -o chess.i
 
+vgatest: vgatest.o
+	time $(LD) $(LDFLAGS) vgatest.o -lc86 -o vgatest
+
+vgatest.o: vgatest.as
+	time $(AS) $(ASFLAGS)  vgatest.as -o vgatest.o
+
+vgatest.as: vgatest.i
+	time $(CC) $(CFLAGS) vgatest.i vgatest.as
+
+vgatest.i: vgatest.c
+	time $(CPP) $(CPPFLAGS) vgatest.c -o vgatest.i
+
 cprintf.o: cprintf.as
 	time $(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
 
@@ -80,6 +91,6 @@ cprintf.i: cprintf.c
 	time $(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
 
 clean:
-	rm -f *.i *.o *.as test chess show_fonts
+	rm -f *.i *.o *.as test chess show_fonts vgatest
 
 # end
