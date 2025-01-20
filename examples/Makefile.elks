@@ -70,6 +70,18 @@ chess.as: chess.i
 chess.i: chess.c
 	time $(CPP) $(CPPFLAGS) chess.c -o chess.i
 
+vga: vga.o
+	time $(LD) $(LDFLAGS) vga.o -lc86 -o vga
+
+vga.o: vga.as
+	time $(AS) $(ASFLAGS)  vga.as -o vga.o
+
+vga.as: vga.i
+	time $(CC) $(CFLAGS) vga.i vga.as
+
+vga.i: vga.c
+	time $(CPP) $(CPPFLAGS) vga.c -o vga.i
+
 cprintf.o: cprintf.as
 	time $(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
 
@@ -80,6 +92,6 @@ cprintf.i: cprintf.c
 	time $(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
 
 clean:
-	rm -f *.i *.o *.as test chess show_fonts
+	rm -f *.i *.o *.as test chess vga show_fonts
 
 # end
