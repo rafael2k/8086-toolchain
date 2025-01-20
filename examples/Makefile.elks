@@ -38,7 +38,7 @@ LDFLAGS=-0 -i -L$(C86LIB)
 
 ##### End of standardized section #####
 
-all: chess test show_fonts
+all: chess test  show_fonts vga
 
 show_fonts: show_fonts.o
 	time $(LD) $(LDFLAGS) show_fonts.o -o show_fonts
