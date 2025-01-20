@@ -36,9 +36,9 @@ NASMFLAGS=-f as86
 
 ##### End of standardized section #####
 
-#DEFINES+=-DNANOPRINTF_IMPLEMENTATION -DNANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_PRECISION_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_FLOAT_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_LARGE_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS=0 -DNANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS=0
+#DEFINES+=
 
-all: test chess show_fonts vga
+all: test chess show_fonts vgatest
 
 show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) show_fonts.o -o show_fonts
@@ -60,13 +60,13 @@ ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
 	cp chess $(TOPDIR)/elkscmd/rootfs_template/root
 endif
 
-.PRECIOUS: vga.i vga.as
-vga: vga.o
-	$(LD) $(LDFLAGS) vga.o -lc86 -o vga
+.PRECIOUS: vgatest.i vgatest.as
+vgatest: vgatest.o
+	$(LD) $(LDFLAGS) vgatest.o -lc86 -o vgatest
 ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
-	cp vga $(TOPDIR)/elkscmd/rootfs_template/root
+	cp vgatest $(TOPDIR)/elkscmd/rootfs_template/root
 endif
 
 
 clean:
-	rm -f *.o *.as *.i *.lst test chess vga show_fonts
+	rm -f *.o *.as *.i *.lst test chess show_fonts vgatest
