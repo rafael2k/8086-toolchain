@@ -206,6 +206,7 @@ static void make1(struct name *np, struct line *lp, struct depend *qdp)
             free((char *)dp);
         }
         setmacro("?", str1, 4);
+        setmacro("^", str1, 4);
         setmacro("@", np->n_name, 4);
         p = strrchr(np->n_name, '.');
         if (p) *p = 0;

@@ -1,96 +1,65 @@
-# To use this Makefile on ELKS, copy the toolchain and basic headers to ELKS /root
-# Also have example files on /root, and ensure /etc/profile is PATH=.:/bin
-# Then type "make"
+# Makefile using make86 (on ELKS or host) to build ELKS example programs
 #
-# To do this execute the following before creating the image on the host:
-#   cd ELKS/libc
-#   cp libc/include/c86/stdarg.h ELKS/elkscmd/rootfs_template/root
-#   cp libc/include/c86/stddef.h ELKS/elkscmd/rootfs_template/root
-#   cp libc/libc86.a             ELKS/elkscmd/rootfs_template/root
-#   cd 8086-toolchain
-#   cp elks-bin/*                ELKS/elkscmd/rootfs_template/root
-#                               (delete nasm86 and ndisasm86 if too big)
-#   cp examples/*.c examples/*.h ELKS/elkscmd/rootfs_template/root
-#   cp examples/Makefile.elks    ELKS/elkscmd/rootfs_template/root/Makefile
+# To use this Makefile on ELKS, copy the toolchain, headers and examples to ELKS /root
+# using ./copyc86.sh shown below, and ensure /etc/profile has PATH=.:/bin
 #   cd ELKS
+#   ./copyc86.sh
 #   make kimage (quickly builds image)
 
-#TOPDIR=/root/elks
-#INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include
-#C86LIB=/root/libc
-
-C86LIB=.
 INCLUDES=-I.
+C86LIB=.
+BIN=./
 
-CPP=cpp86
-CC=c86
-AS=as86
-LD=ld86
+# Uncomment the following lines to build on host using make86, then run:
+#   'make86 -f Makefile.elks TOPDIR=/Users/greg/net/elks-gh all'
+#INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(TOPDIR)/libc/include/c86
+#C86LIB=$(TOPDIR)/libc
+#BIN=
 
 DEFINES=
+#TIME=time
+
+##### Standardized section of Makefile #####
+
+CPP=$(BIN)cpp86
+CC=$(BIN)c86
+AS=$(BIN)as86
+LD=$(BIN)ld86
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
-CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 -align=yes -stackopt=minimum -peep=all -stackcheck=no
-#ASFLAGS=-0 -j -O -w-
-ASFLAGS=-0 -j -V
+CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 \
+    -align=yes -separate=yes -stackopt=minimum -peep=all -stackcheck=no
+#ASFLAGS=-0 -j -O -w- -V
+ASFLAGS=-0 -j
 LDFLAGS=-0 -i -L$(C86LIB)
+LDLIBS=-lc86
+
+# Automated rules for C86 toolchain
+.c.o:
+	$(TIME) $(CPP) $(CPPFLAGS) $*.c -o $*.i
+	$(TIME) $(CC) $(CFLAGS) $*.i $*.as
+	$(TIME) $(AS) $(ASFLAGS) $*.as -o $*.o
+
+.s.o:
+	$(TIME) $(AS) $(ASFLAGS) $*.s -o $*.o
 
 ##### End of standardized section #####
 
-all: chess test show_fonts vgatest
+PROGS=chess test show_fonts vgatest
 
-show_fonts: show_fonts.o
-	time $(LD) $(LDFLAGS) show_fonts.o -o show_fonts
-
-show_fonts.o: show_fonts.s
-	time $(AS) $(ASFLAGS) show_fonts.s -o show_fonts.o
-
-test: test.o cprintf.o
-	time $(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
-
-test.o: test.as
-	time $(AS) $(ASFLAGS) test.as -o test.o
-
-test.as: test.i
-	time $(CC) $(CFLAGS) test.i test.as
-
-test.i: test.c
-	time $(CPP) $(CPPFLAGS) test.c -o test.i
+all: $(PROGS)
 
 chess: chess.o
-	time $(LD) $(LDFLAGS) chess.o -lc86 -o chess
+	$(TIME) $(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-chess.o: chess.as
-	time $(AS) $(ASFLAGS)  chess.as -o chess.o
+test: test.o cprintf.o
+	$(TIME) $(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-chess.as: chess.i
-	time $(CC) $(CFLAGS) chess.i chess.as
-
-chess.i: chess.c
-	time $(CPP) $(CPPFLAGS) chess.c -o chess.i
+show_fonts: show_fonts.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 vgatest: vgatest.o
-	time $(LD) $(LDFLAGS) vgatest.o -lc86 -o vgatest
-
-vgatest.o: vgatest.as
-	time $(AS) $(ASFLAGS)  vgatest.as -o vgatest.o
-
-vgatest.as: vgatest.i
-	time $(CC) $(CFLAGS) vgatest.i vgatest.as
-
-vgatest.i: vgatest.c
-	time $(CPP) $(CPPFLAGS) vgatest.c -o vgatest.i
-
-cprintf.o: cprintf.as
-	time $(AS) $(ASFLAGS)  cprintf.as -o cprintf.o
-
-cprintf.as: cprintf.i
-	time $(CC) $(CFLAGS) cprintf.i cprintf.as
-
-cprintf.i: cprintf.c
-	time $(CPP) $(CPPFLAGS) cprintf.c -o cprintf.i
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:
-	rm -f *.i *.o *.as test chess show_fonts vgatest
-
-# end
+	rm -f *.i *.o *.as $(PROGS)
