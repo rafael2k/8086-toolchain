@@ -65,5 +65,6 @@ chess: chess.o
 vgatest: vgatest.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
+
 clean:
 	rm -f *.o *.as *.i *.lst $(PROGS)
