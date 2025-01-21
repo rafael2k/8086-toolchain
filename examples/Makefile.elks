@@ -48,16 +48,16 @@ PROGS=chess test show_fonts vgatest
 all: $(PROGS)
 
 chess: chess.o
-	$(TIME) $(LD) $(LDFLAGS) -o $@ chess.o $(LDLIBS)
+	$(TIME) $(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 test: test.o cprintf.o
-	$(TIME) $(LD) $(LDFLAGS) -o $@ test.o cprintf.o $(LDLIBS)
+	$(TIME) $(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 show_fonts: show_fonts.o
-	$(TIME) $(LD) $(LDFLAGS) -o $@ show_fonts.o $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 vgatest: vgatest.o
-	$(LD) $(LDFLAGS) -o $@ vgatest.o $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:
 	rm -f *.i *.o *.as $(PROGS)
