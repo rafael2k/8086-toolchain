@@ -20,6 +20,7 @@ CFLAGS+=-align=yes -separate=yes -stackopt=minimum -peep=all -stackcheck=no
 #ASFLAGS=-0 -j -O -w-
 ASFLAGS=-0 -j
 LDFLAGS=-0 -i -L$(C86LIB)
+LDLIBS=-lc86
 NASMFLAGS=-f as86
 
 # Automated rules for C86 toolchain
@@ -34,39 +35,35 @@ NASMFLAGS=-f as86
 %.o: %.as
 	$(AS) $(ASFLAGS) -o $*.o -l $*.lst $*.as
 
+%.o: %.s
+	$(AS) $(ASFLAGS) -o $*.o $*.s
+
 ##### End of standardized section #####
 
 #DEFINES+=
 
-all: test chess show_fonts vgatest
+PROGS=chess test show_fonts vgatest
+
+all: $(PROGS)
+ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
+	cp -p $(PROGS) $(TOPDIR)/elkscmd/rootfs_template/root
+endif
 
 show_fonts: show_fonts.o
-	$(LD) $(LDFLAGS) show_fonts.o -o show_fonts
-
-show_fonts.o: show_fonts.s
-	$(AS) $(ASFLAGS) show_fonts.s -o show_fonts.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 .PRECIOUS: test.i test.as cprintf.i cprintf.as
 test: test.o cprintf.o
-	$(LD) $(LDFLAGS) test.o cprintf.o -lc86 -o test
-ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
-	cp test $(TOPDIR)/elkscmd/rootfs_template/root
-endif
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 .PRECIOUS: chess.i chess.as
 chess: chess.o
-	$(LD) $(LDFLAGS) chess.o -lc86 -o chess
-ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
-	cp chess $(TOPDIR)/elkscmd/rootfs_template/root
-endif
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 .PRECIOUS: vgatest.i vgatest.as
 vgatest: vgatest.o
-	$(LD) $(LDFLAGS) vgatest.o -lc86 -o vgatest
-ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
-	cp vgatest $(TOPDIR)/elkscmd/rootfs_template/root
-endif
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 
 clean:
-	rm -f *.o *.as *.i *.lst test chess show_fonts vgatest
+	rm -f *.o *.as *.i *.lst $(PROGS)
