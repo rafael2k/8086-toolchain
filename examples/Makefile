@@ -4,11 +4,12 @@ ifndef TOPDIR
 $(error ELKS TOPDIR is not defined)
 endif
 
-CPP=../host-bin/cpp86
-CC=../host-bin/c86
-AS=../host-bin/as86
-LD=../host-bin/ld86
-NASM=../host-bin/nasm86
+BIN=../host-bin/
+CPP=$(BIN)cpp86
+CC=$(BIN)c86
+AS=$(BIN)as86
+LD=$(BIN)ld86
+NASM=$(BIN)nasm86
 
 C86LIB=$(TOPDIR)/libc
 INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(C86LIB)/include/c86
