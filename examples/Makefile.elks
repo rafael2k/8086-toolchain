@@ -8,21 +8,23 @@
 
 INCLUDES=-I.
 C86LIB=.
+BIN=./
 
 # Uncomment the following lines to build on host using make86, then run:
 #   'make86 -f Makefile.elks TOPDIR=/Users/greg/net/elks-gh all'
 #INCLUDES=-I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include -I$(TOPDIR)/libc/include/c86
 #C86LIB=$(TOPDIR)/libc
+#BIN=
 
 DEFINES=
 #TIME=time
 
 ##### Standardized section of Makefile #####
 
-CPP=cpp86
-CC=c86
-AS=as86
-LD=ld86
+CPP=$(BIN)cpp86
+CC=$(BIN)c86
+AS=$(BIN)as86
+LD=$(BIN)ld86
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
 CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 \
