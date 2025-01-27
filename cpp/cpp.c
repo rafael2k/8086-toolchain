@@ -609,8 +609,11 @@ static int realchget(void)
       }
 
       ch = getc(curfile);
+      if (ch == EOF && ferror(curfile))	/* NOTE: fgetc/fread read errors return EOF! */
+	  cerror("Cannot read include file");
       if( ch == EOF && fi_count != 0)
       {
+	 if (verbose) fprintf(stderr, "close %s\n", c_fname);
 	 fclose(curfile);
 	 fi_count--;
 	 curfile  = saved_files[fi_count];
