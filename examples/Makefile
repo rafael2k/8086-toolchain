@@ -46,9 +46,9 @@ NASMFLAGS=-f as86
 PROGS=chess test show_fonts vgatest
 
 all: $(PROGS)
-ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
-	cp -p $(PROGS) $(TOPDIR)/elkscmd/rootfs_template/root
-endif
+#ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
+#	cp -p $(PROGS) $(TOPDIR)/elkscmd/rootfs_template/root
+#endif
 
 show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
