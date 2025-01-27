@@ -6,9 +6,9 @@
 #   ./copyc86.sh
 #   make kimage (quickly builds image)
 
-INCLUDES=-I.
-C86LIB=.
-BIN=./
+INCLUDES=-I/usr/include -I/usr/include/c86
+C86LIB=/usr/lib
+BIN=/usr/bin/
 
 # Uncomment the following lines to build on host using make86, then run:
 #   'make86 -f Makefile.elks TOPDIR=/Users/greg/net/elks-gh all'
