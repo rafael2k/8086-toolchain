@@ -37,13 +37,13 @@ OBJS = $(SRCS:.c=.obj)
 
 BINDIR = ../elks-bin
 LOCALFLAGS =
-PROG = $(BINDIR)/cpp86
+PROG = $(BINDIR)/cpp
 SRCS = main.c cpp.c hash.c token1.c token2.c mem.c
 
 all: $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 token1.h: token1.tok
 	gperf -aptTc -N is_ctok -H hash1 token1.tok > tmp.h
