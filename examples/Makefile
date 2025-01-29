@@ -51,7 +51,7 @@ all: $(PROGS)
 #endif
 
 show_fonts: show_fonts.o
-	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 .PRECIOUS: test.i test.as cprintf.i cprintf.as
 test: test.o cprintf.o
