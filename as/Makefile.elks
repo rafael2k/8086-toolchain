@@ -37,7 +37,7 @@ OBJS = $(SRCS:.c=.obj)
 
 BINDIR = ../elks-bin
 LOCALFLAGS =
-PROG = $(BINDIR)/as86
+PROG = $(BINDIR)/as
 SRCS = as.c assemble.c errors.c express.c \
      genbin.c genlist.c genobj.c gensym.c \
      keywords.c macro.c mops.c pops.c readsrc.c \
@@ -46,7 +46,7 @@ SRCS = as.c assemble.c errors.c express.c \
 all: $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 as86_encap: as86_encap.sh
 	sed -e "s:%%LIBDIR%%:$(LIBDIR):" -e "s:%%BINDIR%%:$(BINDIR):" \

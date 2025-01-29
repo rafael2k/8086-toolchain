@@ -35,6 +35,7 @@ int last_line = -1;
 int debug_mode = 0;
 int p_flag = 0;
 int exit_code = 0;
+int verbose;
 
 char * outfile = 0;
 FILE * ofd = 0;
@@ -46,12 +47,10 @@ char ** argv;
 {
    int ar, i;
    char * p;
-static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
+   static char Usage[] = "Usage: cpp [-0pdAKTV] -Dxxx -Uxxx -Ixxx infile -o outfile";
 
-#ifndef __ELKS__
-#ifdef LC_CTYPE
+#if defined(LC_CTYPE) && !defined(__ELKS__)
    setlocale(LC_CTYPE, "");
-#endif
 #endif
 
    alltok = 1;	/* Get all tokens from the cpp. */
@@ -59,6 +58,7 @@ static char Usage[] = "Usage: cpp -E -0 -Dxxx -Uxxx -Ixxx infile -o outfile";
    for(ar=1; ar<argc; ar++) if( argv[ar][0] == '-') switch(argv[ar][1])
    {
    case 'd': debug_mode++; break;
+   case 'V': verbose++; break;
    case 'T': alltok = 0; break;
    case 'A': dialect = DI_ANSI; break;
    case 'K': dialect = DI_KNR; break;
@@ -235,6 +235,7 @@ int checkrel;
       strcpy(p, fname);
 
       fd=fopen(buf, mode);
+      if (verbose) fprintf(stderr, "open \"%s\" = %d\n", buf, fd? fileno(fd): -1);
    }
    if (!fd) {
       for(i=0; i<MAXINCPATH; i++)
@@ -243,6 +244,7 @@ int checkrel;
 	   if (buf[strlen(buf)-1] != '/') strcat(buf, "/");
 	   strcat(buf, fname);
 	   fd=fopen(buf,  mode);
+	   if (verbose) fprintf(stderr, "open <%s> = %d\n", buf, fd? fileno(fd): -1);
 	   if( fd ) break;
 	 }
    }

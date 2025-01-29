@@ -409,6 +409,7 @@ PRIVATE void listerrors()
 #endif
 	writesn(FURTHER);
     }
+    if (errmsg == OBJOUT) exit(1);  /* stop SIGSEGV on ELKS out of disk space */
 }
 
 /* pad out error line to begin under 1st char of source listing */

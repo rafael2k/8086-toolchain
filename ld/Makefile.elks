@@ -49,17 +49,17 @@ OBJS = $(SRCS:.c=.obj)
 
 BINDIR = ../elks-bin
 LOCALFLAGS =
-PROG = $(BINDIR)/ld86 $(BINDIR)/objdump86
+PROG = $(BINDIR)/ld $(BINDIR)/objdump
 SRCS = dumps.c io.c ld.c readobj.c table.c typeconv.c linksyms.c mkar.c \
       writex86.c
 
 all: $(PROG)
 
-$(BINDIR)/ld86: $(OBJS)
-	$(LD) $(LDFLAGS) -o $(BINDIR)/ld86 $(OBJS) $(LDLIBS)
+$(BINDIR)/ld: $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-$(BINDIR)/objdump86: objdump86.obj
-	$(LD) $(LDFLAGS) -o $(BINDIR)/objdump86 objdump86.obj $(LDLIBS)
+$(BINDIR)/objdump: objdump86.obj
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:
 	rm -f $(PROG) *.obj

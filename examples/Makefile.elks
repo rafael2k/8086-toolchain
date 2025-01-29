@@ -6,9 +6,9 @@
 #   ./copyc86.sh
 #   make kimage (quickly builds image)
 
-INCLUDES=-I.
-C86LIB=.
-BIN=./
+INCLUDES=-I/usr/include -I/usr/include/c86
+C86LIB=/usr/lib
+#BIN=/usr/bin/
 
 # Uncomment the following lines to build on host using make86, then run:
 #   'make86 -f Makefile.elks TOPDIR=/Users/greg/net/elks-gh all'
@@ -21,10 +21,10 @@ DEFINES=
 
 ##### Standardized section of Makefile #####
 
-CPP=$(BIN)cpp86
+CPP=$(BIN)cpp
 CC=$(BIN)c86
-AS=$(BIN)as86
-LD=$(BIN)ld86
+AS=$(BIN)as
+LD=$(BIN)ld
 
 CPPFLAGS=-0 $(INCLUDES) $(DEFINES)
 CFLAGS=-g -O -bas86 -separate=yes -warn=4 -lang=c99 \
@@ -45,7 +45,8 @@ LDLIBS=-lc86
 
 ##### End of standardized section #####
 
-PROGS=chess test show_fonts vgatest
+#PROGS=chess test show_fonts vgatest
+PROGS=chess test
 
 all: $(PROGS)
 

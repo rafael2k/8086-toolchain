@@ -18,6 +18,7 @@ extern char * c_fname;
 extern int    c_lineno;
 extern int    alltok;
 extern int    dialect;
+extern int    verbose;
 
 #define DI_KNR	1
 #define DI_ANSI	2
