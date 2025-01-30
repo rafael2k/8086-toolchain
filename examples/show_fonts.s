@@ -4,7 +4,7 @@
 
     .text                   ; text section declaration
     .align 2
-    .global _main
+    entry start
 
 strlen:
     push di
@@ -111,7 +111,7 @@ print_nibble:
     ret
 
 
-_main:
+start:
     push    bp
     mov     bp, sp
     sub     sp, #4
