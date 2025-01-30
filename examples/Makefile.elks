@@ -57,7 +57,7 @@ test: test.o cprintf.o
 	$(TIME) $(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 show_fonts: show_fonts.o
-	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $@ $^
 
 vgatest: vgatest.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
