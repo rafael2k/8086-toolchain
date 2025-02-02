@@ -43,7 +43,7 @@ NASMFLAGS=-f as86
 
 #DEFINES+=
 
-PROGS=chess test show_fonts vgatest evtest
+PROGS=chess test show_fonts vgatest paint evtest
 
 all: $(PROGS)
 #ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
@@ -62,9 +62,13 @@ chess: chess.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 #.PRECIOUS: vgatest.i vgatest.as graphics.i graphics.as
-vgatest: vgatest.o graphics.o vga-4bp.o event.o mouse.o
+vgatest: vgatest.o graphics.o vga-4bp.o strtoi.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 	cp vgatest $(TOPDIR)/elkscmd/rootfs_template/root
+
+paint: paint.o graphics.o vga-4bp.o event.o mouse.o strtoi.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	cp paint $(TOPDIR)/elkscmd/rootfs_template/root
 
 #.PRECIOUS: evtest.i evtest.as event.i event.as mouse.i mouse.as
 evtest: evtest.o event.o mouse.o
