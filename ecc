@@ -97,7 +97,7 @@ for PROG in $@
     echo $CC $CFLAGS ${PROG%.c}.i ${PROG%.c}.as
     $CC $CFLAGS ${PROG%.c}.i ${PROG%.c}.as
     echo $AS $ASFLAGS -o ${PROG%.c}.o ${PROG%.c}.as
-    $AS $ASFLAGS -o ${PROG%.c}.o ${PROG%.c}.as
+    $AS $ASFLAGS -o ${PROG%.c}.o -l ${PROG%.c}.lst ${PROG%.c}.as
     OBJS="$OBJS ${PROG%.c}.o"
     if [ $DOLINK -eq 1 ]; then rm ${PROG%.c}.i ${PROG%.c}.as; fi
   done

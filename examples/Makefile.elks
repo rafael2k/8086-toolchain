@@ -45,8 +45,7 @@ LDLIBS=-lc86
 
 ##### End of standardized section #####
 
-#PROGS=chess test show_fonts vgatest
-PROGS=chess test
+PROGS=vgatest evtest chess test show_fonts
 
 all: $(PROGS)
 
@@ -59,7 +58,10 @@ test: test.o cprintf.o
 show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
-vgatest: vgatest.o
+vgatest: vgatest.o graphics.o vga-4bp.o event.o mouse.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+evtest: evtest.o event.o mouse.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:

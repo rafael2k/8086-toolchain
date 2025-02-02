@@ -37,13 +37,13 @@ NASMFLAGS=-f as86
 	$(AS) $(ASFLAGS) -o $*.o -l $*.lst $*.as
 
 %.o: %.s
-	$(AS) $(ASFLAGS) -o $*.o $*.s
+	$(AS) $(ASFLAGS) -o $*.o -l $*.lst $*.s
 
 ##### End of standardized section #####
 
 #DEFINES+=
 
-PROGS=chess test show_fonts vgatest
+PROGS=chess test show_fonts vgatest evtest
 
 all: $(PROGS)
 #ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
@@ -53,18 +53,23 @@ all: $(PROGS)
 show_fonts: show_fonts.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
-.PRECIOUS: test.i test.as cprintf.i cprintf.as
+#.PRECIOUS: test.i test.as cprintf.i cprintf.as
 test: test.o cprintf.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-.PRECIOUS: chess.i chess.as
+#.PRECIOUS: chess.i chess.as
 chess: chess.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-.PRECIOUS: vgatest.i vgatest.as
-vgatest: vgatest.o
+#.PRECIOUS: vgatest.i vgatest.as graphics.i graphics.as
+vgatest: vgatest.o graphics.o vga-4bp.o event.o mouse.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	cp vgatest $(TOPDIR)/elkscmd/rootfs_template/root
 
+#.PRECIOUS: evtest.i evtest.as event.i event.as mouse.i mouse.as
+evtest: evtest.o event.o mouse.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	cp evtest $(TOPDIR)/elkscmd/rootfs_template/root
 
 clean:
 	rm -f *.o *.as *.i *.lst $(PROGS)
