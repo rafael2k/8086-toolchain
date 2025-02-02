@@ -60,41 +60,41 @@ quit:
             return 0;
         }
         if (FD_ISSET(0, &fdset))
-		{
+        {
             unsigned char buf[1];
             if (read(0, buf, sizeof(buf)) > 0)
-			{
+            {
                 if (buf[0] == '\033')
                     goto quit;          /* quit on ESC! */
                 event->keychar = buf[0];
-				event->type = EVT_KEYCHAR;
-				return 1;
+                event->type = EVT_KEYCHAR;
+                return 1;
             }
         }
         if (FD_ISSET(mouse_fd, &fdset))
-		{
+        {
             int x, y, w, b;
             static int lastx = -1, lasty = -1, lastb = 0;
             if (read_mouse(&x, &y, &w, &b))
-			{
+            {
                 if (b & (BUTTON_SCROLLUP|BUTTON_SCROLLDN))
-				{
+                {
                     event->type = EVT_MOUSEWHEEL;
-					event->y = w * SCROLLFACTOR;
+                    event->y = w * SCROLLFACTOR;
                     lastb = b;
                     return 1;
                 }
                 if (b != lastb)
-				{
+                {
                     if ((b & BUTTON_L) ^ (lastb & BUTTON_L))
-					{
+                    {
                         event->type = (b & BUTTON_L)? EVT_MOUSEDOWN: EVT_MOUSEUP;
                         event->button = BUTTON_L;
                         event->x = posx;
                         event->y = posy;
                     }
-					else if ((b & BUTTON_R) ^ (lastb & BUTTON_R))
-					{
+                    else if ((b & BUTTON_R) ^ (lastb & BUTTON_R))
+                    {
                         event->type = (b & BUTTON_R)? EVT_MOUSEDOWN: EVT_MOUSEUP;
                         event->button = BUTTON_R;
                         event->x = posx;
@@ -104,7 +104,7 @@ quit:
                     return 1;
                 }
                 if (x != lastx || y != lasty)
-				{
+                {
                     event->type = EVT_MOUSEMOVE;
                     posx += x;
                     posy += y;
@@ -134,20 +134,20 @@ int event_poll(struct event *event)
     static struct event ev;     /* ev.type inited to 0 (=EVT_NONE) */
 
     if (event == NULL)
-	{
+    {
         /* only indicate whether event found, don't dequeue */
         if (ev.type == EVT_NONE)
             event_wait_timeout(&ev, 0);     /* 0 timeout = don't block */
-		return ev.type;
+        return ev.type;
     }
 
     /* always deqeue if event found */
     if (ev.type)
-	{
+    {
         *event = ev;
         ev.type = EVT_NONE;
     }
-	else event_wait_timeout(event, 0);
+    else event_wait_timeout(event, 0);
     return event->type;
 }
 
@@ -161,7 +161,7 @@ int event_open(void)
 
 
 #if DEBUG
-	atexit(event_close);
+    atexit(event_close);
     signal(SIGHUP, catch_signals);
     signal(SIGABRT, catch_signals);
     signal(SIGSEGV, catch_signals);

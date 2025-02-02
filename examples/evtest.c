@@ -22,16 +22,16 @@ int main(int ac, char **av)
             printf("char %c\n", e.keychar);
             break;
         case EVT_MOUSEDOWN:
-			printf("  down   x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
+            printf("  down   x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
             break;
         case EVT_MOUSEUP:
-			printf("  up     x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
+            printf("  up     x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
             break;
         case EVT_MOUSEMOVE:
-			printf("  move   x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
+            printf("  move   x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
             break;
         case EVT_MOUSEWHEEL:
-			printf("  scroll x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
+            printf("  scroll x:%4d, y:%4d, b:%2d\n", e.x, e.y, e.button);
             break;
         default:
             printf("unknown type %d\n", e.type);
