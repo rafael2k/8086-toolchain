@@ -1,7 +1,10 @@
 host-bin/*
 elks-bin/*
 *.o
+*.obj
+*.oaj
 *.a
+*.lst
 assembler/macros.c
 nasm32/macros.c
 nasm32/nasm
