@@ -78,6 +78,7 @@ static int      parseMS(int);       /* routine to interpret MS mouse */
  */
 int open_mouse(void)
 {
+    char *port;
     struct termios termios;
 
     /* set button bits and parse procedure*/
@@ -96,9 +97,12 @@ int open_mouse(void)
 #endif
 
     /* open mouse port*/
-    mouse_fd = open(MOUSE_DEVICE, O_RDWR | O_EXCL | O_NOCTTY | O_NONBLOCK);
+    if (!(port = getenv("MOUSE_PORT")))
+        port = MOUSE_DEVICE;
+    printf("Opening mouse on %s\n", port);
+    mouse_fd = open(port, O_RDWR | O_EXCL | O_NOCTTY | O_NONBLOCK);
     if (mouse_fd < 0) {
-        printf("Can't open mouse %s, error %d\n", MOUSE_DEVICE, errno);
+        printf("Can't open mouse %s, error %d\n", port, errno);
         return -1;
     }
 

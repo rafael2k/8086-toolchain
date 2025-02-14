@@ -2329,8 +2329,8 @@ common:
 				mk_high (ap1));
 		    } else {
 			ap3 = data_register ();
-			g_code (op_mov, IL2, ap1, ap3);
-			g_code (op_mov, IL2, ap3, ap2);
+			g_code (op_mov, (ILEN) size, ap1, ap3); /* ghaerr fix byte mov */
+			g_code (op_mov, (ILEN) size, ap3, ap2); /* ghaerr fix byte mov */
 			freeop (ap3);
 			freeop (ap2);
 			freeop (ap1);
