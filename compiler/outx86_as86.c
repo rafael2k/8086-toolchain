@@ -418,7 +418,7 @@ static void putconst P1 (const EXPR *, ep)
     switch (ep->nodetype) {
     case en_autocon:
     case en_icon:
-	oprintf (ep->v.i >= 0L ? "%ld" : "(%ld)", ep->v.i);
+	oprintf (ep->v.i >= 0L ? "%ld" : " %ld", ep->v.i);
 	break;
     case en_labcon:
 	oprintf ("%s%u", prefix, (unsigned) ep->v.l);
@@ -498,16 +498,16 @@ static void putamode P3 (const ADDRESS *, ap, ILEN, len, unsigned int, sa)
     if (sa & SPN) {
 	switch (len) {		/* kludge for movsx and movzx   */
 	case IL1:
-	    oprintf (" byte ");
+	    oprintf ("byte ");
 	    break;
 	case IL2:
-	    //oprintf (" word ");
+	    //oprintf ("word ");
 	    break;
 	case IL4:
-	    oprintf (" dword ");
+	    oprintf ("dword ");
 	    break;
 	case IL8:
-	    oprintf (" qword ");
+	    oprintf ("qword ");
 	    break;
 	default:
 	    break;
