@@ -150,8 +150,9 @@ static void g_push P2 (REG, reg, DEEP, depth)
     sync_stack ();
     ap = mk_reg (reg);
     switch (reg_alloc[depth].regtype) {
-    case D_REG | T_REG:
     case A_REG | T_REG:
+    case D_REG | T_REG:
+    case D_REG | T_REG | N_REG: /* ghaerr fix shift expression bug by allowing no CX */
     case X_REG | T_REG:
 	g_code (op_push, small_option ? IL2 : IL4, ap, NIL_ADDRESS);
 	break;
@@ -214,6 +215,7 @@ static void g_pop P2 (REG, reg, DEEP, depth)
     switch (reg_alloc[depth].regtype) {
     case A_REG | T_REG:
     case D_REG | T_REG:
+    case D_REG | T_REG | N_REG: /* ghaerr fix shift expression bug by allowing no CX */
     case X_REG | T_REG:
 	g_code (op_pop, small_option ? IL2 : IL4, ap, NIL_ADDRESS);
 	break;
