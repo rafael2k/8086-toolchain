@@ -2787,15 +2787,15 @@ static ADDRESS *g_cast P4 (ADDRESS *, ap, TYP *, tp1, TYP *, tp2, FLAGS,
 	case bt_uint32:
 	case bt_ulong:
 	case bt_pointer32:
-	    ap1 = mk_legal (ap, flags, tp2);
-	    freeop (ap1);
-	    if ((ap1->mode == am_mreg) && (ap1->preg == EAX)) {
+            /* ghaerr rewrite 32->16 cast to eliminate putamode(am_mreg) (long index) */
+	    freeop (ap);
+	    if ((ap->mode == am_mreg) && (ap->preg == EAX)) {
 		ap = ax_register ();
-	    } else {
-		ap = data_register ();
-		g_code (op_mov, IL2, mk_low (ap1), ap);
+		return mk_legal (ap, flags, tp2);
 	    }
-	    return mk_legal (ap, flags, tp2);
+	    ap1 = data_register ();
+	    g_code (op_mov, IL2, mk_low (ap), ap1);
+	    return mk_legal (ap1, flags, tp2);
 #ifdef FLOAT_IEEE
 	case bt_float:
 	case bt_double:

@@ -184,10 +184,8 @@ int     warn_option = WARNLEVEL_DEFAULT;	/* the current warning message level */
 BOOL    fpu_option = FALSE;	/* generate code which contains floating point instructions */
 BOOL    fpu_return_option = FALSE;	/* return FP value in FP register */
 
-#ifdef ICODE
 BOOL    icode_option = FALSE;	/* generate an icode file */
 
-#endif /* ICODE */
 #ifdef PROBES
 BOOL    probe_option = FALSE;	/* generate stack probes on function entry */
 
