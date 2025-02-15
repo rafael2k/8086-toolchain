@@ -159,13 +159,11 @@ static OPTION opts[] = {
      {&yesnoopts[0]}	    /*lint !e708*/  /* union initialization */
      },
 #endif /* FORMAT_CHECK */
-#ifdef ICODE
     {
      (const CHAR *) "icode", uniq_option,
      {&icode_option},	    /*lint !e708*/  /* union initialization */
      {NULL}		    /*lint !e708*/  /* union initialization */
      },
-#endif /* ICODE */
 #ifdef DOINLINE
     {
      (const CHAR *) "inline=", numeric_option,

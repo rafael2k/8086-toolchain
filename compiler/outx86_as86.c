@@ -563,9 +563,6 @@ static void putamode P3 (const ADDRESS *, ap, ILEN, len, unsigned int, sa)
 	    putconst (ap->u.offset);
 	}
 	break;
-    case am_mreg:
-        /* ghaerr: FIXME temp fix for am_mreg not resolved in gen86.c (long indices) */
-        eprintf("WARNING: am_mreg using preg %d not sreg %d\n", ap->preg, ap->sreg);
     case am_dreg:
     case am_areg:
 	reg = ap->preg;
