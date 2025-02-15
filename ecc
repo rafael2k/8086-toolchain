@@ -47,6 +47,7 @@ CFLAGS="\
     -stackopt=minimum           \
     -peep=all                   \
     -stackcheck=no              \
+    -icode                      \
     "
 
 ASFLAGS="\

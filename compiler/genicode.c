@@ -39,7 +39,7 @@
 
 /********************************************************* Macro Definitions */
 
-#define	INDENTATION	2	/* number of columns to indent */
+#define	INDENTATION	4	/* number of columns to indent */
 
 /*********************************************** Static Function Definitions */
 
