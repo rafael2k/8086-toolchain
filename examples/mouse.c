@@ -16,7 +16,8 @@
 #include "event.h"
 
 /* configurable options */
-#define MOUSE_DEVICE "/dev/ttyS0"   /* mouse tty device*/
+#define MOUSE_PORT  "/dev/ttyS0"    /* default port unless MOUSE_PORT= env specified */
+#define MOUSE_QEMU  "/dev/ttyS1"    /* default port on QEMU */
 #define MOUSE_MICROSOFT     1       /* microsoft mouse*/
 #define MOUSE_PC            0       /* pc/logitech mouse*/
 #define MOUSE_PS2           0       /* PS/2 mouse */
@@ -98,7 +99,7 @@ int open_mouse(void)
 
     /* open mouse port*/
     if (!(port = getenv("MOUSE_PORT")))
-        port = MOUSE_DEVICE;
+        port = getenv("QEMU")? MOUSE_QEMU: MOUSE_PORT;
     printf("Opening mouse on %s\n", port);
     mouse_fd = open(port, O_RDWR | O_EXCL | O_NOCTTY | O_NONBLOCK);
     if (mouse_fd < 0) {
@@ -108,7 +109,7 @@ int open_mouse(void)
 
     /* set rawmode serial port using termios*/
     if (tcgetattr(mouse_fd, &termios) < 0) {
-        printf("Can't get termio on %s, error %d\n", MOUSE_DEVICE, errno);
+        printf("Can't get termio on %s, error %d\n", port, errno);
         close(mouse_fd);
         return -1;
     }
@@ -123,7 +124,7 @@ int open_mouse(void)
     termios.c_cc[VMIN] = 0;
     termios.c_cc[VTIME] = 0;
     if(tcsetattr(mouse_fd, TCSAFLUSH, &termios) < 0) {
-        printf("Can't set termio on %s, error %d\n", MOUSE_DEVICE, errno);
+        printf("Can't set termio on %s, error %d\n", port, errno);
         close(mouse_fd);
         return -1;
     }
