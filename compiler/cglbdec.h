@@ -145,10 +145,8 @@ extern int warn_option;		/* the current warning message level */
 extern BOOL fpu_option;		/* generate code which contains floating point instructions */
 extern BOOL fpu_return_option;	/* return FP value in FP register */
 
-#ifdef ICODE
 extern BOOL icode_option;	/* generate an icode file */
 
-#endif /* ICODE */
 #ifdef PROBES
 extern BOOL probe_option;	/* generate stack probes on function entry */
 

@@ -39,7 +39,7 @@
 
 /********************************************************* Macro Definitions */
 
-#define	INDENTATION	2	/* number of columns to indent */
+#define	INDENTATION	4	/* number of columns to indent */
 
 /*********************************************** Static Function Definitions */
 
@@ -97,9 +97,9 @@ static void type P1 (const TYP *, tp)
     case bt_pointer16:
     case bt_pointer32:
 	if (is_array_type (tp)) {
-	    iprintf ("array of ");
+	    iprintf ("array of");
 	} else {
-	    iprintf ("pointer to ");
+	    iprintf ("pointer to");
 	}
 	type (referenced_type (tp));
 	break;
@@ -116,7 +116,7 @@ static void type P1 (const TYP *, tp)
 	iprintf ("union ");
 	break;
     case bt_func:
-	iprintf ("function returning ");
+	iprintf ("function returning");
 	type (returned_type (tp));
 	break;
     case bt_longdouble:
