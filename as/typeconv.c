@@ -10,8 +10,11 @@
 #include "type.h"
 #include "globvar.h"
 
-void xxerr P((char *));
-void xxerr(x) char * x; { write(2, x, strlen(x)); }
+static void errexit(char *str)
+{
+    write(2, str, strlen(str));
+    exit(1);
+}
 
 static int long_off[4] = {0,1,2,3};
 static int int_off[2] = {0,1};
@@ -90,7 +93,7 @@ unsigned count;
 	u4c4(buf, (u4_t) offset);
 	return;
     default:
-        xxerr("WARNING: typeconv.c(u4cn) illegal count\n");
+        errexit("u4cn error");
 	return;
     }
 }
@@ -112,7 +115,7 @@ unsigned count;
 	u4c4(buf, (u4_t) offset);
 	return;
     default:
-        xxerr("WARNING: typeconv.c(u2cn) illegal count\n");
+        errexit("u2cn error");
 	return;
     }
 }
@@ -162,7 +165,7 @@ unsigned count;
     case 4:
 	return c4u4(buf);
     default:
-        xxerr("WARNING: typeconv.c(cnu4) illegal count\n");
+        errexit("cnu4 error");
 	return 0;
     }
 }
@@ -182,7 +185,7 @@ unsigned count;
     case 4:
 	return (u2_pt) c4u4(buf);
     default:
-        xxerr("WARNING: typeconv.c(cnu2) illegal count\n");
+        errexit("cnu2 error");
 	return 0;
     }
 }

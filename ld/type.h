@@ -108,6 +108,7 @@ void writedrel P((char *buf, unsigned count));
 void writeout P((char *buf, unsigned count));
 void writetrel P((char *buf, unsigned count));
 void fatalerror P((char *message));
+void errexit P((char *message));
 void inputerror P((char *message));
 void input1error P((char *message));
 void outofmemory P((void));

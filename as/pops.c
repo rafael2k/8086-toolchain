@@ -417,6 +417,7 @@ pfv func;
     }
 }
 
+#if UNUSED
 PUBLIC void fatalerror(err_str)
 char * err_str;
 {
@@ -425,6 +426,7 @@ char * err_str;
     listline();
     finishup();
 }
+#endif
 
 /* swap position with label position, do error, put back posn */
 /* also clear label ptr */

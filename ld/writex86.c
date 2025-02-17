@@ -207,8 +207,8 @@ bool_pt argxsym;
 		    }
 		    else
 		    {
-			tempoffset = ld_roundup(symptr->value, 4, bin_off_t);
-			/* temp kludge quad alignment for 386 */
+			tempoffset = ld_roundup(symptr->value, COMM_ALIGN, bin_off_t);
+			/* temp kludge alignment for 386 */
 			symptr->value = comsz[seg = symptr->flags & SEGM_MASK];
 			comsz[seg] += tempoffset;
 			if (!(symptr->flags & SA_MASK))
@@ -220,10 +220,9 @@ bool_pt argxsym;
 		segsz[seg] += cntooffset(cptr,
 			  sizecount = segsizecount((unsigned) seg, modptr));
 
-		/* adjust sizes to even to get quad boundaries */
-		/* this should be specifiable dynamically */
-		segsz[seg] = ld_roundup(segsz[seg], 4, bin_off_t);
-		comsz[seg] = ld_roundup(comsz[seg], 4, bin_off_t);
+		/* adjust sizes to even to get alignment boundaries */
+		segsz[seg] = ld_roundup(segsz[seg], COMM_ALIGN, bin_off_t);
+		comsz[seg] = ld_roundup(comsz[seg], COMM_ALIGN, bin_off_t);
 		cptr += sizecount;
 	    }
 	}
@@ -344,15 +343,16 @@ bool_pt argxsym;
     }
     if (!hasdata)
         edataoffset = bdataoffset;              /* fixes zero data length bug */
+#ifdef DATASEGS
+    endoffset = combase[NSEG - 1] + comsz[NSEG - 1];
+#else
+    endoffset = combase[7] + comsz[7];
+#endif
 
 #if UNUSED
     setsym("__etext", etextoffset);
     setsym("__edata", edataoffset);
-#ifdef DATASEGS
-    setsym("__end", endoffset = combase[NSEG - 1] + comsz[NSEG - 1]);
-#else
-    setsym("__end", endoffset = combase[7] + comsz[7]);
-#endif
+    setsym("__end", endoffset);
     setsym("__segoff", (bin_off_t)(segadj[4]-segadj[0])/0x10);
 
     //if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
@@ -604,9 +604,9 @@ struct modstruct *modptr;
 	if ((count = segpos[seg] - segbase[seg]) != size)
 	    size_error(seg, count, size);
 
-	/* pad to quad boundary */
+	/* pad to alignment boundary */
 	/* not padding in-between common areas which sometimes get into file */
-	if ((size = ld_roundup(segpos[seg], 4, bin_off_t) - segpos[seg]) != 0)
+	if ((size = ld_roundup(segpos[seg], COMM_ALIGN, bin_off_t) - segpos[seg]) != 0)
 	{
 	    setseg(seg);
 	    writenulls(size);

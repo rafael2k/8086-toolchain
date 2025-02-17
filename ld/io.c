@@ -48,7 +48,6 @@ PRIVATE unsigned warncount;	/* count of warnings */
 #define off_t	long		/* NOT a typedef */
 #endif
 
-FORWARD void errexit P((char *message));
 FORWARD void flushout P((void));
 #ifdef REL_OUTPUT
 FORWARD void flushtrel P((void));
@@ -465,7 +464,7 @@ unsigned count;
 
 /* error module */
 
-PRIVATE void errexit(message)
+PUBLIC void errexit(message)
 char *message;
 {
     putstrn(message);
