@@ -325,10 +325,10 @@ char * archive;
             printf("OBJECTSECTION %d\n", modno);
 	 if( read_sectheader() < 0 ) break;
 
-	 /* segments 0, 4-E are text, 1-3 are data*/
+	 /* segments 0-3 and 8-14 are text, 4-7 are data*/
 	 for(i=0; i<16; i++)
 	 {
-	    if(i < 1 || i > 4)
+	    if(i <= 3 || i >= 8)
 		 size_text += segsizes[i];
 	    else size_data += segsizes[i];
 	 }
