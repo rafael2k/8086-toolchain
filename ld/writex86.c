@@ -306,21 +306,17 @@ bool_pt argxsym;
 		}
 	}
 
-    /* adjust special symbols */
-    int hasdata = 0;
+    /* compute end of data offset and adjust special symbols */
+    edataoffset = bdataoffset;
     for (seg = 0; seg < NSEG; ++seg)
     {
 	/* only count data of nonzero length */
 #ifdef DATASEGS
-	if (segsz[seg] != 0) {
+	if (segsz[seg] != 0 && seg != 0)
 	    edataoffset = segbase[seg] + segsz[seg];
-	    if (seg != 0) hasdata = 1;
-        }
 #else
-	if (segsz[seg] != 0 && seg < 8) {
+	if (segsz[seg] != 0 && seg >= 4 && seg <= 7)
 	    edataoffset = segbase[seg] + segsz[seg];
-	    if (seg >=4 && seg <= 7) hasdata = 1;
-	}
 #endif
 #if UNUSED
 	segboundary[5] = hexdigit[seg];		/* to __segX?H */
@@ -341,8 +337,6 @@ bool_pt argxsym;
 #endif
 #endif
     }
-    if (!hasdata)
-        edataoffset = bdataoffset;              /* fixes zero data length bug */
 #ifdef DATASEGS
     endoffset = combase[NSEG - 1] + comsz[NSEG - 1];
 #else
