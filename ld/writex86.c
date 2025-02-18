@@ -5,15 +5,14 @@
 /*
  * 29 Nov 2024 Greg Haerr added ELKS v1 a.out support
  * 30 Nov 2024 Greg Haerr fix a_data calcuation when no data segments, set a_entry
- * 01 Nov 2024 Greg Haerr write NOPs (0x90) rather than NULs for padding in .text
+ * 01 Dec 2024 Greg Haerr write NOPs (0x90) rather than NULs for padding in .text
+ * 17 Feb 2025 Greg Haerr added text sections 0..3, renumbered data sections 4..7
  */
 
 #include "syshead.h"
 #include "x86_aout.h"
 #ifndef VERY_SMALL_MEMORY
 #include "v7_aout.h"
-#endif
-#ifndef MSDOS
 #include "x86_cpm86.h"
 #endif
 #include "const.h"
@@ -21,25 +20,18 @@
 #include "type.h"
 #include "globvar.h"
 
+#define ELF_SYMS 0
+
 #define btextoffset (text_base_value)
 #define bdataoffset (data_base_value)
 #define page_size() ((bin_off_t)4096)
 
-#ifndef ELF_SYMS
-#define ELF_SYMS 0
-#endif
-
-#ifdef MSDOS
-#  define FILEHEADERLENGTH (headerless?0:A_MINHDR)
-#else
+/* part of header not counted in offsets */
 # ifdef VERY_SMALL_MEMORY
-#  define FILEHEADERLENGTH (headerless?0:(cpm86?CPM86_HEADERLEN:A_MINHDR))
+#  define FILEHEADERLENGTH (headerless?0:A_MINHDR)
 # else
 #  define FILEHEADERLENGTH (headerless?0:(cpm86?CPM86_HEADERLEN:(v7?V7_HEADERLEN:A_MINHDR)))
 # endif
-#endif
-				/* part of header not counted in offsets */
-#define DPSEG 2
 
 #define CM_MASK 0xC0
 #define MODIFY_MASK 0x3F
@@ -97,8 +89,6 @@ FORWARD void writeheader P((void));
 
 #ifndef VERY_SMALL_MEMORY
 FORWARD void v7header P((void));
-#endif
-#ifndef MSDOS
 FORWARD void cpm86header P((void));
 #endif
 FORWARD void writenulls P((bin_off_t count));
@@ -131,11 +121,7 @@ bool_pt argxsym;
     bin_off_t tempoffset;
 
     if( reloc_output )
-#ifndef MSDOS
        fatalerror("Output binformat not configured relocatable, use -N");
-#else
-       fatalerror("Cannot use -r under MSDOS, sorry");
-#endif
 
     sepid = argsepid;
     bits32 = argbits32;
@@ -300,7 +286,7 @@ bool_pt argxsym;
 	if (segsz[seg] != 0 && seg >= 4 && seg <= 7)
 	    edataoffset = segbase[seg] + segsz[seg];
 #if UNUSED
-	segboundary[5] = hexdigit[seg];		/* to __segX?H */
+	segboundary[5] = hexdigit[seg];				/* to __segX?H */
 	segboundary[6] = 'D';
 	setsym(segboundary, (tempoffset = segbase[seg]) + segsz[seg]); /* __segXDH */
 	segboundary[7] = 'L';
@@ -324,8 +310,8 @@ bool_pt argxsym;
     setsym("__end", endoffset);
     setsym("__segoff", (bin_off_t)(segadj[4]-segadj[0])/0x10);
 
-    //if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
-       //heap_top_value = endoffset + 0x8000;
+    /*if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
+       heap_top_value = endoffset + 0x8000;*/
     if( heap_top_value > 0x10000 && !bits32 ) heap_top_value = 0x10000;
     setsym("__heap_top", (bin_off_t)heap_top_value);
 #endif
@@ -339,12 +325,9 @@ bool_pt argxsym;
     }
 
     openout(outfilename);
-#ifndef MSDOS
-    if (cpm86) cpm86header();
-    else
-#endif
 #ifndef VERY_SMALL_MEMORY
-    if (v7)
+    if (cpm86) cpm86header();
+    else if (v7)
        v7header();
     else
 #endif
@@ -361,8 +344,7 @@ bool_pt argxsym;
     {
 	seekout(FILEHEADERLENGTH
 		+ (unsigned long) (etextpadoff - btextoffset)
-		+ (unsigned long) (edataoffset - bdataoffset)
-		);
+		+ (unsigned long) (edataoffset - bdataoffset));
 	extsym.n_numaux = extsym.n_type = 0;
 	for (modptr = modfirst; modptr != NUL_PTR; modptr = modptr->modnext)
 	    if (modptr->loadflag)
@@ -439,8 +421,7 @@ bool_pt argxsym;
 		    }
 	    }
 	seekout((unsigned long) offsetof(struct exec, a_syms));
-	u4cn(buf4, (u4_t) nsym * sizeof extsym,
-	     memsizeof(struct exec, a_syms));
+	u4cn(buf4, (u4_t) nsym * sizeof extsym, memsizeof(struct exec, a_syms));
 	writeout(buf4, memsizeof(struct exec, a_syms));
     }
     closeout();
@@ -450,13 +431,13 @@ bool_pt argxsym;
 PRIVATE void linkmod(modptr)
 struct modstruct *modptr;
 {
-    char buf[ABS_TEXT_MAX];
-    int command;
+    int command, m;
     unsigned char modify;
     bin_off_t offset;
     int symbolnum;
     struct symstruct **symparray;
     struct symstruct *symptr;
+    char buf[ABS_TEXT_MAX];
 
     setseg(0);
     relocsize = 2;
@@ -516,7 +497,7 @@ struct modstruct *modptr;
 	    offset = readsize(relocsize);
 	    if (modify & R_MASK)
 	    {
-                int m = (modify & SEGM_MASK);
+                m = (modify & SEGM_MASK);
 	        if( curseg != m && m != SEGM_MASK )
 	           interseg(modptr->filename, modptr->archentry, (char*)0);
 		offset -= (spos + relocsize);
@@ -531,7 +512,7 @@ struct modstruct *modptr;
 	    offset = readconvsize((unsigned) modify & OF_MASK);
 	    if (modify & R_MASK)
 	    {
-                int m = (symptr->flags & SEGM_MASK);
+                m = (symptr->flags & SEGM_MASK);
 	        if( curseg != m && m != SEGM_MASK )
 	           interseg(modptr->filename, modptr->archentry, symptr->name);
 		offset -= (spos + relocsize);
@@ -555,8 +536,7 @@ struct modstruct *modptr;
 
     for (seg = 0, sizeptr = modptr->segsize; seg < NSEG; ++seg)
     {
-	size = cntooffset(sizeptr,
-			  sizecount = segsizecount((unsigned) seg, modptr));
+	size = cntooffset(sizeptr, sizecount = segsizecount((unsigned) seg, modptr));
 	sizeptr += sizecount;
 	if ((count = segpos[seg] - segbase[seg]) != size)
 	    size_error(seg, count, size);
@@ -609,8 +589,7 @@ fastin_pt newseg;
     {
 	segpos[curseg] = spos;
 	spos = segpos[curseg = newseg];
-	seekout(FILEHEADERLENGTH + (unsigned long) spos
-		+ (unsigned long) segadj[curseg]);
+	seekout(FILEHEADERLENGTH + spos + segadj[curseg]);
     }
 }
 
@@ -620,32 +599,24 @@ unsigned countsize;
     writenulls((bin_off_t) readsize(countsize));
 }
 
-#ifndef MSDOS
-PRIVATE void cpm86header()
+PRIVATE void writenulls(count)
+bin_off_t count;
 {
-    struct cpm86_exec header;
-    memset(&header, 0, sizeof header);
+    spos += count;
+#if 0
+    /* This will only work if we record the highest spos found an seek there
+     * at the end of the generation
+     */
 
-    if (sepid)
-    {
-      header.ce_group[0].cg_type = CG_CODE;
-      u2c2(header.ce_group[0].cg_len, (15 + etextpadoff) / 16);
-      u2c2(header.ce_group[0].cg_min, (15 + etextpadoff) / 16);
-      header.ce_group[1].cg_type = CG_DATA;
-      u2c2(header.ce_group[1].cg_len, (15 + edataoffset) / 16);
-      u2c2(header.ce_group[1].cg_min, (15 + endoffset  ) / 16);
-      u2c2(header.ce_group[1].cg_max, 0x1000);
-    }
-    else
-    {
-      header.ce_group[0].cg_type = CG_CODE;
-      u2c2(header.ce_group[0].cg_len, (15 + edataoffset) / 16);
-      u2c2(header.ce_group[0].cg_min, (15 + endoffset  ) / 16);
-    }
-    if( FILEHEADERLENGTH )
-       writeout((char *) &header, FILEHEADERLENGTH);
-}
+    seekout(FILEHEADERLENGTH + spos + segadj[curseg]);
+    return;
+
 #endif
+    if( (long)count < 0 )
+	    fatalerror("org command requires reverse seek");
+    while (count-- > 0)
+	writechar((curseg <= 3 || curseg >= 8)? 0x90: 0);
+}
 
 PRIVATE void writeheader()
 {
@@ -678,6 +649,31 @@ PRIVATE void writeheader()
 }
 
 #ifndef VERY_SMALL_MEMORY
+PRIVATE void cpm86header()
+{
+    struct cpm86_exec header;
+    memset(&header, 0, sizeof header);
+
+    if (sepid)
+    {
+      header.ce_group[0].cg_type = CG_CODE;
+      u2c2(header.ce_group[0].cg_len, (15 + etextpadoff) / 16);
+      u2c2(header.ce_group[0].cg_min, (15 + etextpadoff) / 16);
+      header.ce_group[1].cg_type = CG_DATA;
+      u2c2(header.ce_group[1].cg_len, (15 + edataoffset) / 16);
+      u2c2(header.ce_group[1].cg_min, (15 + endoffset  ) / 16);
+      u2c2(header.ce_group[1].cg_max, 0x1000);
+    }
+    else
+    {
+      header.ce_group[0].cg_type = CG_CODE;
+      u2c2(header.ce_group[0].cg_len, (15 + edataoffset) / 16);
+      u2c2(header.ce_group[0].cg_min, (15 + endoffset  ) / 16);
+    }
+    if( FILEHEADERLENGTH )
+       writeout((char *) &header, FILEHEADERLENGTH);
+}
+
 PRIVATE void v7header()
 {
     struct v7_exec header;
@@ -713,24 +709,3 @@ PRIVATE void v7header()
        writeout((char *) &header, FILEHEADERLENGTH);
 }
 #endif
-
-PRIVATE void writenulls(count)
-bin_off_t count;
-{
-    long lcount = count;
-    spos += count;
-#if 0
-    /* This will only work if we record the highest spos found an seek there
-     * at the end of the generation
-     */
-
-    seekout(FILEHEADERLENGTH + (unsigned long) spos
-	 + (unsigned long) segadj[curseg]);
-    return;
-
-#endif
-    if( lcount < 0 )
-    	fatalerror("org command requires reverse seek");
-    while (count-- > 0)
-	writechar((curseg <= 3 || curseg >= 8)? 0x90: 0);
-}

@@ -35,5 +35,5 @@
 #define CREAT_PERMS	0666	/* permissions for creat() */
 #define EXEC_PERMS	0111	/* extra permissions to set for executable */
 
-/* undefine to support V7 a.out headers */
+/* undefine to support V7 a.out or cpm86 headers */
 #define VERY_SMALL_MEMORY
