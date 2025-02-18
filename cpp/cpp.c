@@ -1254,6 +1254,9 @@ void gen_substrings(char *macname, char *data_str, int arg_count, int is_vararg)
    int args_found = 0;
    (void)macname;
 
+   if(!arg_count)
+	   return;
+
    arg_list = malloc(sizeof(struct arg_store) * arg_count);
    if(!arg_list) cfatal("Out of memory for arglist");
    memset(arg_list, 0, sizeof(struct arg_store) * arg_count);
