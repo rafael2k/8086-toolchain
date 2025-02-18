@@ -81,3 +81,6 @@ int write P((int fd, const void *buf, unsigned nbytes));
 #ifndef O_RDWR
 #define O_RDWR		2
 #endif
+#ifndef O_BINARY
+#define O_BINARY	0
+#endif

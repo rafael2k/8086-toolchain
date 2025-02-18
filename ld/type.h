@@ -10,11 +10,7 @@ typedef unsigned u2_pt;
 typedef unsigned long u4_t;
 typedef unsigned long u4_pt;
 
-#ifdef HOST_8BIT
-typedef char fastin_t;
-#else
 typedef int fastin_t;
-#endif
 typedef int fastin_pt;
 
 typedef unsigned flags_t;	/* unsigned makes shifts logical */

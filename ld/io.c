@@ -182,11 +182,7 @@ char *filename;
     {
 	closein();
 	inputname = filename;	/* this relies on filename being static */
-#ifdef O_BINARY
 	if ((infd = open(filename, O_BINARY|O_RDONLY)) < 0)
-#else
-	if ((infd = open(filename, O_RDONLY)) < 0)
-#endif
 	    inputerror("cannot open");
 	inbufptr = inbufend = inbuf;
     }
@@ -198,11 +194,7 @@ char *filename;
     mode_t oldmask;
 
     outputname = filename;
-#ifdef O_BINARY
     if ((outfd = open(filename, O_BINARY|O_WRONLY|O_CREAT|O_TRUNC, CREAT_PERMS)) == ERR)
-#else
-    if ((outfd = creat(filename, CREAT_PERMS)) == ERR)
-#endif
 	outputerror("cannot open");
 
 #ifndef MSDOS
@@ -217,11 +209,7 @@ char *filename;
 #endif
     outbufptr = outbuf;
 #ifdef REL_OUTPUT
-#ifdef O_BINARY
     if ((trelfd = open(filename, O_BINARY|O_WRONLY, CREAT_PERMS)) == ERR)
-#else
-    if ((trelfd = open(filename, O_WRONLY, CREAT_PERMS)) == ERR)
-#endif
 	outputerror("cannot reopen");
     trelbufptr = trelbuf;
 #endif
