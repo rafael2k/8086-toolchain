@@ -17,7 +17,7 @@
 
 #undef HOST_8BIT		/* enable some 8-bit optimizations */
 
-#ifndef __AS386_16__
+#if !ELKS
 #define S_ALIGNMENT	4	/* source memory alignment, power of 2 */
 				/* don't use for 8 bit processors */
 				/* don't use even for 80386 - overhead for */
@@ -28,6 +28,7 @@
 #ifdef I80386
 #define LONG_OFFSETS
 #endif
+#define COMM_ALIGN      2       /* .comm variable alignment for 8086 */
 
 /* these must be defined to suit the source libraries */
 

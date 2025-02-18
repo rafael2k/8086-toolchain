@@ -129,7 +129,7 @@ PUBLIC void initp1p2()
     lctabtop = (lcptr = lctab = hid_lctab) + NLOC;
     for (lcp = lctab; lcp < lctabtop; ++lcp)
     {
-	lcp->data = lcdata = RELBIT;	/* lc relocatable until 1st ORG */
+	lcp->data = lcdata = TEXTLOC | RELBIT;	/* lc relocatable until 1st ORG */
 	lcp->lc = lc = 0;
     }
 }

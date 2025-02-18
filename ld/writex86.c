@@ -80,8 +80,6 @@ PRIVATE unsigned relocsize;	/* current relocation size 1, 2 or 4 */
 PRIVATE bin_off_t segadj[NSEG];	/* adjusts (file offset - seg offset) */
 				/* depends on zero init */
 PRIVATE bin_off_t segbase[NSEG];/* bases of data parts of segments */
-PRIVATE char segboundary[9] = "__seg0DH";
-				/* name of seg boundary __seg0DL to __segfCH */
 PRIVATE bin_off_t segpos[NSEG];	/* segment positions for current module */
 PRIVATE bin_off_t segsz[NSEG];	/* sizes of data parts of segments */
 				/* depends on zero init */
@@ -93,11 +91,10 @@ PRIVATE bool_t xsym;		/* extended symbol table */
 
 FORWARD void linkmod P((struct modstruct *modptr));
 FORWARD void padmod P((struct modstruct *modptr));
-FORWARD void setsym P((char *name, bin_off_t value));
-FORWARD void symres P((char *name));
 FORWARD void setseg P((fastin_pt newseg));
 FORWARD void skip P((unsigned countsize));
 FORWARD void writeheader P((void));
+
 #ifndef VERY_SMALL_MEMORY
 FORWARD void v7header P((void));
 #endif
@@ -105,6 +102,12 @@ FORWARD void v7header P((void));
 FORWARD void cpm86header P((void));
 #endif
 FORWARD void writenulls P((bin_off_t count));
+
+#if UNUSED
+PRIVATE char segboundary[9] = "__seg0DH"; /* name of seg boundary __seg0DL to __segfCH */
+FORWARD void setsym P((char *name, bin_off_t value));
+FORWARD void symres P((char *name));
+#endif
 
 EXTERN bool_t reloc_output;
 
@@ -147,6 +150,7 @@ bool_pt argxsym;
 	    bdataoffset = page_size();
     }
 
+#if UNUSED
     /* reserve special symbols use curseg to pass parameter to symres() */
     for (curseg = 0; curseg < NSEG; ++curseg)
     {
@@ -160,21 +164,22 @@ bool_pt argxsym;
 	segboundary[7] = 'H';
 	symres(segboundary);	/* __segXCH */
 #ifndef DATASEGS
-        if( curseg > 3 )
-	{
+        if (curseg >= 8) {
 	   segboundary[6] = 'S';
 	   segboundary[7] = 'O';
 	   symres(segboundary); /* __segXSO */
         }
 #endif
     }
-    curseg = 3;
+    curseg = 7;
     symres("__edata");
     symres("__end");
     symres("__heap_top");
-    curseg = 0;			/* text seg, s.b. variable */
+    curseg = 3;			/* text seg, s.b. variable */
     symres("__etext");
     symres("__segoff");
+#endif
+    curseg = 0;
 
     /* calculate segment and common sizes (sum over loaded modules) */
     /* use zero init of segsz[] */
@@ -202,8 +207,8 @@ bool_pt argxsym;
 		    }
 		    else
 		    {
-			tempoffset = ld_roundup(symptr->value, 4, bin_off_t);
-			/* temp kludge quad alignment for 386 */
+			tempoffset = ld_roundup(symptr->value, COMM_ALIGN, bin_off_t);
+			/* temp kludge alignment for 386 */
 			symptr->value = comsz[seg = symptr->flags & SEGM_MASK];
 			comsz[seg] += tempoffset;
 			if (!(symptr->flags & SA_MASK))
@@ -215,10 +220,9 @@ bool_pt argxsym;
 		segsz[seg] += cntooffset(cptr,
 			  sizecount = segsizecount((unsigned) seg, modptr));
 
-		/* adjust sizes to even to get quad boundaries */
-		/* this should be specifiable dynamically */
-		segsz[seg] = ld_roundup(segsz[seg], 4, bin_off_t);
-		comsz[seg] = ld_roundup(comsz[seg], 4, bin_off_t);
+		/* adjust sizes to even to get alignment boundaries */
+		segsz[seg] = ld_roundup(segsz[seg], COMM_ALIGN, bin_off_t);
+		comsz[seg] = ld_roundup(comsz[seg], COMM_ALIGN, bin_off_t);
 		cptr += sizecount;
 	    }
 	}
@@ -228,33 +232,39 @@ bool_pt argxsym;
 #ifdef DATASEGS
      * Assume seg 0 is text and rest are data
 #else
-     * Assume seg 1..3 are data, Seg 0 is real text, seg 4+ are far text
+     * Assume 0..3 are text, 4..7 are data, seg 8+ are far text
 #endif
      */
     segpos[0] = segbase[0] = spos = btextoffset;
     combase[0] = segbase[0] + segsz[0];
-    segadj[1] = segadj[0] = -btextoffset;
-    etextpadoff = etextoffset = combase[0] + comsz[0];
-    if (sepid)
+    segadj[0] = -btextoffset;
+#ifndef DATASEGS
+    for (seg = 1; seg <= 3; ++seg)
     {
-	etextpadoff = ld_roundup(etextoffset, 0x10, bin_off_t);
-	segadj[1] += etextpadoff - bdataoffset;
+	segpos[seg] = segbase[seg] = combase[seg - 1] + comsz[seg - 1];
+	combase[seg] = segbase[seg] + segsz[seg];
+	segadj[seg] = segadj[seg - 1];
     }
+#endif
+    etextpadoff = etextoffset = combase[3] + comsz[3];
+    if (sepid)
+	etextpadoff = ld_roundup(etextpadoff, 0x10, bin_off_t);
     else if (bdataoffset == 0)
 	bdataoffset = etextpadoff;
-    segpos[1] = segbase[1] = edataoffset = bdataoffset;
-    combase[1] = segbase[1] + segsz[1];
+    segpos[4] = segbase[4] = edataoffset = bdataoffset;
+    combase[4] = segbase[4] + segsz[4];
+    segadj[4] = etextpadoff;
 #ifndef DATASEGS
-    for (seg = 4; seg < NSEG; ++seg)
+    for (seg = 8; seg < NSEG; ++seg)
     {
 	segpos[seg] = segbase[seg] = 0;
 	combase[seg] = segbase[seg] + segsz[seg];
 	segadj[seg] = etextpadoff;
 
 	etextpadoff += ld_roundup(segsz[seg] + comsz[seg], 0x10, bin_off_t);
-	segadj[1]   += ld_roundup(segsz[seg] + comsz[seg], 0x10, bin_off_t);
+	segadj[4]   += ld_roundup(segsz[seg] + comsz[seg], 0x10, bin_off_t);
     }
-    for (seg = 2; seg < 4; ++seg)
+    for (seg = 5; seg <= 7; ++seg)
 #else
     for (seg = 2; seg < NSEG; ++seg)
 #endif
@@ -296,54 +306,55 @@ bool_pt argxsym;
 		}
 	}
 
-    /* adjust special symbols */
-    int hasdata = 0;
+    /* compute end of data offset and adjust special symbols */
+    edataoffset = bdataoffset;
     for (seg = 0; seg < NSEG; ++seg)
     {
 	/* only count data of nonzero length */
 #ifdef DATASEGS
-	if (segsz[seg] != 0) {
+	if (segsz[seg] != 0 && seg != 0)
 	    edataoffset = segbase[seg] + segsz[seg];
-	    if (seg != 0) hasdata = 1;
-        }
 #else
-	if (segsz[seg] != 0 && seg < 4) {
+	if (segsz[seg] != 0 && seg >= 4 && seg <= 7)
 	    edataoffset = segbase[seg] + segsz[seg];
-	    if (seg != 0) hasdata = 1;
-	}
 #endif
+#if UNUSED
 	segboundary[5] = hexdigit[seg];		/* to __segX?H */
 	segboundary[6] = 'D';
-	setsym(segboundary, (tempoffset = segbase[seg]) + segsz[seg]);
-						/* __segXDH */
+	setsym(segboundary, (tempoffset = segbase[seg]) + segsz[seg]); /* __segXDH */
 	segboundary[7] = 'L';
-	setsym(segboundary, tempoffset);	/* __segXDL */
+	setsym(segboundary, tempoffset);			/* __segXDL */
 	segboundary[6] = 'C';
-	setsym(segboundary, tempoffset = combase[seg]);
-						/* __segXCL */
+	setsym(segboundary, tempoffset = combase[seg]);		/* __segXCL */
 	segboundary[7] = 'H';
-	setsym(segboundary, tempoffset + comsz[seg]);
-						/* __segXCH */
+	setsym(segboundary, tempoffset + comsz[seg]);		/* __segXCH */
 #ifndef DATASEGS
-        if( seg > 3 )
-	{
+        if (seg >= 8) {
 	   segboundary[6] = 'S';
 	   segboundary[7] = 'O';
-	   setsym(segboundary, (bin_off_t)(segadj[seg]-segadj[0])/0x10);
-	   /* __segXSO */
+	   setsym(segboundary, (bin_off_t)(segadj[seg]-segadj[0])/0x10); /* __segXSO */
         }
 #endif
+#endif
     }
-    if (!hasdata)
-        edataoffset = bdataoffset;              /* fixes zero data length bug */
+#ifdef DATASEGS
+    endoffset = combase[NSEG - 1] + comsz[NSEG - 1];
+#else
+    endoffset = combase[7] + comsz[7];
+#endif
+
+#if UNUSED
     setsym("__etext", etextoffset);
     setsym("__edata", edataoffset);
-#ifdef DATASEGS
-    setsym("__end", endoffset = combase[NSEG - 1] + comsz[NSEG - 1]);
-#else
-    setsym("__end", endoffset = combase[3] + comsz[3]);
+    setsym("__end", endoffset);
+    setsym("__segoff", (bin_off_t)(segadj[4]-segadj[0])/0x10);
+
+    //if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
+       //heap_top_value = endoffset + 0x8000;
+    if( heap_top_value > 0x10000 && !bits32 ) heap_top_value = 0x10000;
+    setsym("__heap_top", (bin_off_t)heap_top_value);
 #endif
-    setsym("__segoff", (bin_off_t)(segadj[1]-segadj[0])/0x10);
+
     if( !bits32 )
     {
         if( etextoffset > 65536L )
@@ -351,11 +362,6 @@ bool_pt argxsym;
         if( endoffset > 65536L )
             fatalerror("data segment too large for 16bit");
     }
-
-    //if( heap_top_value < 0x100 || endoffset > heap_top_value-0x100)
-       //heap_top_value = endoffset + 0x8000;
-    if( heap_top_value > 0x10000 && !bits32 ) heap_top_value = 0x10000;
-    setsym("__heap_top", (bin_off_t)heap_top_value);
 
     openout(outfilename);
 #ifndef MSDOS
@@ -415,8 +421,7 @@ bool_pt argxsym;
 			    extsym.n_sclass = C_EXT;
 			else
 			    extsym.n_sclass = C_STAT;
-			if (!(flags & I_MASK) ||
-			     flags & C_MASK)
+			if (!(flags & I_MASK) || flags & C_MASK)
 			    switch (flags & (A_MASK | SEGM_MASK))
 			    {
 #ifdef DATASEGS
@@ -430,8 +435,14 @@ bool_pt argxsym;
 #ifdef DATASEGS
 			    default:
 #else
-			    case 1: case 2: case 3:
-			    case A_MASK|1: case A_MASK|2: case A_MASK|3:
+			    case 4:
+			    case 5:
+			    case 6:
+			    case 7:
+			    case A_MASK|4:
+			    case A_MASK|5:
+			    case A_MASK|6:
+			    case A_MASK|7:
 #endif
 				if (flags & (C_MASK | SA_MASK))
 				    extsym.n_sclass |= N_BSS;
@@ -446,8 +457,7 @@ bool_pt argxsym;
 			{
 			   int i;
 			   extsym.n_sclass = 0;
-			   memset((void*)&extsym.n_value,0,
-				   sizeof(extsym.n_value));
+			   memset((void*)&extsym.n_value,0, sizeof(extsym.n_value));
 
 			   for(i=sizeof extsym.n_name; i<strlen(symptr->name);
 			       i+=sizeof extsym.n_name)
@@ -588,9 +598,9 @@ struct modstruct *modptr;
 	if ((count = segpos[seg] - segbase[seg]) != size)
 	    size_error(seg, count, size);
 
-	/* pad to quad boundary */
+	/* pad to alignment boundary */
 	/* not padding in-between common areas which sometimes get into file */
-	if ((size = ld_roundup(segpos[seg], 4, bin_off_t) - segpos[seg]) != 0)
+	if ((size = ld_roundup(segpos[seg], COMM_ALIGN, bin_off_t) - segpos[seg]) != 0)
 	{
 	    setseg(seg);
 	    writenulls(size);
@@ -600,6 +610,7 @@ struct modstruct *modptr;
     }
 }
 
+#if UNUSED
 PRIVATE void setsym(name, value)
 char *name;
 bin_off_t value;
@@ -624,6 +635,7 @@ register char *name;
 	symptr->flags = E_MASK | curseg;	/* show defined, not common */
     }
 }
+#endif
 
 /* set new segment */
 
@@ -694,9 +706,9 @@ PRIVATE void writeheader()
             sizeof header.a_entry);
     offtocn((char *) &header.a_version, (bin_off_t) 1,
 	    sizeof header.a_version);
-    offtocn((char *) &header.a_total, (bin_off_t) heap_top_value,
+    u2cn((char *) &header.a_total, (unsigned short) heap_top_value,
 	    sizeof header.a_total);
-    offtocn((char *) &header.a_minstack, (bin_off_t) stack_value,
+    u2cn((char *) &header.a_minstack, (unsigned short) stack_value,
 	    sizeof header.a_minstack);
     if( FILEHEADERLENGTH )
        writeout((char *) &header, FILEHEADERLENGTH);
@@ -757,5 +769,5 @@ bin_off_t count;
     if( lcount < 0 )
     	fatalerror("org command requires reverse seek");
     while (count-- > 0)
-	writechar(curseg == 0? 0x90: 0);    /* NOTE doesn't yet write NOPs in far text */
+	writechar((curseg <= 3 || curseg >= 8)? 0x90: 0);
 }

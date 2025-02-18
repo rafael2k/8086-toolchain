@@ -308,11 +308,9 @@ oops - ENTBIT misplaced
 
 /* special segments */
 
-#define BSSLOC		3
-#define DATALOC		3
-#define DPLOC		2
-#define STRLOC		1
-#define TEXTLOC		0
+#define BSSLOC		7
+#define DATALOC		7	/* ld86 data sections 4..7 */
+#define TEXTLOC		3	/* ld86 text sections 0..3 */
 
 #include "errors.h"
 
