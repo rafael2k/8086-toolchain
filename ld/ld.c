@@ -127,11 +127,9 @@ char **argv;
 	    case 'N':		/* Native format a.out */
 #endif
 	    case 'd':		/* Make a headerless outfile */
-#ifndef MSDOS
-	    case 'c':		/* Write header in CP/M-86 format */
-#endif
 	    case 'y':		/* Use a newer symbol table */
 #ifndef VERY_SMALL_MEMORY
+	    case 'c':		/* Write header in CP/M-86 format */
 	    case '7':		/* Produce a UNIX v7 a.out header */
 #endif
 		if (arg[2] == 0)
