@@ -1,10 +1,9 @@
 # Native ELKS Toolchain
 
-ELKS 8086 Toolchain is a work-in-progress project for providing a native ELKS 8086 C compiler toolchain.
+ELKS 8086 Toolchain is a nativa C toolchain for ELKS.
 
-This is a fork of the upstream 8086-toolchain, which contains and old NASM version (by Simon Tatham and Julian Hall), and 
-the C86 C compiler by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
-It was introduced to complete the ELKS native toolchain software by Bruce Evans, Jody Bruchon et al., namely dev86's cpp, ld, ar and as. 
+ELKS toolchain C compiler is C86, by Matthew Brandt, Christoph van Wuellen, Keith and Dave Walker.
+Other parts of ELKS native toolchain software was written by Bruce Evans, Jody Bruchon et al., namely dev86's cpp, ld, ar and as. 
 Make is courtesy of David Given, Carl Eric Codere and Ceriel Jacobs, while disasm (dis88) was originally authored by G. M. Harding.
 Many improvements and changes by Rafael Diniz and Gregory Haerr for making all the software run on ELKS.
 
@@ -22,17 +21,18 @@ work on any recent Linux or MacOS with OpenWatcom v2 installed (source the OW ow
 OpenWatcom environment variables and env.sh from ELKS, or just env.sh from ELKS and wcenv.sh in libc directory of 
 ELKS top-dir, after adjusting the path to OpenWatcom directory).
 
-There is a also a binary distribution available in https://github.com/rafael2k/8086-toolchain/tree/dev/elks-devdisk
+ELKS top-dir contains a script called 'copyc86.sh' which copies the toolchain binaries, headers and library to ELKS root fs template and also produces
+an archive.
 
 ## Build and Install
 
 For now, use this instructions: [Setting up the 8086 toolchain (C86 compiler and tools)](https://github.com/ghaerr/elks/wiki/Setting-up-the-8086-toolchain-(C86-compiler-and-tools)).
 
-## ELKS DevDisk
 
-We'll provide in [elks-devdisk](https://github.com/ghaerr/8086-toolchain/tree/dev86/elks-devdisk) a bootable ELKS image with the toolchain installed, and
-standalone tarball with all toolchain software, C library and headers.
-
+For example, with all environment variables set, type:
+```
+make
+```
 
 ## Issues
 
