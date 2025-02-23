@@ -28,14 +28,13 @@
 #include "expr.h"
 #include "cglbdec.h"
 #include "proto.h"
-#include "mem.h"
 
 /********************************************************* Macro Definitions */
 
 /*
- * Memory is allocated in Blocks of 1024 longs, which form a linked list
+ * Memory is allocated in Blocks of 384 longs, which form a linked list
  */
-#define BLKLEN ((size_t)512 * sizeof(long))
+#define BLKLEN ((size_t)384 * sizeof(long)) /* rafael2k - reduced from 1024 to 384, 23/02/2025  */
 #define NIL_BLK ( (struct blk *) 0)
 
 /********************************************************** Type Definitions */
@@ -77,7 +76,7 @@ VOIDSTAR xalloc P1 (size_t, siz)
     if (global_flag) {
 	if (siz > glbsize) {
 	    len = (siz > BLKLEN) ? siz : BLKLEN;
-	    bp = (struct blk *) farmalloc (len + sizeof (struct blk));
+	    bp = (struct blk *) malloc (len + sizeof (struct blk));
 
 	    if (bp == NULL) {
 		message (MSG_NOMEMORY, (int) (glo_mem * sizeof (long)),
@@ -98,7 +97,7 @@ VOIDSTAR xalloc P1 (size_t, siz)
     } else {			/* not global */
 	if (siz > locsize) {
 	    len = (siz > BLKLEN) ? siz : BLKLEN;
-	    bp = (struct blk *) farmalloc (len + sizeof (struct blk));
+	    bp = (struct blk *) malloc (len + sizeof (struct blk));
 
 	    if (bp == NULL) {
 		message (MSG_LOCALMEM, (int) (loc_mem * sizeof (long)),
@@ -136,7 +135,7 @@ void rel_local P0 (void)
     bp1 = locblk;
     while (bp1 != NIL_BLK) {
 	bp2 = bp1->next;
-	farfree(bp1);
+	free (bp1);
 	bp1 = bp2;
     }
     if (loc_mem + glo_mem > max_mem) {
@@ -161,7 +160,7 @@ void rel_global P0 (void)
     bp1 = glbblk;
     while (bp1 != NIL_BLK) {
 	bp2 = bp1->next;
-	farfree(bp1);
+	free (bp1);
 	bp1 = bp2;
     }
     if (glo_mem > max_mem) {

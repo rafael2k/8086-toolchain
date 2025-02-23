@@ -1,58 +1,73 @@
 #ifdef __ELKS__
-
-/* ELKS far memory functions */
+/* malloc/free wholesale replacement for 8086 toolchain */
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-void *farmalloc(size_t size)
+#define MALLOC_ARENA_SIZE   8192  /* size of initial arena fmemalloc (max 65520)*/
+#define MALLOC_ARENA_THRESH 1500U   /* max size to allocate from arena-managed heap */
+
+unsigned int malloc_arena_size = MALLOC_ARENA_SIZE;
+unsigned int malloc_arena_thresh = MALLOC_ARENA_THRESH;
+
+#define FP_SEG(fp)          ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
+#define FP_OFF(fp)          ((unsigned)(unsigned long)(void __far *)(fp))
+
+static void __far *heap;
+
+void *malloc(size_t size)
 {
-    return fmemalloc(size);
+    char *p;
+
+    if (heap == NULL) {
+        heap = fmemalloc(malloc_arena_size);
+        if (!heap) {
+            __dprintf("FATAL: Can't fmemalloc %u\n", malloc_arena_size);
+            system("meminfo > /dev/console");
+            exit(1);
+        }
+        _fmalloc_add_heap(heap, malloc_arena_size);
+    }
+
+    if (size <= malloc_arena_thresh)
+        p = _fmalloc(size);
+    else p = fmemalloc(size);
+    return p;
 }
 
-void farfree(void *ptr)
+void free(void *ptr)
 {
     if (ptr == NULL)
         return;
-    fmemfree(ptr);
+    if (FP_OFF(ptr) == 0)       /* non-arena pointer */
+        fmemfree(ptr);
+    else
+        _ffree(ptr);
 }
 
-void *farrealloc(void *ptr, size_t size)
+void *realloc(void *ptr, size_t size)
 {
     void *new;
     size_t osize = size;
 
     if (ptr == 0)
-        return farmalloc(size);
+        return malloc(size);
 
-    new = farmalloc(size);
+#if LATER
+    /* we can't yet get size from fmemalloc'd block */
+    osize = _fmalloc_usable_size(ptr);
+    __dprintf("old %u new %u\n", osize, size);
+    if (size < osize || osize == 0)
+        osize = size;           /* copy less bytes in memcpy below */
+#endif
+
+    new = malloc(size);
     if (new == 0) {
         __dprintf("realloc: Out of memory\n");
         return 0;
     }
     memcpy(new, ptr, osize);    /* FIXME copies too much but can't get real osize */
-    farfree(ptr);
+    free(ptr);
     return new;
 }
-#else
-
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
-void *farmalloc(size_t size)
-{
-    return malloc(size);
-}
-
-void farfree(void *ptr)
-{
-    free(ptr);
-}
-
-void *farrealloc(void *ptr, size_t size)
-{
-    return realloc(ptr, size);
-}
-
 #endif
