@@ -32,9 +32,9 @@
 /********************************************************* Macro Definitions */
 
 /*
- * Memory is allocated in Blocks of 1024 longs, which form a linked list
+ * Memory is allocated in Blocks of 384 longs, which form a linked list
  */
-#define BLKLEN ((size_t)768 * sizeof(long))
+#define BLKLEN ((size_t)384 * sizeof(long)) /* rafael2k - reduced from 1024 to 384, 23/02/2025  */
 #define NIL_BLK ( (struct blk *) 0)
 
 /********************************************************** Type Definitions */
