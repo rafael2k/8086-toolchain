@@ -1557,8 +1557,6 @@ static ADDRESS *g_shift P3 (const EXPR *, ep, FLAGS, flags, OPCODE, op)
 static ADDRESS *g_asshift P3 (const EXPR *, ep, FLAGS, flags, OPCODE, op)
 {
     ADDRESS *ap1, *ap2;
-    FLAGS   flgs;   // Added for new code below - WSF
-
 
     switch (ep->etp->type) {
     case bt_int16:
@@ -1578,26 +1576,21 @@ static ADDRESS *g_asshift P3 (const EXPR *, ep, FLAGS, flags, OPCODE, op)
 	    return g_asbitfield (ep, flags, op, FALSE);
 	}
 
-	// The following code replaces the above code, which generated invalid
-	// code for the 8086 (i.e., uses an immediate operand). The code was 
-	// taken from the g_shift() function. - WSF
-	ap1 = g_expr (ep->v.p[0], (FLAGS) (F_DREG | F_VOL | F_NOECX));
-	flgs = (FLAGS) (F_DREG | F_ECX);
-	ap2 = g_expr (ep->v.p[1], flgs);
-	validate (ap1);
-	g_code (op, (ILEN) ep->etp->size, ap2, ap1);
-	freeop (ap2);
-	return mk_legal (ap1, flags, ep->etp);
-    //
-
 /*
 	ap1 = g_expr (ep->v.p[0], (FLAGS) (F_MEM | F_DREG | F_NOECX));
 	ap2 = g_expr (ep->v.p[1], (FLAGS) (F_DREG | F_IMMED | F_ECX));
+*/
+	// The following code replaces the above code, which generated invalid
+	// code for the 8086 (i.e., uses an immediate operand). The code was
+	// taken from the g_shift() function. - WSF
+	/* ghaerr: fix result not stored on assign/shift op by adding F_MEM */
+	ap1 = g_expr (ep->v.p[0], (FLAGS) (F_MEM | F_DREG | F_VOL | F_NOECX));
+	ap2 = g_expr (ep->v.p[1], (FLAGS) (F_DREG | F_ECX));
+
 	validate (ap1);
 	g_code (op, (ILEN) ep->etp->size, ap2, ap1);
 	freeop (ap2);
 	return mk_legal (ap1, flags, ep->etp);
-*/
     default:
 	FATAL ((__FILE__, "g_asshift", "illegal type %d", ep->etp->type));
 	break;
