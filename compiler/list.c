@@ -141,6 +141,7 @@ static void put_ty P2 (const TYP *, tp, LEVEL, indent)
     case bt_int32:
     case bt_ulong:
     case bt_long:
+    case bt_longlong:
     case bt_float:
     case bt_double:
     case bt_longdouble:
