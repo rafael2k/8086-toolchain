@@ -994,7 +994,8 @@ static ADDRESS *g_extend P3 (ADDRESS *, ap, TYP *, tp1, TYP *, tp2)
 		g_code (op_shl, IL2, mk_immed (8L), mk_low (ap));
 		g_code (op_shr, IL2, mk_immed (8L), mk_low (ap));
 	    } else {
-		g_code (op_and, IL2, mk_immed (0xFF00L), mk_low (ap));
+		/* ghaerr: fix sign/zero-extend unsigned char to long bug */
+		g_code (op_and, IL2, mk_immed (0x00FFL), mk_low (ap));
 	    }
 	    /*lint -fallthrough */
 	case bt_uint16:
