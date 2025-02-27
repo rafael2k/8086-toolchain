@@ -67,6 +67,7 @@ char ** argv;
 #if 1
    case '0': define_macro("__C86__");
 	     define_macro("__STDC__");
+	     define_macro("__STRICT_ANSI__");
 	     define_macro("_M_I86");
 	     break;
 #else
