@@ -12,9 +12,9 @@ endif
 CC = owcc
 LD = owcc
 CLBASE = -mcmodel=l
-CLBASE += -bnone -march=i86 -std=c99
+CLBASE += -bnone -march=i86 -std=c99 -fsigned-char -msoft-float
 CLBASE += -fno-stack-check -fnostdlib
-CLBASE += -Wc,-fpi87 -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
+CLBASE += -Wc,-zev -Wc,-zls -Wc,-x -Wc,-wcd=303
 WARNINGS = -Wall -Wextra
 INCLUDES = -I$(TOPDIR)/libc/include -I$(TOPDIR)/elks/include
 INCLUDES += -I$(TOPDIR)/libc/include/watcom
