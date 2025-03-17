@@ -27,7 +27,7 @@ LDBASE += -Wl,option -Wl,nodefaultlibs
 LDBASE += -Wl,option -Wl,stack=0x1000
 LDBASE += -Wl,option -Wl,heapsize=512
 LDFLAGS = $(LDBASE)
-LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libc.lib
+LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libcl.lib
 
 OBJS = $(SRCS:.c=.obj)
 %.obj: %.c
