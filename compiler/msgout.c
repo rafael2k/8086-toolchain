@@ -288,6 +288,7 @@ void fatal P3V (const char *, fname, const char *, routine, const char *, msg)
 	message (MSG_FATAL, fname, routine);
 	vprint (errfile, msg, ap);
 	message (MSG_MISSING);
+	eprintf ("Failure in %s line %d\n", act_file, act_line);
 #ifdef CPU_DEFINED
 	g_flush (NIL_SYM);
 #endif /* CPU_DEFINED */
