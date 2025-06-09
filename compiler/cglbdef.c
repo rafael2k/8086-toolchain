@@ -129,7 +129,7 @@ BOOL    listing_option = FALSE;	/* list the input source and symbol tables */
 
 #endif /* LIST */
 BOOL    longdouble_option = FALSE;	/* long doubles are to be the same size as doubles */
-BOOL    obsolete_option = TRUE;	/* future language directions defined obsolete feature */
+BOOL    obsolete_option = FALSE;	/* future language directions defined obsolete feature */
 BOOL    opt_option = TRUE;	/* use the global optimiser */
 BOOL    optimize_option = FALSE;	/* do "expensive" optimisations */
 

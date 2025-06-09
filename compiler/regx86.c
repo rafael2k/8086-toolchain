@@ -560,7 +560,7 @@ ADDRESS *axdx_register P0 (void)
 
 ADDRESS *cx_register P0 (void)
 {
-    printf("cx_register\n");
+    debug("cx_register\n");
     return temp_register (CX_REG | T_REG);
 }
 
