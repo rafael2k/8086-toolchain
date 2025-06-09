@@ -94,9 +94,9 @@ static ADDRESS edx_reg = {
 };
 
 static REGTYPE reg_type[] = {
-    (REGTYPE) (D_REG | A_REG | X_REG | T_REG),	/* EAX */
-    (REGTYPE) (D_REG | A_REG | X_REG | T_REG),	/* EDX */
-    (REGTYPE) (D_REG | A_REG | Y_REG | T_REG | C_REG),	/* ECX */
+    (REGTYPE) (D_REG | A_REG | X_REG | T_REG | AX_REG), /* EAX */
+    (REGTYPE) (D_REG | A_REG | X_REG | T_REG | DX_REG), /* EDX */
+    (REGTYPE) (D_REG | A_REG | Y_REG | T_REG | CX_REG), /* ECX */
     (REGTYPE) 0,		/* EBX */
     (REGTYPE) 0,		/* ESI */
     (REGTYPE) 0,		/* EDI */

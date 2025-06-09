@@ -478,6 +478,7 @@ void initsym P0 (void)
     sscanf_name = quick_insert ((const CHAR *) "sscanf", (SIZE) 6, tk_id);
     func_name = quick_insert ((const CHAR *) "__func__", (SIZE) 8, tk_id);
     main_name = quick_insert ((const CHAR *) "main", (SIZE) 4, tk_id);
+    loadreg_name = quick_insert ((const CHAR *) "__loadreg", (SIZE) 9, tk_id);
 
     /*
      *      Names used for pre-processor directives
