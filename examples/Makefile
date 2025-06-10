@@ -43,7 +43,7 @@ NASMFLAGS=-f as86
 
 #DEFINES+=
 
-PROGS=chess test show_fonts vgatest paint evtest
+PROGS=chess test_cc test show_fonts vgatest paint evtest
 
 all: $(PROGS)
 #ifeq "$(TOPDIR)" "/Users/greg/net/elks-gh"
@@ -55,6 +55,9 @@ show_fonts: show_fonts.o
 
 #.PRECIOUS: test.i test.as cprintf.i cprintf.as
 test: test.o cprintf.o
+	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+test_cc: test_cc.o
 	$(LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 #.PRECIOUS: chess.i chess.as
