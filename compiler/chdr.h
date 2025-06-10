@@ -786,8 +786,10 @@ struct options
 #define	DEBUG_LONGLONG	7	/* debugging the long long support */
 #define	is_debugging(x)	((unsigned)internal_option & (1U<<x))
 #define	DPRINTF(x)	debugprintf x
+#define debug           printf
 #else /* DEBUG */
 #define	DPRINTF(x)
+#define debug(...)
 #endif /* DEBUG */
 /*
  *   Language options

@@ -86,13 +86,13 @@ static ADDRESS ah_reg = {
 };
 
 static REGTYPE reg_type[] = {
-    /* ghaerr: add Z_REG, required for ax_register; fixes ptr += and imul/idiv hangs */
-    (REGTYPE) (D_REG | T_REG | X_REG | N_REG | Z_REG),	/* EAX */
-    (REGTYPE) (D_REG | T_REG | X_REG | N_REG),	/* EDX */
-    (REGTYPE) (D_REG | T_REG | Y_REG | C_REG),	/* ECX */
-    (REGTYPE) (D_REG | T_REG),	/* EBX */
-    (REGTYPE) (A_REG | T_REG),	/* ESI */
-    (REGTYPE) (A_REG | T_REG),	/* EDI */
+    /* ghaerr: add AX_REG, required for ax_register; fixes ptr += and imul/idiv hangs */
+    (REGTYPE) (D_REG | T_REG | X_REG | N_REG | AX_REG), /* EAX */
+    (REGTYPE) (D_REG | T_REG | X_REG | N_REG | DX_REG), /* EDX */
+    (REGTYPE) (D_REG | T_REG | Y_REG |         CX_REG), /* ECX */
+    (REGTYPE) (D_REG | T_REG |                 BX_REG), /* EBX */
+    (REGTYPE) (A_REG | T_REG                         ), /* ESI */
+    (REGTYPE) (A_REG | T_REG |                 DI_REG), /* EDI */
     0,				/* ESP */
     0,				/* EBP */
     0,				/* AX */
@@ -538,6 +538,7 @@ static ADDRESS *mk_legal P3 (ADDRESS *, ap, FLAGS, flags, TYP *, tp)
     ADDRESS *ap1, *ap2;
     SIZE    size = tp->size;
 
+    if (ap) debug("MK_legal mode %d flags %ld\n", ap->mode, (long)flags);
     if (flags & F_NOVALUE) {
 	if (ap) {
 #ifdef FLOAT_IEEE
@@ -566,24 +567,34 @@ static ADDRESS *mk_legal P3 (ADDRESS *, ap, FLAGS, flags, TYP *, tp)
 	    if ((flags & F_NOEDI) && (ap->preg == EDI || ap->preg == ESI)) {
 		break;
 	    }
+	    if ((flags & F_EDI) && (ap->preg != EDI)) {
+		break;
+	    }
 	    return ap;
 	}
 	break;
     case am_dreg:
 	if (flags & F_DREG) {
+	    debug("PREG %d\n", ap->preg);
 	    if ((flags & F_VOL) && !is_temporary_register (ap->preg)) {
 		break;
 	    }
 	    if ((flags & F_NOEDI) && (ap->preg == EDI || ap->preg == ESI)) {
 		break;
 	    }
-	    if ((flags & F_NOECX) && (ap->preg == ECX)) {
-		break;
-	    }
 	    if (flags & F_EAXEDX) {
 		break;
 	    }
+	    if ((flags & F_NOECX) && (ap->preg == ECX)) {
+		break;
+	    }
 	    if ((flags & F_ECX) && (ap->preg != ECX)) {
+		break;
+	    }
+	    if ((flags & F_EDX) && (ap->preg != EDX)) {
+		break;
+	    }
+	    if ((flags & F_EBX) && (ap->preg != EBX)) {
 		break;
 	    }
 	    return ap;
@@ -633,7 +644,18 @@ static ADDRESS *mk_legal P3 (ADDRESS *, ap, FLAGS, flags, TYP *, tp)
     if (flags & F_DREG) {
 	freeop (ap);		/* maybe we can reuse it */
 	if (flags & F_ECX) {
+	    debug("mk_legal cx_register\n");
 	    ap2 = cx_register ();
+	    g_code (op_mov, IL2, ap, ap2);
+	    return ap2;
+	}
+	if (flags & F_EDX) {
+	    ap2 = dx_register ();
+	    g_code (op_mov, IL2, ap, ap2);
+	    return ap2;
+	}
+	if (flags & F_EBX) {
+	    ap2 = bx_register ();
 	    g_code (op_mov, IL2, ap, ap2);
 	    return ap2;
 	}
@@ -679,6 +701,11 @@ static ADDRESS *mk_legal P3 (ADDRESS *, ap, FLAGS, flags, TYP *, tp)
     }
     if (flags & F_AREG) {
 	freeop (ap);		/* maybe we can reuse it */
+	if (flags & F_EDI) {
+	    ap2 = di_register ();
+	    g_code (op_mov, IL2, ap, ap2);
+	    return ap2;
+	}
 	switch (size) {
 	case 1L:
 	    ap2 = address_register ();
@@ -2832,7 +2859,7 @@ static ADDRESS *g_cast P4 (ADDRESS *, ap, TYP *, tp1, TYP *, tp2, FLAGS,
 	    ap1 = mk_legal (ap, flags, tp2);
 	    freeop (ap1);
 	    if ((ap1->mode == am_mreg) && (ap1->preg == EAX)) {
-		ap = ax_register ();    /* ghaerr: fix ptr += requires Z_REG or hangs */
+		ap = ax_register ();    /* ghaerr: fix ptr += requires AX_REG or hangs */
 	    } else {
 		ap = data_register ();
 	        g_code (op_mov, IL2, mk_low (ap1), ap);
@@ -3174,6 +3201,30 @@ static ADDRESS *g_asm P1 (const EXPR *, ep)
 #endif /* ASM */
 
 /*
+ * handle builtin functions. returns the addressing mode of the result.
+ */
+static ADDRESS *g_builtin P2 (const EXPR *, ep, FLAGS, flags)
+{
+    EXPR *parms;
+    EXPR *ep1, *ep2;
+    ADDRESS *ap;
+
+    if (ep->v.p[0]->v.str == loadreg_name) {
+        parms = ep->v.p[1];
+        ep2 = parms->v.p[0];            /* value */
+        parms = parms->v.p[1];
+        ep1 = parms->v.p[0];	        /* register */
+        flags = ep1->v.i;
+        debug("g_expr flags %d\n", flags);
+        ap = g_expr (ep2, flags);
+        freeop (ap);
+        debug("b4 mk_legal\n");
+        return mk_legal (ap, flags, ep->etp);
+    }
+    return NIL_ADDRESS;
+}
+
+/*
  * general expression evaluation. returns the addressing mode of the result.
  */
 static ADDRESS *g_expr P2 (const EXPR *, ep, FLAGS, flags)
@@ -3284,6 +3335,9 @@ static ADDRESS *g_expr P2 (const EXPR *, ep, FLAGS, flags)
 	freeop (g_expr (ep->v.p[0], (FLAGS) (F_ALL | F_NOVALUE)));
 	return g_expr (ep->v.p[1], flags);
     case en_fcall:
+	if (ep->v.p[0]->v.str == loadreg_name)
+	    return g_builtin(ep, flags);
+	/*lint -fallthrough */
     case en_call:
     case en_usercall:
 	return g_fcall (ep, flags);
@@ -3831,6 +3885,7 @@ PRIVATE EXPR *g_transform P1 (EXPR *, ep)
     case en_fcall:
     case en_call:
     case en_usercall:
+    case en_str:		/* converted asmcall */
     case en_assign:
     case en_ainc:
     case en_adec:

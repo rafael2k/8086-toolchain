@@ -91,10 +91,9 @@ BOOL    align_option = FALSE;	/* align structure fields to smallest alignment */
 
 #endif /* INTEL */
 #ifdef ASM
-//BOOL    asm_option = FALSE;	/* asm keyword allowed */
-BOOL    asm_option = TRUE;	// -WSF
-
+BOOL    asm_option = TRUE;	/* asm keyword allowed */
 #endif /* ASM */
+
 BOOL    bitfield_option = FALSE;	/* reverse allocation order of bitfields */
 BOOL    code_option = TRUE;	/* generate code */
 int     datamodel_option = 0;	/* method of referencing global data */
@@ -299,6 +298,7 @@ const CHAR *fscanf_name;	/* pointer to the name fscanf */
 const CHAR *sscanf_name;	/* pointer to the name sscanf */
 const CHAR *func_name;		/* pointer to the name __func__ */
 const CHAR *main_name;		/* pointer to the name main */
+const CHAR *loadreg_name;	/* pointer to the name __loadreg */
 
 STRING *strtab;			/* table of strings to be output to the assembler file */
 BOOL    uses_structassign;	/* function uses a structure assignment */

@@ -580,11 +580,20 @@ static CODE *code P4 (OPCODE, op, ILEN, len, ADDRESS *, ap1, ADDRESS *, ap2)
     return ip;
 }
 
+#if DEBUG
+extern struct oplst
+{
+    const char *s;
+    unsigned int sa;
+} opl[];
+#endif
+
 /*
  * generate a code sequence into the peep list.
  */
 void g_code P4 (OPCODE, op, ILEN, len, ADDRESS *, ap1, ADDRESS *, ap2)
 {
+    debug("g_code op %d %s\n", op, opl[op].s);
     add_peep (code (op, len, ap1, ap2));
 }
 

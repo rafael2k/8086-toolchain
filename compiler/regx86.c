@@ -357,7 +357,7 @@ static REG next_reg P2 (REG, reg, REGTYPE, regtype)
     for (;;) {
 	if (reg > ST7) {
 	    reg = EAX;
-	    if (++loopcnt > 1)      /* ghaerr: will otherwise hang if no Z_REG in EAX */
+	    if (++loopcnt > 1)      /* ghaerr: will otherwise hang if no AX_REG in EAX */
 	        FATAL ((__FILE__, "next_reg", "INFINITE LOOP"));
 	}
 	if ((regtypes[reg] & regtype) == regtype) {
@@ -403,13 +403,16 @@ static void deallocate_register P1 (REG, reg)
     }
     switch (reg_alloc[depth].regtype) {
     case D_REG | T_REG:
+    case D_REG | T_REG | N_REG:
     case X_REG | T_REG:
-    case C_REG | T_REG:
-    case Z_REG | T_REG:
-    case D_REG | N_REG | T_REG:
+    case AX_REG | T_REG:
+    case CX_REG | T_REG:
+    case DX_REG | T_REG:
+    case BX_REG | T_REG:
 	next_dreg = reg_alloc[depth].next_reg;
 	break;
     case A_REG | T_REG:
+    case DI_REG | T_REG:
 	next_areg = reg_alloc[depth].next_reg;
 	break;
 #ifdef FLOAT_IEEE
@@ -459,7 +462,7 @@ static ADDRESS *temp_register P1 (REGTYPE, regtype)
 	next_dreg = (REG) ((int) reg + 1);
 	ap->mode = am_dreg;
 	break;
-    case D_REG | N_REG | T_REG:
+    case D_REG | T_REG | N_REG:
 	if (next_dreg == ECX) {
 	    next_dreg++;
 	}
@@ -494,17 +497,35 @@ static ADDRESS *temp_register P1 (REGTYPE, regtype)
 	next_freg = (REG) ((int) reg + 1);
 	ap->mode = am_freg;
 	break;
-    case C_REG | T_REG:
+    case AX_REG | T_REG:
+	reg = allocate_register (EAX, next_dreg, regtype);
+	ap = mk_reg (reg);
+	next_dreg = (REG) ((int) reg + 1);
+	ap->mode = am_dreg;
+	break;
+    case CX_REG | T_REG:
 	reg = allocate_register (ECX, next_dreg, regtype);
 	ap = mk_reg (reg);
 	next_dreg = (REG) ((int) reg + 1);
 	ap->mode = am_dreg;
 	break;
-    case Z_REG | T_REG:
-	reg = allocate_register (EAX, next_dreg, regtype);
+    case DX_REG | T_REG:
+	reg = allocate_register (EDX, next_dreg, regtype);
 	ap = mk_reg (reg);
 	next_dreg = (REG) ((int) reg + 1);
 	ap->mode = am_dreg;
+	break;
+    case BX_REG | T_REG:
+	reg = allocate_register (EBX, next_dreg, regtype);
+	ap = mk_reg (reg);
+	next_dreg = (REG) ((int) reg + 1);
+	ap->mode = am_dreg;
+	break;
+    case DI_REG | T_REG:
+	reg = allocate_register (EDI, next_areg, regtype);
+	ap = mk_reg (reg);
+	next_areg = (REG) ((int) reg + 1);
+	ap->mode = am_areg;
 	break;
     default:
 	CANNOT_REACH_HERE ();
@@ -529,7 +550,7 @@ ADDRESS *data_register_no_cx P0 (void)
 
 ADDRESS *ax_register P0 (void)
 {
-    return temp_register (Z_REG | T_REG);   /* ghaerr: requires Z_REG in reg_type[] */
+    return temp_register (AX_REG | T_REG);  /* ghaerr: requires AX_REG in reg_type[] */
 }
 
 ADDRESS *axdx_register P0 (void)
@@ -539,7 +560,23 @@ ADDRESS *axdx_register P0 (void)
 
 ADDRESS *cx_register P0 (void)
 {
-    return temp_register (C_REG | T_REG);
+    debug("cx_register\n");
+    return temp_register (CX_REG | T_REG);
+}
+
+ADDRESS *dx_register P0 (void)
+{
+    return temp_register (DX_REG | T_REG);
+}
+
+ADDRESS *bx_register P0 (void)
+{
+    return temp_register (BX_REG | T_REG);
+}
+
+ADDRESS *di_register P0 (void)
+{
+    return temp_register (DI_REG | T_REG);
 }
 
 /*
