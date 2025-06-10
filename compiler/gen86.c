@@ -1458,7 +1458,8 @@ static ADDRESS *g_asbin P3 (const EXPR *, ep, FLAGS, flags, OPCODE, op)
 	    /* void result */
 	    ap1 = NIL_ADDRESS;
 	} else {
-	    ap1 = g_expr (ep->v.p[0], (FLAGS) (flagx | F_DREG));
+	    /* ghaerr: replace F_DREG w/F_MEM to fix long a = ++l pre inc/decrement */
+	    ap1 = g_expr (ep->v.p[0], (FLAGS) (flagx | F_MEM));
 	    ap2 = g_expr (ep->v.p[1], (FLAGS) (flagx | F_ALL));
 	    validate (ap1);
 	    switch (op) {
