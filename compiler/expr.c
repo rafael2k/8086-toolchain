@@ -1497,6 +1497,21 @@ static EXPR *parmlist P2 (const EXPR *, ep, const BLOCK *, block)
 }
 
 /*
+ * check builtin function parameters
+ */
+static void check_builtin P2 (EXPR *, ep, EXPR *, parms)
+{
+    EXPR *ep1;
+
+    if (ep->v.p[0]->v.str == loadreg_name) {
+	parms = parms->v.p[1];  /* param 2 */
+	ep1 = parms->v.p[0];	/* register */
+	if (!is_icon (ep1))
+	    message (ERR_CONSTINT);
+    }
+}
+
+/*
  * primary will parse a primary expression and set the node pointer returning
  * the type of the expression parsed. primary expressions are any of:
  * id
@@ -1795,6 +1810,7 @@ static EXPR *primary P0 (void)
 		switch (funckind (tp1))
 		{
 		case fc_normal:
+		    check_builtin(ep, ep2);
 		    ep = mk_node (en_fcall, ep, ep2, tp);
 		    break;
 		case fc_user:

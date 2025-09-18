@@ -986,6 +986,7 @@ void funcbody P2 (SYM *, sp, const BLOCK *, block)
 #endif /* ICODE */
 #ifdef CPU_DEFINED
 #ifdef DOINLINE
+    debug("is_inline %d = %d\n", is_inline(sp), inline_statement_cost(stmt));
     if (is_inline (sp) && (inline_statement_cost (stmt) < inline_option)) {
 	sp->value.stmt = copystmttree (stmt);
     } else

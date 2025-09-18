@@ -243,6 +243,7 @@ extern const CHAR *fscanf_name;	/* pointer to the name fscanf */
 extern const CHAR *sscanf_name;	/* pointer to the name sscanf */
 extern const CHAR *func_name;	/* pointer to the name __func__ */
 extern const CHAR *main_name;	/* pointer to the name main */
+extern const CHAR *loadreg_name;	/* pointer to the name __loadreg */
 
 extern struct slit *strtab;	/* table of strings to be output to the assembler file */
 extern BOOL uses_structassign;	/* function uses a structure assignment */

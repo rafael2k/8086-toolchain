@@ -88,7 +88,7 @@ static SIZE align_type = 0L;
 static const char *prefix = ".L";   /* make labels temporary and not output to .o file  */
 static const char *comment = ";";
 
-static struct oplst
+struct oplst
 {
     const char *s;
     unsigned int sa;		/* special addressing modes:
@@ -391,7 +391,8 @@ static struct oplst
     "; Line", 0}
     ,				/* op_line */
     {
-    (char *) NULL, 0}		/* op_label */
+    "; Label", 0}
+				/* op_label */
 };
 
 /*****************************************************************************/

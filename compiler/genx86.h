@@ -36,9 +36,12 @@ typedef unsigned int FLAGS;
 #define	F_NOVALUE ((FLAGS) 32U)	/* dont need result value */
 #define	F_VOL	((FLAGS) 64U)	/* need value in scratch register */
 #define	F_NOEDI	((FLAGS) 128U)	/* do not use %edi and %esi */
-#define	F_NOECX	((FLAGS) 256U)	/* do not use %exc */
+#define	F_NOECX	((FLAGS) 256U)	/* do not use %ecx */
 #define	F_EAXEDX ((FLAGS) 512U)	/* result needed in %eax */
 #define	F_ECX	((FLAGS) 1024U)	/* use %ecx if a register is needed */
+#define	F_EDX	((FLAGS) 2048U)	/* use %edx if a register is needed */
+#define	F_EBX	((FLAGS) 4096U)	/* use %ebx if a register is needed */
+#define	F_EDI	((FLAGS) 8192U)	/* use %edi if a register is needed */
 
 #define F_ALL	((FLAGS)(F_DREG | F_AREG | F_MEM | F_IMMED | F_FREG))	/* any mode */
 
@@ -245,10 +248,13 @@ enum e_am
 #define	T_REG		((REGTYPE)8)	/* temporary register */
 #define	M_REG		((REGTYPE)16)	/* multiple data register */
 #define	X_REG		((REGTYPE)32)	/* AX/DX register */
-#define	Y_REG		((REGTYPE)64)	/* not AX/DX register */
-#define	C_REG		((REGTYPE)128)	/* CX data register */
-#define Z_REG		((REGTYPE)256)	/* AX data register */
-#define N_REG		((REGTYPE)512)	/* no CX data register */
+#define	Y_REG		((REGTYPE)64)	/* not AX/DX register UNUSED */
+#define N_REG		((REGTYPE)128)	/* no CX data register */
+#define CX_REG		((REGTYPE)256)	/* CX data register */
+#define AX_REG		((REGTYPE)512)	/* AX data register */
+#define DX_REG		((REGTYPE)1024)	/* DX data register */
+#define BX_REG		((REGTYPE)2048)	/* BX data register */
+#define DI_REG		((REGTYPE)4096)	/* DI address register */
 #define	is_data_register(r)		((regtypes[(int)r] & D_REG) != 0)
 #define	is_address_register(r)		((regtypes[(int)r] & A_REG) != 0)
 #define	is_float_register(r)		((regtypes[(int)r] & F_REG) != 0)
@@ -409,6 +415,9 @@ ADDRESS *address_register P_ ((void));
 ADDRESS *axdx_register P_ ((void));
 ADDRESS *ax_register P_ ((void));
 ADDRESS *cx_register P_ ((void));
+ADDRESS *dx_register P_ ((void));
+ADDRESS *bx_register P_ ((void));
+ADDRESS *di_register P_ ((void));
 ADDRESS *data_register P_ ((void));
 ADDRESS *data_register_no_cx P_ ((void));
 ADDRESS *mdata_register P_ ((void));
