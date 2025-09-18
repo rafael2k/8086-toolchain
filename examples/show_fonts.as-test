@@ -1,0 +1,253 @@
+| disasm86, release 2.2pre (ELKS)
+| @(#)	Disassembly of show_fonts
+| File has split I/D space
+
+	.global	_main    	| Public symbols
+
+	.text			| loc = 00000, size = 001a0
+strlen:    			| loc 00000
+	push	di
+	push	cx
+	mov	al,#0
+	mov	cx,#-1
+	cmp	cx,cx
+	cld
+	repnz
+	scab
+	neg	cx
+	dec	cx
+	dec	cx
+	xchg	ax,cx
+	pop	cx
+	pop	di
+	ret
+prints:    			| loc 00014
+	push	ax
+	push	bx
+	push	cx
+	push	dx
+	push	bp
+	push	es
+	call	strlen		| loc 00000
+	mov	cx,di
+	mov	dx,ax
+	mov	bx,#1
+	mov	ax,#4
+	int	0x80
+	pop	es
+	pop	bp
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	ret
+printhex:    			| loc 00030
+	push	cx
+	push	ax
+	mov	al,ah
+	mov	cl,#4
+	shrb	al,cl
+	call	print_ni		| loc 00068
+	pop	ax
+	push	ax
+	mov	al,ah
+	and	al,*15
+	call	print_ni		| loc 00068
+	pop	ax
+	push	ax
+	mov	cl,#4
+	shrb	al,cl
+	call	print_ni		| loc 00068
+	pop	ax
+	push	ax
+	and	al,*15
+	call	print_ni		| loc 00068
+	pop	ax
+	pop	cx
+	ret
+printhex:    			| loc 00057
+	push	ax
+	push	cx
+	mov	cl,#4
+	shrb	al,cl
+	call	print_ni		| loc 00068
+	pop	cx
+	pop	ax
+	and	al,*15
+	call	print_ni		| loc 00068
+	ret
+print_ni:    			| loc 00068
+	cmp	al,*9
+	jng	.+5		| loc 0006f
+	jmp	.+23		| loc 00083
+	add	al,*0x30
+	mov	char_ptr,al
+	mov	cx,#0x00A0
+	mov	dx,#1
+	mov	bx,#1
+	mov	ax,#4
+	int	0x80
+	ret
+	add	al,*0x37
+	mov	char_ptr,al
+	mov	cx,char_ptr
+	mov	dx,#1
+	mov	bx,#1
+	mov	ax,#4
+	int	0x80
+	ret
+_main:    			| loc 00098
+	push	bp
+	mov	bp,sp
+	sub	sp,#4
+	mov	di,msg_bann
+	call	prints		| loc 00014
+	mov	di,msg_head
+	call	prints		| loc 00014
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0200
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0300
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0400
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0500
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0600
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0700
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+	mov	dx,#0
+	mov	cx,#0
+	mov	ax,#0x1130
+	mov	bx,#0x0800
+	push	bp
+	push	es
+	int	0x10
+	call	print_in		| loc 00147
+	pop	es
+	pop	bp
+exit:    			| loc 0013f
+	mov	bx,#0
+	mov	ax,#1
+	int	0x80
+print_in:    			| loc 00147
+	push	dx
+	push	cx
+	push	bp
+	mov	ax,es
+	call	printhex		| loc 00030
+	call	printspc		| loc 00186
+	pop	bp
+	mov	ax,bp
+	call	printhex		| loc 00030
+	call	printspc		| loc 00186
+	pop	cx
+	mov	ax,cx
+	call	printhex		| loc 00030
+	call	printspc		| loc 00186
+	pop	dx
+	mov	ax,dx
+	call	printhex		| loc 00030
+	call	printnl		| loc 0016e
+	ret
+printnl:    			| loc 0016e
+	push	ax
+	push	bx
+	push	cx
+	push	dx
+	mov	dx,#1
+	mov	cx,new_line
+	mov	bx,#1
+	mov	ax,#4
+	int	0x80
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	ret
+printspc:    			| loc 00186
+	push	ax
+	push	bx
+	push	cx
+	push	dx
+	mov	dx,#1
+	mov	cx,new_spac
+	mov	bx,#1
+	mov	ax,#4
+	int	0x80
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	ret
+	nop
+	nop
+
+	.data			| loc = 00000, size = 000e0
+tempbuff:    			| loc 00000
+	.blkb	160
+char_ptr:    			| loc 000a0
+	.byte	0x00,0x00                        	| ".."
+new_line:    			| loc 000a2
+	.byte	0x0a,0x00                        	| "\n."
+new_spac:    			| loc 000a4
+	.byte	0x20,0x00                        	| ".."
+msg_bann:    			| loc 000a6
+	.byte	0x52,0x4f,0x4d,0x20,0x46,0x6f,0x6e,0x74	| "ROM.Font"
+	.byte	0x73,0x20,0x43,0x68,0x65,0x63,0x6b,0x65	| "s.Checke"
+	.byte	0x72,0x20,0x62,0x79,0x20,0x52,0x61,0x66	| "r.by.Raf"
+	.byte	0x61,0x65,0x6c,0x20,0x44,0x69,0x6e,0x69	| "ael.Dini"
+	.byte	0x7a,0x0a,0x00                    	| "z\n."
+msg_head:    			| loc 000c9
+	.byte	0x20,0x45,0x53,0x20,0x20,0x20,0x42,0x50	| ".ES...BP"
+	.byte	0x20,0x20,0x20,0x43,0x58,0x20,0x20,0x20	| "...CX..."
+	.byte	0x44,0x58,0x0a,0x00,0x00,0x00,0x00    	| "DX\n...."
+

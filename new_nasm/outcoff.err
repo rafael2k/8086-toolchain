@@ -1,0 +1,9 @@
+.\output\outcoff.c(317): Warning! W135: Shift amount too large
+.\output\outcoff.c(884): Warning! W106: Constant out of range - truncated
+.\output\outcoff.c(884): Note! I2003: source conversion type is 'unsigned int '
+.\output\outcoff.c(884): Note! I2004: target conversion type is 'int '
+nasmlib.h(420): Warning! W202: Symbol 'overflow_signed' has been defined, but not referenced
+nasmlib.h(405): Warning! W202: Symbol 'overflow_general' has been defined, but not referenced
+nasmlib.h(435): Warning! W202: Symbol 'overflow_unsigned' has been defined, but not referenced
+nasmlib.h(450): Warning! W202: Symbol 'signed_bits' has been defined, but not referenced
+nasm.h(423): Warning! W202: Symbol 'is_register' has been defined, but not referenced

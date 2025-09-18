@@ -1,0 +1,301 @@
+[4mNASM[24m(1)                     General Commands Manual                    [4mNASM[24m(1)
+
+[1mNAME[0m
+       nasm - the Netwide Assembler, a portable 80x86 assembler
+
+[1mSYNOPSIS[0m
+       [1mnasm  [22m[ [1m-@ [22mresponse file ] [ [1m-f [22mformat ] [ [1m-o [22moutfile ] [ [1m-l [22mlistfile ]
+       [ [4moptions[24m...  ] filename
+       [1mnasm -h[0m
+       [1mnasm -v[0m
+
+[1mDESCRIPTION[0m
+       The [1mnasm [22mcommand assembles the file [4mfilename[24m and directs output to  the
+       file  [4moutfile[24m  if specified. If [4moutfile[24m is not specified, [1mnasm [22mwill de‐
+       rive a default output file name from the name of its input  file,  usu‐
+       ally  by  appending `.o' or `.obj', or by removing all extensions for a
+       raw binary file. Failing that, the output file name will be `nasm.out'.
+
+   [1mOPTIONS[0m
+       [1m-@ [4m[22mfilename[0m
+              Causes [1mnasm [22mto process options from [4mfilename[24m as if they were in‐
+              cluded on the command line.
+
+       [1m-a     [22mCauses [1mnasm [22mto assemble the given input file without  first  ap‐
+              plying the macro preprocessor.
+
+       [1m-D [4m[22mmacro[=value][0m
+              Pre-defines a single-line macro.
+
+       [1m-d [4m[22mmacro[=value][0m
+              Same as the [1m-D [22moption.
+
+       [1m-e     [22mCauses  [1mnasm  [22mto  preprocess the given input file, and write the
+              output to [4mstdout[24m (or the specified output file  name),  and  not
+              actually assemble anything.
+
+       [1m-f [4m[22mformat[0m
+              Specifies  the output file format. To see a list of valid output
+              formats, use the [1m-hf [22moption.
+
+       [1m-g     [22mCauses [1mnasm [22mto generate debug information in selected format
+
+       [1m-h     [22mCauses [1mnasm [22mto exit immediately, after giving a summary  of  its
+              invocation options.
+
+       [1m-hf    [22mSame as [1m-h [22m, but also lists all valid output formats.
+
+       [1m-I [4m[22mdirectory[0m
+              Adds  a  directory to the search path for include files. The di‐
+              rectory specification must include the  trailing  slash,  as  it
+              will be directly prepended to the name of the include file.
+
+       [1m-i [4m[22mdirectory[0m
+              Same as the [1m-I [22moption.
+
+       [1m-l [4m[22mlistfile[0m
+              Causes  an assembly listing to be directed to the given file, in
+              which the original source is displayed on the  right  hand  side
+              (plus the source for included files and the expansions of multi-
+              line macros) and the generated code is shown in hex on the left.
+
+       [1m-M     [22mCauses  [1mnasm  [22mto  output  Makefile-style dependencies to stdout;
+              normal output is suppressed.
+
+       [1m-MG [4m[22mfile[0m
+              Same as [1m-M [22mbut assumes that  missing  Makefile  dependecies  are
+              generated and added to dependency list without a prefix.
+
+       [1m-MF [4m[22mfile[0m
+              Output Makefile-style dependencies to the specified file.
+
+       [1m-MD [4m[22mfile[0m
+              Same as a combination of [1m-M [22mand [1m-MF [22moptions.
+
+       [1m-MT [4m[22mfile[0m
+              Override  the  default  name of the dependency target dependency
+              target name. This is normally the same as the  output  filename,
+              specified by the [1m-o [22moption.
+
+       [1m-MQ [4m[22mfile[0m
+              The  same  as  [1m-MT [22mexcept it tries to quote characters that have
+              special meaning in Makefile syntax. This is  not  foolproof,  as
+              not all characters with special meaning are quotable in Make.
+
+       [1m-MP    [22mEmit phony target
+
+       [1m-O [4m[22mnumber[0m
+              Optimize branch offsets.
+              [1m-O0 [22m:No optimization (default)
+              [1m-O1 [22m:Minimal optimization
+              [1m-Ox [22m:Multipass optimization (recommended)
+
+       [1m-o [4m[22moutfile[0m
+              Specifies  a precise name for the output file, overriding [1mnasm[22m's
+              default means of determining it.
+
+       [1m-P [4m[22mfile[0m
+              Specifies a file to be pre-included, before the main source file
+              starts to be processed.
+
+       [1m-p [4m[22mfile[0m
+              Same as the [1m-P [22moption.
+
+       [1m-r     [22mCauses [1mnasm [22mto exit immediately, after  displaying  its  version
+              number.  [4m(obsolete)[0m
+
+       [1m-s     [22mCauses  [1mnasm [22mto send its error messages and/or help text to [4mstd‐[0m
+              [4mout[24m instead of [4mstderr[24m.
+
+       [1m-t     [22mCauses [1mnasm [22mto assemble in SciTech TASM compatible mode
+
+       [1m-U [4m[22mmacro[0m
+              Undefines a single-line macro.
+
+       [1m-u [4m[22mmacro[0m
+              Same as the [1m-U [22moption.
+
+       [1m-v     [22mCauses [1mnasm [22mto exit immediately, after  displaying  its  version
+              number.
+
+       [1m-w[4m[22m[+-]foo[0m
+              Causes [1mnasm [22mto enable or disable certain classes of warning mes‐
+              sages, for example [1m-w+orphan-labels [22mor [1m-w-macro-params[0m
+
+       [1m-X [4m[22mformat[0m
+              specifies error reporting format (gnu or vc).
+
+       [1m-Z [4m[22mfilename[0m
+              Causes [1mnasm [22mto redirect error messages to [4mfilename[24m.  This option
+              exists  to support operating systems on which stderr is not eas‐
+              ily redirected.
+
+       [1m--prefix[0m
+
+       [1m--postfix[0m
+              Prepend or append  (respectively)  the  given  argument  to  all
+              global or extern variables.
+
+   [1mSYNTAX[0m
+       This  man  page  does  not fully describe the syntax of [1mnasm[22m's assembly
+       language, but does give a summary of the differences from other  assem‐
+       blers.
+
+       [4mRegisters[24m  have  no  leading  `%'  sign, unlike [1mgas[22m, and floating-point
+       stack registers are referred to as [4mst0[24m, [4mst1[24m, and so on.
+
+       [4mFloating-point[24m [4minstructions[24m may use either the single-operand  form  or
+       the double. A [4mTO[24m keyword is provided; thus, one could either write
+
+                      fadd st0,st1
+                      fadd st1,st0
+
+       or one could use the alternative single-operand forms
+
+                      fadd st1
+                      fadd to st1
+
+       [4mUninitialised[24m  [4mstorage[24m  is  reserved  using the [4mRESB[24m, [4mRESW[24m, [4mRESD[24m, [4mRESQ[24m,
+       [4mREST[24m and [4mRESO[24m pseudo-opcodes, each taking one parameter which gives the
+       number of bytes, words, doublewords, quadwords or ten-byte words to re‐
+       serve.
+
+       [4mRepetition[24m of data items is not done by the [4mDUP[24m keyword as seen in  DOS
+       assemblers, but by the use of the [4mTIMES[24m prefix, like this:
+
+             message: times 3 db 'abc'
+                      times 64-$+message db 0
+
+       which  defines  the string `abcabcabc', followed by the right number of
+       zero bytes to make the total length up to 64 bytes.
+
+       [4mSymbol[24m [4mreferences[24m are always understood to be immediate (i.e.  the  ad‐
+       dress  of  the  symbol), unless square brackets are used, in which case
+       the contents of the memory location are used. Thus:
+
+                      mov ax,wordvar
+
+       loads AX with the address of the variable `wordvar', whereas
+
+                      mov ax,[wordvar]
+                      mov ax,[wordvar+1]
+                      mov ax,[es:wordvar+bx]
+
+       all refer to the [4mcontents[24m of memory locations. The syntaxes
+
+                      mov ax,es:wordvar[bx]
+                      es mov ax,wordvar[1]
+
+       are not legal at all, although the use of a segment register name as an
+       instruction prefix is valid, and can be used with instructions such  as
+       [4mLODSB[24m which can't be overridden any other way.
+
+       [4mConstants[24m may be expressed numerically in most formats: a trailing H, Q
+       or  B  denotes hex, octal or binary respectively, and a leading `0x' or
+       `$' denotes hex as well. Leading zeros are  not  treated  specially  at
+       all.   Character  constants may be enclosed in single or double quotes;
+       there is no escape character. The ordering is little-endian (reversed),
+       so that the  character  constant  [4m'abcd'[24m  denotes  0x64636261  and  not
+       0x61626364.
+
+       [4mLocal[24m  [4mlabels[24m  begin  with a period, and their `locality' is granted by
+       the assembler prepending the name of  the  previous  non-local  symbol.
+       Thus  declaring  a label `.loop' after a label `label' has actually de‐
+       fined a symbol called `label.loop'.
+
+   [1mDIRECTIVES[0m
+       [4mSECTION[24m [4mname[24m or [4mSEGMENT[24m [4mname[24m causes [1mnasm [22mto direct all  following  code
+       to  the  named section. Section names vary with output file format, al‐
+       though most formats support the names [4m.text[24m, [4m.data[24m and [4m.bss[24m.  (The  ex‐
+       ception is the [4mobj[24m format, in which all segments are user-definable.)
+
+       [4mABSOLUTE[24m [4maddress[24m causes [1mnasm [22mto position its notional assembly point at
+       an  absolute  address: so no code or data may be generated, but you can
+       use [4mRESB[24m, [4mRESW[24m and [4mRESD[24m to move the assembly point further on, and  you
+       can  define labels. So this directive may be used to define data struc‐
+       tures. When you have finished doing absolute assembly, you  must  issue
+       another [4mSECTION[24m directive to return to normal assembly.
+
+       [4mBITS[24m  [4m16,[24m  [4mBITS[24m  [4m32[24m  or [4mBITS[24m [4m64[24m switches the default processor mode for
+       which [1mnasm [22mis generating code: it is equivalent to [4mUSE16[24m  or  [4mUSE32[24m  in
+       DOS assemblers.
+
+       [4mEXTERN[24m  [4msymbol[24m  and [4mGLOBAL[24m [4msymbol[24m import and export symbol definitions,
+       respectively, from and to other modules. Note that the [4mGLOBAL[24m directive
+       must appear before the definition of the symbol it refers to.
+
+       [4mSTRUC[24m [4mstrucname[24m and [4mENDSTRUC[24m, when used to bracket a  number  of  [4mRESB[24m,
+       [4mRESW[24m  or  similar instructions, define a data structure. In addition to
+       defining the offsets of the structure members, the construct  also  de‐
+       fines  a  symbol  for  the  size  of the structure, which is simply the
+       structure name with [4m_size[24m tacked on to the end.
+
+   [1mFORMAT-SPECIFIC DIRECTIVES[0m
+       [4mORG[24m [4maddress[24m is used by the [4mbin[24m  flat-form  binary  output  format,  and
+       specifies  the  address  at  which  the  output code will eventually be
+       loaded.
+
+       [4mGROUP[24m [4mgrpname[24m [4mseg1[24m [4mseg2...[24m  is used by the [4mobj[24m (Microsoft 16-bit)  out‐
+       put  format,  and  defines segment groups. This format also uses [4mUPPER‐[0m
+       [4mCASE[24m, which directs that all segment, group and symbol names output  to
+       the  object  file should be in uppercase. Note that the actual assembly
+       is still case sensitive.
+
+       [4mLIBRARY[24m [4mlibname[24m is used by the [4mrdf[24m output format, and causes  a  depen‐
+       dency  record to be written to the output file which indicates that the
+       program requires a certain library in order to run.
+
+   [1mMACRO PREPROCESSOR[0m
+       Single-line macros are defined using the [4m%define[24m or [4m%idefine[24m  commands,
+       in a similar fashion to the C preprocessor. They can be overloaded with
+       respect  to number of parameters, although defining a macro with no pa‐
+       rameters prevents the definition of any macro with the same name taking
+       parameters, and vice versa.  [4m%define[24m defines macros whose  names  match
+       case-sensitively, whereas [4m%idefine[24m defines case-insensitive macros.
+
+       Multi-line macros are defined using [4m%macro[24m and [4m%imacro[24m (the distinction
+       is  the  same as that between [4m%define[24m and [4m%idefine[24m), whose syntax is as
+       follows:
+
+             %macro [4mname[24m [4mminprm[24m[-[4mmaxprm[24m][+][.nolist] [[4mdefaults[24m]
+                      <some lines of macro expansion text>
+             %endmacro
+
+       Again, these macros may be overloaded. The trailing plus sign indicates
+       that any parameters after the last one get subsumed, with  their  sepa‐
+       rating  commas,  into the last parameter. The [4mdefaults[24m part can be used
+       to specify defaults for unspecified macro  parameters  after  [4mminparam[24m.
+       [4m%endm[24m is a valid synonym for [4m%endmacro[24m.
+
+       To  refer to the macro parameters within a macro expansion, you use [4m%1[24m,
+       [4m%2[24m and so on. You can also enforce that a macro parameter  should  con‐
+       tain  a  condition  code by using [4m%+1[24m, and you can invert the condition
+       code by using [4m%-1[24m.  You can also define a label specific to a macro in‐
+       vocation by prefixing it with a double % sign.
+
+       Files can be included using the [4m%include[24m directive, which works like C.
+
+       The preprocessor has a `context stack', which may be used by one  macro
+       to  store  information  that  a later one will retrieve. You can push a
+       context on the stack using [4m%push[24m, remove one using [4m%pop[24m, and change the
+       name of the top context (without disturbing any associated definitions)
+       using [4m%repl[24m.  Labels and [4m%define[24m macros specific to the top context may
+       be defined by prefixing their names with %$, and things specific to the
+       next context down with %$$, and so on.
+
+       Conditional assembly is done by means of  [4m%ifdef[24m,  [4m%ifndef[24m,  [4m%else[24m  and
+       [4m%endif[24m  as  in C. (Except that [4m%ifdef[24m can accept several putative macro
+       names, and will evaluate TRUE if any of them is defined.) In  addition,
+       the  directives [4m%ifctx[24m and [4m%ifnctx[24m can be used to condition on the name
+       of the top context on the context stack. The obvious set  of  `else-if'
+       directives,  [4m%elifdef[24m,  [4m%elifndef[24m, [4m%elifctx[24m and [4m%elifnctx[24m are also sup‐
+       ported.
+
+[1mBUGS[0m
+       Please   report   bugs   through   the   bug   tracker   function    at
+       http://nasm.sourceforge.org.
+
+[1mSEE ALSO[0m
+       [1mas[22m([1m1[22m), [1mld[22m([1m1[22m).
+
+                         The Netwide Assembler Project                 [4mNASM[24m(1)

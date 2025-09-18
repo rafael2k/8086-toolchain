@@ -1,0 +1,861 @@
+Open Watcom Linker Version 1.9
+Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
+Created on:       10/08/26 20:16:34
+Executable Image: nasm.exe
+creating a DOS executable
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+ISORTAB3_GROUP                  41a0:000c            00001647
+ISORDATA_GROUP                  4305:0004            0000dcbc
+ISORTAB1_GROUP                  50d1:0000            0000c098
+ISORTAB2_GROUP                  5cda:0008            00000ffa
+ISORTAB4_GROUP                  5dda:0002            00007f58
+ISORTAB5_GROUP                  65cf:000a            00000000
+DGROUP                          65d0:0000            000015b0
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+nasm_TEXT              CODE           AUTO           0000:0000       00003614
+nasmlib_TEXT           CODE           AUTO           0000:3614       00001072
+ver_TEXT               CODE           AUTO           0000:4686       00000000
+raa_TEXT               CODE           AUTO           0000:4686       000002d7
+saa_TEXT               CODE           AUTO           0000:495d       00000851
+rbtree_TEXT            CODE           AUTO           0000:51ae       00000290
+float_TEXT             CODE           AUTO           0000:543e       000015e3
+insnsa_TEXT            CODE           AUTO           0000:6a21       00000000
+insnsb_TEXT            CODE           AUTO           0000:6a21       00000000
+directiv_TEXT          CODE           AUTO           0000:6a21       00000082
+assemble_TEXT          CODE           AUTO           0000:6aa3       0000435f
+labels_TEXT            CODE           AUTO           0000:ae02       00000ca8
+hashtbl_TEXT           CODE           AUTO           0000:baaa       000004a8
+crc64_TEXT             CODE           AUTO           0000:bf52       000000d8
+parser_TEXT            CODE           AUTO           0000:c02a       00001972
+outform_TEXT           CODE           AUTO           0000:d99c       0000023b
+outlib_TEXT            CODE           AUTO           0000:dbd7       0000005d
+nulldbg_TEXT           CODE           AUTO           0000:dc34       00000051
+nullout_TEXT           CODE           AUTO           0000:dc85       00000025
+outbin_TEXT            CODE           AUTO           0dca:000a       000036c5
+outaout_TEXT           CODE           AUTO           0dca:36cf       00001acd
+outcoff_TEXT           CODE           AUTO           0dca:519c       000021b2
+outelf_TEXT            CODE           AUTO           0dca:734e       0000027b
+outelf32_TEXT          CODE           AUTO           0dca:75c9       00004795
+outelf64_TEXT          CODE           AUTO           199f:000e       00005470
+outobj_TEXT            CODE           AUTO           199f:547e       0000422b
+outas86_TEXT           CODE           AUTO           199f:96a9       00001184
+outrdf2_TEXT           CODE           AUTO           199f:a82d       00001379
+outdbg_TEXT            CODE           AUTO           199f:bba6       00000636
+outieee_TEXT           CODE           AUTO           199f:c1dc       000026b3
+outmac32_TEXT          CODE           AUTO           2827:000f       00001f91
+outmac64_TEXT          CODE           AUTO           2827:1fa0       00002640
+preproc_TEXT           CODE           AUTO           2827:45e0       00008890
+quote_TEXT             CODE           AUTO           2827:ce70       000007e7
+pptok_TEXT             CODE           AUTO           2827:d657       00000092
+macros_TEXT            CODE           AUTO           2827:d6e9       00000088
+listing_TEXT           CODE           AUTO           2827:d771       00000927
+eval_TEXT              CODE           AUTO           2827:e098       00001e86
+exprlib_TEXT           CODE           AUTO           3818:000e       000003d9
+stdscan_TEXT           CODE           AUTO           3818:03e7       0000070c
+strfunc_TEXT           CODE           AUTO           3818:0af3       0000041c
+tokhash_TEXT           CODE           AUTO           3818:0f0f       000000cd
+regvals_TEXT           CODE           AUTO           3818:0fdc       00000000
+regflags_TEXT          CODE           AUTO           3818:0fdc       00000000
+ilog2_TEXT             CODE           AUTO           3818:0fdc       0000016c
+strlcpy_TEXT           CODE           AUTO           3818:1148       0000004e
+_TEXT                  CODE           AUTO           3818:11a0       000086ec
+ISORTAB3CONST          FAR_DATA       ISORTAB3_GROUP 41a0:000c       000012d0
+ISORTAB3CONST2         FAR_DATA       ISORTAB3_GROUP 42cd:000c       00000078
+ISORTAB3_DATA          FAR_DATA       ISORTAB3_GROUP 42d5:0004       00000044
+ISORTAB3_BSS           FAR_DATA       ISORTAB3_GROUP 42d9:0008       000002bb
+ISORDATACONST          FAR_DATA       ISORDATA_GROUP 4305:0004       00007470
+ISORDATACONST2         FAR_DATA       ISORDATA_GROUP 4a4c:0004       00003f82
+ISORDATA_DATA          FAR_DATA       ISORDATA_GROUP 4e44:0006       00000944
+ISORDATA_BSS           FAR_DATA       ISORDATA_GROUP 4ed8:000a       00001f86
+ISORTAB1CONST          FAR_DATA       ISORTAB1_GROUP 50d1:0000       00000000
+ISORTAB1CONST2         FAR_DATA       ISORTAB1_GROUP 50d1:0000       0000c098
+ISORTAB1_DATA          FAR_DATA       ISORTAB1_GROUP 5cda:0008       00000000
+ISORTAB2CONST          FAR_DATA       ISORTAB2_GROUP 5cda:0008       00000000
+ISORTAB2CONST2         FAR_DATA       ISORTAB2_GROUP 5cda:0008       00000ff9
+ISORTAB2_DATA          FAR_DATA       ISORTAB2_GROUP 5dda:0002       00000000
+ISORTAB4CONST          FAR_DATA       ISORTAB4_GROUP 5dda:0002       00000e28
+ISORTAB4CONST2         FAR_DATA       ISORTAB4_GROUP 5ebc:000a       00007130
+ISORTAB4_DATA          FAR_DATA       ISORTAB4_GROUP 65cf:000a       00000000
+ISORTAB5CONST          FAR_DATA       ISORTAB5_GROUP 65cf:000a       00000000
+ISORTAB5CONST2         FAR_DATA       ISORTAB5_GROUP 65cf:000a       00000000
+ISORTAB5_DATA          FAR_DATA       ISORTAB5_GROUP 65cf:000a       00000000
+FAR_DATA               FAR_DATA       AUTO           65cf:000a       00000000
+_NULL                  BEGDATA        DGROUP         65d0:0000       00000020
+_AFTERNULL             BEGDATA        DGROUP         65d2:0000       00000002
+_DATA                  DATA           DGROUP         65d2:0002       00000496
+XIB                    DATA           DGROUP         661b:0008       00000000
+XI                     DATA           DGROUP         661b:0008       00000024
+XIE                    DATA           DGROUP         661d:000c       00000000
+YIB                    DATA           DGROUP         661d:000c       00000000
+YI                     DATA           DGROUP         661d:000c       00000018
+YIE                    DATA           DGROUP         661f:0004       00000000
+CONST                  DATA           DGROUP         661f:0004       000004b0
+CONST2                 DATA           DGROUP         666a:0004       000001a2
+STRINGS                DATA           DGROUP         6684:0006       00000000
+DATA                   DATA           DGROUP         6684:0006       00000000
+_BSS                   BSS            DGROUP         6684:0006       00000264
+STACK                  STACK          DGROUP         66ab:0000       00000800
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: nasm.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\nasm.c)
+41a0:1398      _global_offset_changed
+41a0:13a0+     _prev_offset_changed
+41a0:160c      _abs_offset
+41a0:1614      _abs_seg
+41a0:1618+     _stall_count
+41a0:1630+     _dfmt
+41a0:1644      _in_abs_seg
+41a0:164c      _pass0
+41a0:164e      _passn
+41a0:1354      _tasm_compatible_mode
+41a0:1355      _maxbits
+41a0:1357      _globalrel
+41a0:1359      _ofmt
+41a0:135d      _ofile
+41a0:1361      _optimizing
+41a0:1383      _user_nolist
+41a0:1385+     _textopts
+0000:0670      main_
+Module: nasmlib.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\nasmlib.c)
+4305:bd3a      _nasm_tolower_tab
+4305:b3f6      _globalbits
+0000:3614      tolower_init_
+0000:363a      nasm_set_verror_
+0000:3653      nasm_error_
+0000:3692      nasm_init_malloc_error_
+0000:369a      nasm_malloc_
+0000:36d1      nasm_zalloc_
+0000:36e7      nasm_realloc_
+0000:372d      nasm_free_
+0000:3744      nasm_strdup_
+0000:3792      nasm_strndup_
+0000:37f9      nasm_assert_failed_
+0000:382e      nasm_stricmp_
+0000:387c      nasm_strnicmp_
+0000:38d5      nasm_memicmp_
+0000:3922      nasm_strsep_
+0000:39ef      readnum_
+0000:3cf5      readstrnum_
+0000:3e21      seg_init_
+0000:3e37      seg_alloc_
+0000:3e60      fwriteint16_t_
+0000:3e8c      fwriteint32_t_
+0000:3ed1      fwriteint64_t_
+0000:3f9e*     fwriteaddr_
+0000:3ffc      fwritezero_
+0000:4050      standard_extension_
+0000:4115      prefix_name_
+0000:4144*     bsi_
+0000:41af      bsii_
+0000:4213      src_set_fname_
+0000:423a      src_set_linnum_
+0000:4261      src_get_linnum_
+0000:4276      src_get_
+0000:4359      nasm_strcat_
+0000:43ae      nasm_skip_spaces_
+0000:43e7      nasm_skip_word_
+0000:441b      nasm_zap_spaces_fwd_
+0000:4453      nasm_zap_spaces_rev_
+0000:448e*     nasm_trim_spaces_
+0000:44ad+     nasm_get_word_
+0000:4511      nasm_opt_val_
+0000:462a      idata_bytes_
+4305:7474      _zero_buffer
+Module: ver.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\ver.c)
+4305:8474      _nasm_version
+4305:8482      _nasm_date
+4305:848e      _nasm_compile_options
+4305:848f      _nasm_comment
+4305:84b3      _nasm_signature
+Module: raa.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\raa.c)
+0000:46e8      raa_init_
+0000:46f6      raa_free_
+0000:4751      raa_read_
+0000:480e      raa_write_
+Module: saa.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\saa.c)
+0000:495d      saa_init_
+0000:49e3      saa_free_
+0000:4aee      saa_wstruct_
+0000:4b93      saa_wbytes_
+0000:4c61      saa_rewind_
+0000:4c89      saa_rstruct_
+0000:4d03+     saa_rbytes_
+0000:4d72      saa_rnbytes_
+0000:4de8      saa_fread_
+0000:4e79      saa_fwrite_
+0000:4f10      saa_fpwrite_
+0000:4f65      saa_write8_
+0000:4f89      saa_write16_
+0000:4fa3      saa_write32_
+0000:4fe9      saa_write64_
+0000:50bf      saa_writeaddr_
+0000:50e0      saa_wleb128u_
+0000:5129      saa_wleb128s_
+Module: rbtree.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\rbtree.c)
+0000:51ae      rb_search_
+0000:5339      rb_insert_
+Module: float.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\float.c)
+0000:6884      float_const_
+0000:6929      float_option_
+Module: insnsa.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\insnsa.c)
+50d1:ba80      _nasm_instructions
+Module: insnsb.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\insnsb.c)
+5cda:0008      _nasm_bytecodes
+Module: directiv.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\directiv.c)
+0000:6a21      find_directive_
+4305:8516      _directives
+Module: assemble.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\assemble.c)
+0000:7109      assemble_
+0000:7995      insn_size_
+Module: labels.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\labels.c)
+0000:afe8      lookup_label_
+0000:b05a      is_extern_
+0000:b090      redefine_label_
+0000:b3a0      define_label_
+0000:b55f      define_common_
+0000:b701      declare_as_global_
+0000:b7f8      init_labels_
+0000:b887      cleanup_labels_
+0000:ba4e      local_scope_
+4305:b469      _lprefix
+4305:b473      _lpostfix
+Module: hashtbl.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\hashtbl.c)
+0000:bac0      hash_init_
+0000:bb11      hash_find_
+0000:bc2c      hash_findi_
+0000:bd06      hash_add_
+0000:be72      hash_iterate_
+0000:bf2e      hash_free_
+Module: crc64.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\crc64.c)
+0000:bf52      crc64_
+0000:bfc0      crc64i_
+Module: parser.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\parser.c)
+0000:c02a      parser_global_info_
+0000:c27f      parse_line_
+0000:d944      cleanup_insn_
+Module: output\outform.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outform.c)
+0000:d99c      ofmt_find_
+0000:da45      dfmt_find_
+0000:daaa      ofmt_list_
+0000:db53      dfmt_list_
+Module: output\outlib.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outlib.c)
+0000:dbd7      realsize_
+Module: output\nulldbg.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\nulldbg.c)
+0000:dc34      null_debug_init_
+0000:dc3d+     null_debug_linenum_
+0000:dc4e+     null_debug_deflabel_
+0000:dc5f      null_debug_directive_
+0000:dc6a+     null_debug_typevalue_
+0000:dc75+     null_debug_output_
+0000:dc80+     null_debug_cleanup_
+4305:b4f6      _null_debug_form
+4305:b51a      _null_debug_arr
+Module: output\nullout.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\nullout.c)
+0000:dc85      null_setinfo_
+0000:dc92      null_directive_
+0000:dc9f      null_sectalign_
+Module: output\outbin.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outbin.c)
+4305:b52a      _of_bin
+4305:b568      _of_ith
+4305:b5a6      _of_srec
+Module: output\outaout.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outaout.c)
+4305:b5e8      _of_aout
+4305:b626      _of_aoutb
+Module: output\outcoff.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outcoff.c)
+0dca:650a+     AddExport_
+4305:b66a      _of_coff
+4305:b6a8      _of_win32
+4305:b6e6      _of_win64
+Module: output\outelf.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outelf.c)
+0dca:734e      section_attrib_
+4305:8e0a      _elf_known_sections
+Module: output\outelf32.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outelf32.c)
+4305:b7cd+     _elf32_debugs_arr
+4305:b7d9      _of_elf32
+Module: output\outelf64.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outelf64.c)
+4305:b8c1+     _elf64_debugs_arr
+4305:b8cd      _of_elf64
+Module: output\outobj.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outobj.c)
+199f:9121+     dbgbi_init_
+4305:b93c      _of_obj
+Module: output\outas86.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outas86.c)
+4305:b97a      _of_as86
+Module: output\outrdf2.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outrdf2.c)
+4305:b9f4      _of_rdf2
+Module: output\outdbg.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outdbg.c)
+4305:ba32+     _types
+199f:c081+     dbgdbg_init_
+4305:ba82      _of_dbg
+4305:d8e6+     _dbgsect
+Module: output\outieee.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outieee.c)
+199f:e301+     dbgls_init_
+4305:baf0      _of_ieee
+Module: output\outmac32.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outmac32.c)
+4305:bb92+     _head_ncmds
+4305:bb96+     _head_sizeofcmds
+4305:bb9a+     _seg_filesize
+4305:bb9e+     _seg_vmsize
+4305:bba2+     _seg_nsects
+4305:bba6+     _rel_padcnt
+4305:bbaa      _of_macho32
+Module: output\outmac64.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\output\outmac64.c)
+4305:bc4c+     _head_ncmds64
+4305:bc50+     _head_sizeofcmds64
+4305:bc54+     _seg_filesize64
+4305:bc5c+     _seg_vmsize64
+4305:bc64+     _seg_nsects64
+4305:bc68+     _rel_padcnt64
+4305:bc70      _of_macho64
+Module: preproc.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\preproc.c)
+2827:cb8c      pp_include_path_
+2827:cc14      pp_pre_include_
+2827:cc8c      pp_pre_define_
+2827:cd5c      pp_pre_undefine_
+2827:cdd9*     pp_runtime_
+2827:cdfd      pp_extra_stdmac_
+4305:bcee      _nasmpp
+Module: quote.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\quote.c)
+2827:ce70      nasm_quote_
+2827:d251      nasm_unquote_
+2827:d5fe      nasm_skip_string_
+Module: pptok.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\pptok.c)
+2827:d657      pp_token_hash_
+4305:8f82      _pp_directives
+4305:9132      _pp_directives_len
+Module: macros.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\macros.c)
+4305:939e      _nasm_stdmac
+2827:d6e9      nasm_stdmac_find_package_
+4305:acf2      _aout_stdmac
+4305:ad21      _as86_stdmac
+4305:ad50      _bin_stdmac
+4305:ad99      _coff_stdmac
+4305:ae09      _elf_stdmac
+4305:ae60      _macho_stdmac
+4305:ae8f      _obj_stdmac
+4305:af42      _rdf2_stdmac
+4305:afb3      _nasm_stdmac_after_tasm
+Module: listing.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\listing.c)
+4305:bd0b      _nasmlist
+Module: eval.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\eval.c)
+2827:e098      eval_cleanup_
+2827:fc87      eval_global_info_
+2827:fcc2      evaluate_
+Module: exprlib.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\exprlib.c)
+3818:000e      is_simple_
+3818:0096      is_really_simple_
+3818:010e      is_reloc_
+3818:0227      is_unknown_
+3818:0266      is_just_unknown_
+3818:02ae      reloc_value_
+3818:030e      reloc_seg_
+3818:03a2      reloc_wrt_
+Module: stdscan.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\stdscan.c)
+3818:03e7      stdscan_set_
+3818:0400      stdscan_get_
+3818:0442      stdscan_reset_
+3818:045b      stdscan_cleanup_
+3818:051f      stdscan_
+Module: strfunc.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\strfunc.c)
+3818:0e9a      string_transform_
+Module: tokhash.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\tokhash.c)
+3818:0f0f      nasm_token_hash_
+Module: regvals.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\regvals.c)
+4305:b018      _nasm_regvals
+Module: regflags.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\regflags.c)
+4305:b162      _nasm_reg_flags
+Module: ilog2.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\ilog2.c)
+3818:0fdc      ilog2_32_
+3818:102e+     ilog2_64_
+3818:10d5      alignlog2_32_
+3818:1100*     alignlog2_64_
+Module: lib\strlcpy.obj(E:\Programme\Software\NASM\nasm-2.09-20100825\lib\strlcpy.c)
+3818:1148*     strlcpy_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(stk)
+3818:11a5      __STK
+3818:11c5*     __STKOVERFLOW_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fputs.c)
+3818:11e2      fputs_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fputc.c)
+3818:1282      fputc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(puts.c)
+3818:1352      puts_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i8m086)
+3818:139d      __I8M
+3818:139d      __U8M
+3818:1382      __I8ME
+3818:1382      __U8ME
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i8d086)
+3818:17f3      __U8DQ
+3818:1809      __U8DR
+3818:181f      __I8DQ
+3818:183b      __I8DR
+3818:1851*     __U8DQE
+3818:1867*     __U8DRE
+3818:187d      __I8DQE
+3818:1893      __I8DRE
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(localtim.c)
+3818:18a9+     _localtime_
+3818:1938      localtime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strftime.c)
+3818:19df      strftime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(gmtime.c)
+3818:1f53      __brktime_
+3818:20b6+     _gmtime_
+3818:20da      gmtime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(snprintf.c)
+3818:2120      vsnprintf_
+3818:21a4      snprintf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strcmp.c)
+3818:21d3      strcmp_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fopen.c)
+3818:21fb+     __open_flags_
+3818:23fb+     _fsopen_
+3818:2462      fopen_
+3818:253d*     freopen_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(iob.c)
+65d0:0024      ___iob
+65d0:018c      __fmode
+65d0:0b6a      ___OpenStreams
+65d0:0b6e      ___ClosedStreams
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fprintf.c)
+3818:25b3      fprintf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strlen.c)
+3818:25e2      strlen_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fclose.c)
+3818:25f7      __doclose_
+3818:26a8      __shutdown_stream_
+3818:26c2      fclose_
+65d0:0b72+     ___RmTmpFileFn
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(time.c)
+3818:270d      time_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(remove.c)
+3818:2758      remove_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fflush.c)
+3818:275d      fflush_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strncpy.c)
+3818:2772      strncpy_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strchr.c)
+3818:27ae      strchr_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strtol.c)
+3818:2a15      strtoul_
+3818:2a27*     strtol_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(printf.c)
+3818:2a30      printf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(exit.c)
+3818:2a5f+     __null_int23_exit_
+3818:2a60      exit_
+3818:2a91*     _exit_
+65d0:021a+     ___int23_exit
+65d0:021e+     ___FPE_handler_exit
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fgets.c)
+3818:2aaa      fgets_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strcspn.c)
+3818:2b39      strcspn_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(istable.c)
+65d0:0a3c      __IsTable
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(perror.c)
+3818:2b8e      perror_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(getenv.c)
+3818:2bea      getenv_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(memcpy.c)
+3818:2caf      memcpy_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(atoi.c)
+3818:2cd1      atoi_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i8ls086)
+3818:2d3a      __I8LS
+3818:2d3a      __U8LS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strcpy.c)
+3818:2d4a      strcpy_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(sscanf.c)
+3818:2dc0+     vsscanf_
+3818:2df6      sscanf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(cstart)
+65d0:0000*     __nullarea
+65d0:0222*     __ovlflag
+65d0:0223*     __intno
+65d0:0224*     __ovlvec
+3818:2e24      _cstart_
+3818:2ef7*     _Not_Enough_Memory_
+3818:302b      __exit_
+3818:304a      __do_exit_with_msg__
+3818:30a8      __GETDS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(cmodel)
+3818:30b2      _big_code_
+3818:30b2*     CodeModelMismatch
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(argcv.c)
+65d0:0b76      __argv
+65d0:0b7a      ___argv
+65d0:0b7e      __argc
+65d0:0b80      ___argc
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(tolower.c)
+3818:30b2      tolower_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fmalloc.c)
+3818:30c0      _fmalloc_
+3818:30c0      malloc_
+65d0:0228+     ___fheap
+65d0:022a      ___fheapRover
+65d0:022c      ___LargestSizeB4Rover
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(calloc.c)
+3818:31cd      calloc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(frealloc.c)
+3818:320c*     _frealloc_
+3818:320c      realloc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(ffree.c)
+3818:32e8      _ffree_
+3818:32e8      free_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strpbrk.c)
+3818:332e      strpbrk_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fwrite.c)
+3818:3387      fwrite_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(u8rs086)
+3818:3582      __U8RS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(memset.c)
+3818:3592      memset_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i4m)
+3818:35aa      __I4M
+3818:35aa      __U4M
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fseek.c)
+3818:362d      fseek_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(ftell.c)
+3818:377b      ftell_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fread.c)
+3818:37d7      fread_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i4d)
+3818:39ca      __I4D
+3818:3a19      __U4D
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strspn.c)
+3818:3a9d      strspn_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(sprintf.c)
+3818:3af2      sprintf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strcat.c)
+3818:3b21      strcat_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(toupper.c)
+3818:3b4c      toupper_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strrchr.c)
+3818:3b5a      strrchr_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(qsort.c)
+3818:3bf8      qsort_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(memcmp.c)
+3818:4168      memcmp_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(i8rs086)
+3818:418e      __I8RS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(xmsg.c)
+3818:419e*     __exit_with_msg_
+3818:41a3      __fatal_runtime_error_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(crwdata)
+65d0:022e      __curbrk
+65d0:0236      __STACKLOW
+65d0:0238      __STACKTOP
+65d0:023a      __cbyte
+65d0:023c      __child
+65d0:023e      __no87
+65d0:024c      ___FPE_handler
+65d0:0230      __psp
+65d0:0240      __get_ovl_stack
+65d0:0244      __restore_ovl_stack
+65d0:0248      __close_ovl_file
+65d0:0250      __LpCmdLine
+65d0:0254      __LpPgmName
+65d0:0232      __osmajor
+65d0:0233      __osminor
+65d0:0234      __osmode
+65d0:0235      __HShift
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(flush.c)
+3818:41c2      __flush_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(ioalloc.c)
+3818:42f5      __ioalloc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(seterrno.c)
+3818:438f      __set_errno_
+3818:43a3*     __set_EDOM_
+3818:43b5*     __set_ERANGE_
+3818:43c7*     __set_EINVAL_
+3818:43dc      __set_doserrno_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(tzset.c)
+65d0:0258      ___start_dst
+65d0:026a      ___end_dst
+65d0:037e      _tzname
+65d0:0386      _timezone
+65d0:038a      _daylight
+65d0:038c      ___dst_adjust
+3818:43e8*     __DontCacheOSTZ_
+3818:4401*     __CacheOSTZ_
+3818:4989+     __parse_tz_
+3818:4b5a      tzset_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(timeutil.c)
+3818:4cb8      __isindst_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(itoa.c)
+3818:4fab+     utoa_
+3818:5008      itoa_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(leapyear.c)
+3818:502c      __leapyear_
+65d0:05e4      ___diyr
+65d0:05fe      ___dilyr
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(prtf.c)
+3818:5056      __prtf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(comtflag.c)
+3818:5e24*     __set_commode_
+65d0:03b4      __commode
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(open.c)
+3818:602c*     open_
+3818:6063      sopen_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(chktty.c)
+3818:6090      __chktty_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(freefp.c)
+3818:60bb      __freefp_
+3818:6136      __purgefp_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(allocfp.c)
+3818:6177      __allocfp_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(initfile.c)
+3818:6299      __InitFiles_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(ioexit.c)
+3818:63e7*     fcloseall_
+3818:63ee      __full_io_exit_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fprtf.c)
+3818:6412      __fprtf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(__lseek.c)
+3818:64dd      __lseek_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(_clse.c)
+3818:6517      __close_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(gtctm.c)
+3818:654a      __getctime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mktime.c)
+3818:65d3      mktime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(unlnk.c)
+3818:668d      unlink_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(flushall.c)
+3818:66a3      __flushall_
+3818:6700      flushall_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(initrtns.c)
+3818:6740      __InitRtns
+3818:6740*     __FInitRtns
+3818:679b      __FiniRtns
+3818:679b*     __FFiniRtns
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fgetc.c)
+3818:67ff      __fill_buffer_
+3818:68f4      fgetc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(setbits.c)
+3818:6999      __setbits_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(bits.c)
+65d0:0b3e      __Bits
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(errno.c)
+3818:69f1      __get_errno_ptr_
+3818:69f8      __get_doserrno_ptr_
+65d0:0b82+     _errno
+65d0:0b84+     __doserrno
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strerror.c)
+3818:69ff      strerror_
+3818:6a27*     _strerror_
+65d0:03b6+     __sys_errlist
+65d0:045a+     __sys_nerr
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(environ.c)
+65d0:0c86      ___env_mask
+65d0:0c8a      _environ
+65d0:0c8e*     __wenviron
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbterm.c)
+3818:6af2      _mbterm_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbsnextc.c)
+3818:6b34      _mbsnextc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbcupper.c)
+3818:6b65      _mbctoupper_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbsinc.c)
+3818:6b88      _mbsinc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(scnf.c)
+3818:7aa7      __scnf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(cmain086.c)
+3818:7d35      __CMain
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(uselfn.c)
+65d0:045c      ___uselfn
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(dosseg)
+3818:7d60      __DOSseg__
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(initargv.c)
+3818:7d61      __Init_Argv_
+3818:7dc4+     _getargv_
+3818:7fc3      __Fini_Argv_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(hpgrw086.c)
+3818:7fed      __CMain_nheapgrow_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mem.c)
+3818:8000      __MemAllocator
+3818:80ca      __MemFree
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(growseg.c)
+3818:8227      __GrowSeg_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(allocseg.c)
+3818:8319      __AllocSeg_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fmemneed.c)
+3818:83b0      __fmemneed_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(nmalloc.c)
+3818:83b3      _nmalloc_
+65d0:045e      ___nheapbeg
+65d0:0460      ___MiniHeapRover
+65d0:0462      ___LargestSizeB4MiniHeapRover
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fmsize.c)
+3818:848d*     _msize_
+3818:848d      _fmsize_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(nexpand.c)
+3818:849e      __HeapManager_expand_
+3818:8615      _nexpand_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fexpand.c)
+3818:8668      _fexpand_
+3818:8668*     _expand_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(nfree.c)
+3818:869d      _nfree_
+65d0:0c96+     ___MiniHeapFreeRover
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(qwrit.c)
+3818:8798      __qwrite_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(lseek.c)
+3818:87f5      lseek_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(tell.c)
+3818:8826      tell_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(qread.c)
+3818:8837      __qread_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(vsprintf.c)
+3818:8870      vsprintf_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(enterdb.c)
+3818:889b      __EnterWVIDEO_
+65d0:0464+     ___WD_Present
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fsync.c)
+3818:88bf      fsync_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(alphabet.c)
+65d0:095c      ___Alphabet
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(wctomb.c)
+3818:88c4      wctomb_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(strupr.c)
+3818:88ed      strupr_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(noefgfmt.c)
+65d0:0466      ___EFG_printf
+65d0:046a      ___EFG_scanf
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbisdbcs.c)
+65d0:0c98      ___IsDBCS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbislead.c)
+3818:8922*     _ismbblead_
+65d0:0c9a      ___MBCSIsTable
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(lltoa.c)
+3818:893e      ulltoa_
+3818:8a23*     lltoa_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(ltoa.c)
+3818:8a85      ultoa_
+3818:8af4*     ltoa_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(opendos.c)
+3818:8b23      _dos_open_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(iomode.c)
+3818:8b49      __GetIOMode_
+3818:8b6e      __SetIOMode_nogrow_
+65d0:046e      ___NFiles
+65d0:0470      ___init_mode
+65d0:0498      ___io_mode
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(isatt.c)
+3818:8b91      isatty_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(dosret.c)
+3818:8bad*     _dosretax_
+3818:8bb2*     _dosret0_
+3818:8bb9      __set_errno_dos_
+3818:8c17*     __set_errno_dos_reterr_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(umaskval.c)
+65d0:04b0      ___umaskval
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(creatdos.c)
+3818:8c22      _dos_creat_
+3818:8c46*     _dos_creatnew_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(stiomode.c)
+3818:8c68+     __grow_iomode_
+3818:8d2b+     __shrink_iomode_
+3818:8d66      __SetIOMode_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(locmktim.c)
+3818:8dc9      __local_mktime_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(doserror)
+3818:8f90      __doserror_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(sgdef086)
+65d0:04b8      __Start_XI
+65d0:04dc      __End_XI
+65d0:04dc      __Start_YI
+65d0:04f4      __End_YI
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(gtche.c)
+3818:8f9e      getche_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(setenvp.c)
+3818:8fd6      __setenvp_
+3818:90d9      __freeenvp_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbinit.c)
+3818:9175      __mbinit_
+65d0:04b2      ___MBCodePage
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbdtoupp.c)
+3818:9250      _mbdtoupper_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(mbtowc.c)
+3818:925e      mbtowc_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(fdfs086)
+3818:9360      __FDFS
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(___argc.c)
+65d0:0da2      ____Argv
+65d0:0da6      ____Argc
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(amblksiz.c)
+65d0:04b4      __amblksiz
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(histsplt.c)
+65d0:0da8      ___historical_splitparms
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(heapgrow.c)
+3818:93a7*     _heapgrow_
+3818:93a7*     _fheapgrow_
+3818:93a8      _nheapgrow_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(heapen.c)
+3818:9422*     _heapenable_
+65d0:04b6      ___heap_enabled
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(nmemneed.c)
+3818:9433      __nmemneed_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(grownear.c)
+3818:94bb      __LastFree_
+3818:9535      __ExpandDGROUP_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(bfree.c)
+3818:9646      _bfree_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(bexpand.c)
+3818:966b      _bexpand_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(filedos.c)
+3818:96c4*     _dos_close_
+3818:96d2      _dos_commit_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(iomodtty.c)
+3818:96e2      __ChkTTYIOMode_
+3818:9720*     __IOMode_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(clearenv.c)
+3818:9730      clearenv_
+Module: D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib(sbrk.c)
+3818:9812*     sbrk_
+3818:9822      __brk_
+
+
+                        +--------------------+
+                        |   Libraries Used   |
+                        +--------------------+
+
+D:\PROGRA~1\OPENWA~1/lib286/dos\clibl.lib
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  0800 (2048.)
+Memory size:  000672b0 (422576.)
+Entry point address: 3818:2e24
+Link time: 00:00.62

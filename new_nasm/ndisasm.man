@@ -1,0 +1,80 @@
+[4mNDISASM[24m(1)                  General Commands Manual                 [4mNDISASM[24m(1)
+
+[1mNAME[0m
+       ndisasm - the Netwide Disassembler, an 80x86 binary file disassembler
+
+[1mSYNOPSIS[0m
+       [1mndisasm [22m[ [1m-o [22morigin ] [ [1m-s [22msync-point [...]]  [ [1m-a [22m| [1m-i [22m] [ [1m-b [22mbits ] [
+       [1m-u [22m] [ [1m-e [22mhdrlen ] [ [1m-k [22moffset,length [...]]  infile
+       [1mndisasm -h[0m
+       [1mndisasm -r[0m
+
+[1mDESCRIPTION[0m
+       The  [1mndisasm [22mcommand generates a disassembly listing of the binary file
+       [4minfile[24m and directs it to stdout.
+
+   [1mOPTIONS[0m
+       [1m-h     [22mCauses [1mndisasm [22mto exit immediately, after giving  a  summary  of
+              its invocation options.
+
+       [1m-r     [22mCauses [1mndisasm [22mto exit immediately, after displaying its version
+              number.
+
+       [1m-o [4m[22morigin[0m
+              Specifies  the  notional  load address for the file. This option
+              causes [1mndisasm [22mto get the addresses it lists down the left  hand
+              margin, and the target addresses of PC-relative jumps and calls,
+              right.
+
+       [1m-s [4m[22msync-point[0m
+              Manually  specifies a synchronisation address, such that [1mndisasm[0m
+              will not output any machine instruction which encompasses  bytes
+              on both sides of the address. Hence the instruction which [4mstarts[0m
+              at that address will be correctly disassembled.
+
+       [1m-e [4m[22mhdrlen[0m
+              Specifies a number of bytes to discard from the beginning of the
+              file  before  starting  disassembly. This does not count towards
+              the calculation of the disassembly offset: the  first  [4mdisassem‐[0m
+              [4mbled[24m  instruction  will  be shown starting at the given load ad‐
+              dress.
+
+       [1m-k [4m[22moffset,length[0m
+              Specifies that [4mlength[24m bytes, starting  from  disassembly  offset
+              [4moffset[24m,  should  be  skipped over without generating any output.
+              The skipped bytes still count towards  the  calculation  of  the
+              disassembly offset.
+
+       [1m-a [22mor [1m-i[0m
+              Enables  automatic  (or intelligent) sync mode, in which [1mndisasm[0m
+              will attempt to guess where synchronisation should be performed,
+              by means of examining the target addresses of the relative jumps
+              and calls it disassembles.
+
+       [1m-b [4m[22mbits[0m
+              Specifies 16-, 32- or 64-bit mode. The default is 16-bit mode.
+
+       [1m-u     [22mSpecifies 32-bit mode, more compactly than using `-b 32'.
+
+       [1m-p [4m[22mvendor[0m
+              Prefers instructions as defined by [4mvendor[24m in case of a conflict.
+              Known [4mvendor[24m names include [1mintel[22m, [1mamd[22m, [1mcyrix[22m, and [1midt[22m.  The  de‐
+              fault is [1mintel[22m.
+
+[1mRESTRICTIONS[0m
+       [1mndisasm  [22monly disassembles binary files: it has no understanding of the
+       header information present in object or executable files. If  you  want
+       to disassemble an object file, you should probably be using [1mobjdump[22m([1m1[22m).
+
+       Auto-sync  mode  won't  necessarily cure all your synchronisation prob‐
+       lems: a sync marker can only be placed automatically if a jump or  call
+       instruction  is  found to refer to it [4mbefore[24m [1mndisasm [22mactually disassem‐
+       bles that part of the code. Also, if spurious  jumps  or  calls  result
+       from  disassembling  non-machine-code data, sync markers may get placed
+       in strange places. Feel free to turn auto-sync off and go back to doing
+       it manually if necessary.
+
+[1mSEE ALSO[0m
+       [1mobjdump[22m([1m1[22m).
+
+                         The Netwide Assembler Project              [4mNDISASM[24m(1)

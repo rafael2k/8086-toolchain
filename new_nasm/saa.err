@@ -1,0 +1,14 @@
+saa.c(49): Warning! W135: Shift amount too large
+saa.c(49): Warning! W124: Comparison result always 1
+saa.c(52): Warning! W135: Shift amount too large
+saa.c(52): Warning! W135: Shift amount too large
+saa.c(235): Warning! W135: Shift amount too large
+saa.c(236): Warning! W135: Shift amount too large
+saa.c(237): Warning! W135: Shift amount too large
+saa.c(256): Warning! W135: Shift amount too large
+saa.c(257): Warning! W135: Shift amount too large
+saa.c(258): Warning! W135: Shift amount too large
+nasmlib.h(405): Warning! W202: Symbol 'overflow_general' has been defined, but not referenced
+nasmlib.h(420): Warning! W202: Symbol 'overflow_signed' has been defined, but not referenced
+nasmlib.h(435): Warning! W202: Symbol 'overflow_unsigned' has been defined, but not referenced
+nasmlib.h(450): Warning! W202: Symbol 'signed_bits' has been defined, but not referenced

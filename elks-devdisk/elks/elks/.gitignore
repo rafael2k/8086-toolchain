@@ -1,0 +1,18 @@
+# Configuration files
+.config
+.config.old
+
+# Generated files
+arch/i86/boot/Image
+arch/i86/boot/bootsect
+arch/i86/boot/setup
+arch/i86/boot/system
+arch/i86/drivers/char/KeyMaps/keymaps.h
+arch/i86/kernel/entry.S
+arch/i86/tools/build
+arch/i86/tools/mkbootloader
+include/arch/asm-offsets.h
+include/autoconf.h
+include/linuxmt/compiler-generated.h
+scripts/lxdialog/local-curses.h
+scripts/lxdialog/lxdialog

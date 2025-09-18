@@ -1,0 +1,192 @@
+diff --git a/compiler/Makefile.elks b/compiler/Makefile.elks
+index f93d5d0..65fdffb 100644
+--- a/compiler/Makefile.elks
++++ b/compiler/Makefile.elks
+@@ -25,7 +25,7 @@ LDBASE += -Wl,option -Wl,dosseg
+ LDBASE += -Wl,option -Wl,start=_start
+ LDBASE += -Wl,option -Wl,nodefaultlibs
+ LDBASE += -Wl,option -Wl,stack=0x1000
+-LDBASE += -Wl,option -Wl,heapsize=512
++LDBASE += -Wl,option -Wl,heapsize=256
+ LDFLAGS = $(LDBASE)
+ LDLIBS = -Wl,library -Wl,$(TOPDIR)/libc/libc.lib
+ 
+diff --git a/compiler/mem.c b/compiler/mem.c
+index 30c325b..aff9f46 100644
+--- a/compiler/mem.c
++++ b/compiler/mem.c
+@@ -1,73 +1,58 @@
+ #ifdef __ELKS__
+-/* malloc/free wholesale replacement for 8086 toolchain */
++
++/* ELKS far memory functions */
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
+ 
+-#define MALLOC_ARENA_SIZE   16000U  /* size of initial arena fmemalloc (max 65520)*/
+-#define MALLOC_ARENA_THRESH 1024U   /* max size to allocate from arena-managed heap */
+-
+-unsigned int malloc_arena_size = MALLOC_ARENA_SIZE;
+-unsigned int malloc_arena_thresh = MALLOC_ARENA_THRESH;
+-
+-#define FP_SEG(fp)          ((unsigned)((unsigned long)(void __far *)(fp) >> 16))
+-#define FP_OFF(fp)          ((unsigned)(unsigned long)(void __far *)(fp))
+-
+-static void __far *heap;
+-
+-void *malloc(size_t size)
++void *farmalloc(size_t size)
+ {
+-    char *p;
+-
+-    if (heap == NULL) {
+-        heap = fmemalloc(malloc_arena_size);
+-        if (!heap) {
+-            __dprintf("FATAL: Can't fmemalloc %u\n", malloc_arena_size);
+-            system("meminfo > /dev/console");
+-            exit(1);
+-        }
+-        _fmalloc_add_heap(heap, malloc_arena_size);
+-    }
+-
+-    if (size <= malloc_arena_thresh)
+-        p = _fmalloc(size);
+-    else p = fmemalloc(size);
+-    return p;
++    return fmemalloc(size);
+ }
+ 
+-void free(void *ptr)
++void farfree(void *ptr)
+ {
+     if (ptr == NULL)
+         return;
+-    if (FP_OFF(ptr) == 0)       /* non-arena pointer */
+-        fmemfree(ptr);
+-    else
+-        _ffree(ptr);
++    fmemfree(ptr);
+ }
+ 
+-void *realloc(void *ptr, size_t size)
++void *farrealloc(void *ptr, size_t size)
+ {
+     void *new;
+     size_t osize = size;
+ 
+     if (ptr == 0)
+-        return malloc(size);
+-
+-#if LATER
+-    /* we can't yet get size from fmemalloc'd block */
+-    osize = _fmalloc_usable_size(ptr);
+-    __dprintf("old %u new %u\n", osize, size);
+-    if (size < osize || osize == 0)
+-        osize = size;           /* copy less bytes in memcpy below */
+-#endif
++        return farmalloc(size);
+ 
+-    new = malloc(size);
++    new = farmalloc(size);
+     if (new == 0) {
+         __dprintf("realloc: Out of memory\n");
+         return 0;
+     }
+     memcpy(new, ptr, osize);    /* FIXME copies too much but can't get real osize */
+-    free(ptr);
++    farfree(ptr);
+     return new;
+ }
++#else
++
++#include <stdlib.h>
++#include <string.h>
++#include <stdio.h>
++
++void *farmalloc(size_t size)
++{
++    return malloc(size);
++}
++
++void farfree(void *ptr)
++{
++    free(ptr);
++}
++
++void *farrealloc(void *ptr, size_t size)
++{
++    return realloc(ptr, size);
++}
++
+ #endif
+diff --git a/compiler/mem.h b/compiler/mem.h
+new file mode 100644
+index 0000000..ec05f9e
+--- /dev/null
++++ b/compiler/mem.h
+@@ -0,0 +1,8 @@
++#ifndef MEM_H_
++#define MEM_H_
++
++void *farmalloc(size_t size);
++void farfree(void *ptr);
++void *farrealloc(void *ptr, size_t size);
++
++#endif // MEM_H_
+diff --git a/compiler/memmgt.c b/compiler/memmgt.c
+index 53e2e1a..64705ef 100644
+--- a/compiler/memmgt.c
++++ b/compiler/memmgt.c
+@@ -28,13 +28,14 @@
+ #include "expr.h"
+ #include "cglbdec.h"
+ #include "proto.h"
++#include "mem.h"
+ 
+ /********************************************************* Macro Definitions */
+ 
+ /*
+  * Memory is allocated in Blocks of 1024 longs, which form a linked list
+  */
+-#define BLKLEN ((size_t)768 * sizeof(long))
++#define BLKLEN ((size_t)512 * sizeof(long))
+ #define NIL_BLK ( (struct blk *) 0)
+ 
+ /********************************************************** Type Definitions */
+@@ -76,7 +77,7 @@ VOIDSTAR xalloc P1 (size_t, siz)
+     if (global_flag) {
+ 	if (siz > glbsize) {
+ 	    len = (siz > BLKLEN) ? siz : BLKLEN;
+-	    bp = (struct blk *) malloc (len + sizeof (struct blk));
++	    bp = (struct blk *) farmalloc (len + sizeof (struct blk));
+ 
+ 	    if (bp == NULL) {
+ 		message (MSG_NOMEMORY, (int) (glo_mem * sizeof (long)),
+@@ -97,7 +98,7 @@ VOIDSTAR xalloc P1 (size_t, siz)
+     } else {			/* not global */
+ 	if (siz > locsize) {
+ 	    len = (siz > BLKLEN) ? siz : BLKLEN;
+-	    bp = (struct blk *) malloc (len + sizeof (struct blk));
++	    bp = (struct blk *) farmalloc (len + sizeof (struct blk));
+ 
+ 	    if (bp == NULL) {
+ 		message (MSG_LOCALMEM, (int) (loc_mem * sizeof (long)),
+@@ -135,7 +136,7 @@ void rel_local P0 (void)
+     bp1 = locblk;
+     while (bp1 != NIL_BLK) {
+ 	bp2 = bp1->next;
+-	free (bp1);
++	farfree(bp1);
+ 	bp1 = bp2;
+     }
+     if (loc_mem + glo_mem > max_mem) {
+@@ -160,7 +161,7 @@ void rel_global P0 (void)
+     bp1 = glbblk;
+     while (bp1 != NIL_BLK) {
+ 	bp2 = bp1->next;
+-	free (bp1);
++	farfree(bp1);
+ 	bp1 = bp2;
+     }
+     if (glo_mem > max_mem) {

@@ -1,0 +1,7 @@
+assemble.c(2078): Warning! W106: Constant out of range - truncated
+assemble.c(2078): Note! I2003: source conversion type is 'unsigned long '
+assemble.c(2078): Note! I2004: target conversion type is 'int '
+assemble.c(2081): Warning! W106: Constant out of range - truncated
+assemble.c(2081): Note! I2003: source conversion type is 'unsigned long '
+assemble.c(2081): Note! I2004: target conversion type is 'int '
+nasmlib.h(435): Warning! W202: Symbol 'overflow_unsigned' has been defined, but not referenced
